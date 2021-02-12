@@ -1,0 +1,7 @@
+name: 'DAMo - Common features'
+type: module
+description: 'DAMo common features.'
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'

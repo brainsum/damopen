@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Assets Api.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\damopen_assets_api\Field\ImageStyleDownloadUrl;
+
+/**
+ * Implements hook_entity_base_field_info().
+ *
+ * Provide thumbnail_url for json api - The relative image style url of the
+ * image uri.
+ */
+function damopen_assets_api_library_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() === 'file') {
+    $fields['thumbnail_url'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Thumbnail image style URL'))
+      ->setDescription(t('The download URL of the thumbnail image style of the image.'))
+      ->setComputed(TRUE)
+      ->setCustomStorage(TRUE)
+      ->setClass(ImageStyleDownloadUrl::class);
+  }
+  return $fields;
+}

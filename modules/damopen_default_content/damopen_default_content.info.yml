@@ -1,0 +1,10 @@
+name: "Default content for DAMo"
+type: module
+description: "Adds default content"
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - drupal:taxonomy

@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: field_video_file
+  media_upload:
+    upload_target_field: field_video_file
+    enabled: 1
+id: video_file
+label: 'Video file'
+description: "<p>Use Video file for uploading locally hosted videos.</p>\r\n"
+source: video_file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_video_file
+field_map: {  }

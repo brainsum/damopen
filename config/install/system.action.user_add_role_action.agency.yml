@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.agency
+  module:
+    - user
+id: user_add_role_action.agency
+label: 'Add the Agency role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: agency

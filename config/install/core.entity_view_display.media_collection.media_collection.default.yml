@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_collection
+id: media_collection.media_collection.default
+targetEntityType: media_collection
+bundle: media_collection
+mode: default
+content:
+  items:
+    label: hidden
+    type: media_collection_items
+    weight: 0
+    region: content
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+hidden:
+  assets_archive: true
+  langcode: true
+  search_api_excerpt: true
+  share_date: true
+  share_emails: true
+  share_url: true
+  uid: true

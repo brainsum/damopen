@@ -1,0 +1,5 @@
+entity.shared_media_collection.add_form:
+  route_name: entity.shared_media_collection.add_form
+  title: 'Add Media collection (shared)'
+  appears_on:
+    - entity.shared_media_collection.collection

@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.collection_item
+    - field.field.media.audio.field_custom_thumbnail
+    - field.field.media.audio.field_description
+    - field.field.media.audio.field_file
+    - field.field.media.audio.field_keywords
+    - image.style.gallery_item
+    - media.type.audio
+  module:
+    - image
+id: media.audio.collection_item
+targetEntityType: media
+bundle: audio
+mode: collection_item
+content:
+  field_keywords:
+    weight: 2
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  name:
+    type: string
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  thumbnail:
+    type: image
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      image_style: gallery_item
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_custom_thumbnail: true
+  field_description: true
+  field_file: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

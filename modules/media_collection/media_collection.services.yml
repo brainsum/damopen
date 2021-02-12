@@ -1,0 +1,62 @@
+services:
+  media_collection.entity_processor.media_entity:
+    class: Drupal\media_collection\Service\EntityProcessor\MediaEntityProcessor
+    arguments:
+      - '@entity_type.manager'
+
+  media_collection.entity_processor.media_collection_item:
+    class: Drupal\media_collection\Service\EntityProcessor\CollectionItemProcessor
+    arguments:
+      - '@media_collection.entity_processor.media_entity'
+
+  media_collection.entity_processor.media_collection:
+    class: Drupal\media_collection\Service\EntityProcessor\CollectionProcessor
+    arguments:
+      - '@media_collection.entity_processor.media_collection_item'
+
+  media_collection.file_handler.media_collection_item:
+    class: Drupal\media_collection\Service\FileHandler\ItemFileHandler
+    arguments:
+      - '@damopen_common.file_system'
+      - '@media_collection.entity_processor.media_collection_item'
+      - '@damopen_assets_download.asset_archiver'
+      - '@datetime.time'
+      - '@date.formatter'
+      - '@damopen_assets_download.file_manager'
+
+  media_collection.file_handler.media_collection:
+    class: Drupal\media_collection\Service\FileHandler\CollectionFileHandler
+    arguments:
+      - '@damopen_common.file_system'
+      - '@media_collection.entity_processor.media_collection'
+      - '@damopen_assets_download.asset_archiver'
+      - '@datetime.time'
+      - '@date.formatter'
+      - '@damopen_assets_download.file_manager'
+
+  media_collection.collection_handler:
+    class: Drupal\media_collection\Service\CollectionHandler
+    arguments:
+      - '@string_translation'
+      - '@entity_type.manager'
+      - '@cache_tags.invalidator'
+
+  media_collection.download_handler:
+    class: Drupal\media_collection\Service\DownloadHandler
+    arguments:
+      - '@media_collection.collection_handler'
+      - '@current_user'
+      - '@media_collection.file_handler.media_collection'
+      - '@damopen_assets_download.file_response_builder'
+
+  media_collection.generator.header_markup:
+    class: Drupal\media_collection\Service\HeaderMarkupGenerator
+    arguments:
+      - '@string_translation'
+      - '@media_collection.collection_handler'
+      - '@current_user'
+
+  media_collection.file_size_calculator:
+    class: Drupal\media_collection\Service\FileSizeCalculator
+    arguments:
+      - '@cache.default'

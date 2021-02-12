@@ -1,0 +1,42 @@
+# Media collection routing definition
+media_collection.settings_tab:
+  route_name: media_collection.settings
+  title: 'Settings'
+  base_route: media_collection.settings
+
+entity.media_collection.canonical:
+  route_name: entity.media_collection.canonical
+  base_route: entity.media_collection.canonical
+  title: 'View'
+
+entity.media_collection.edit_form:
+  route_name: entity.media_collection.edit_form
+  base_route: entity.media_collection.canonical
+  title: 'Edit'
+
+entity.media_collection.delete_form:
+  route_name:  entity.media_collection.delete_form
+  base_route:  entity.media_collection.canonical
+  title: Delete
+  weight: 10
+# Media collection item routing definition
+media_collection_item.settings_tab:
+  route_name: media_collection_item.settings
+  title: 'Settings'
+  base_route: media_collection_item.settings
+
+entity.media_collection_item.canonical:
+  route_name: entity.media_collection_item.canonical
+  base_route: entity.media_collection_item.canonical
+  title: 'View'
+
+entity.media_collection_item.edit_form:
+  route_name: entity.media_collection_item.edit_form
+  base_route: entity.media_collection_item.canonical
+  title: 'Edit'
+
+entity.media_collection_item.delete_form:
+  route_name:  entity.media_collection_item.delete_form
+  base_route:  entity.media_collection_item.canonical
+  title: Delete
+  weight: 10

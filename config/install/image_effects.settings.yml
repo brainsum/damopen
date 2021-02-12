@@ -1,0 +1,14 @@
+color_selector:
+  plugin_id: html_color
+  plugin_settings:
+    html_color: {  }
+image_selector:
+  plugin_id: dropdown
+  plugin_settings:
+    basic: {  }
+    dropdown:
+      path: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark
+font_selector:
+  plugin_id: basic
+  plugin_settings:
+    basic: {  }

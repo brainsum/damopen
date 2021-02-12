@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+    - video_embed_media
+third_party_settings:
+  crop:
+    image_field: null
+  media_upload:
+    enabled: false
+    upload_target_field: null
+id: video
+label: Video
+description: "<p>Use Video for either uploading locally hosted videos or for embedding external videos hosted by YouTube, Vimeo, Dreambroker or any other provider.</p>\r\n"
+source: video_embed_field
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_video
+field_map:
+  id: field_id
+  source_name: field_source

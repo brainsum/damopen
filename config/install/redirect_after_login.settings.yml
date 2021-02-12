@@ -1,0 +1,9 @@
+login_redirection:
+  anonymous: null
+  authenticated: /
+  dam: /
+  keyword_contributor: /
+  media_api: /
+  agency: /
+  manager: /
+  administrator: /

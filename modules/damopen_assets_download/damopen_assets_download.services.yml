@@ -1,0 +1,31 @@
+services:
+  damopen_assets_download.file_response_builder:
+    class: Drupal\damopen_assets_download\Service\FileResponseBuilder
+    arguments:
+      - '@transliteration'
+
+  damopen_assets_download.asset_file_handler:
+    class: Drupal\damopen_assets_download\Service\AssetFileHandler
+    arguments: {  }
+
+  damopen_assets_download.asset_archiver:
+    class:  Drupal\damopen_assets_download\Service\AssetArchiver
+    arguments:
+      - '@damopen_common.file_system'
+      - '@uuid'
+
+  damopen_assets_download.file_manager:
+    class: Drupal\damopen_assets_download\Service\FileManager
+    arguments:
+      - '@entity_type.manager'
+      - '@stream_wrapper_manager'
+
+  damopen_assets_download.asset_download_handler:
+    class:  Drupal\damopen_assets_download\Service\AssetDownloadHandler
+    arguments:
+      - '@damopen_assets_download.asset_file_handler'
+      - '@damopen_assets_download.asset_archiver'
+      - '@damopen_assets_download.file_manager'
+      - '@damopen_common.file_system'
+      - '@datetime.time'
+      - '@date.formatter'

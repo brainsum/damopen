@@ -1,0 +1,98 @@
+{
+    "name": "drupal/damopen",
+    "description": "Distribution for quickly starting a new Digital Media Assets Management system with Drupal",
+    "type": "drupal-profile",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": {
+        "drupal-8": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "asset-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "require": {
+        "php": "^7.3",
+        "ext-json": "*",
+        "ext-zip": "*",
+        "brainsum/damo_theme": ">=0.3 <1.0",
+        "brainsum/media_upload": "^4.0.0",
+        "drupal/better_exposed_filters": "^5.0.0",
+        "drupal/dropzonejs": "^2.0.0",
+        "drupal/entity_browser": "^2.3.0",
+        "drupal/entity_embed": "^1.1.0",
+        "drupal/exif": "^2.2.0",
+        "drupal/field_group": "^3.1.0",
+        "drupal/filehash": "^1.4.0",
+        "drupal/focal_point": "^1.5.0",
+        "drupal/image_effects": "^3.0.0",
+        "drupal/inline_entity_form": "^1.0.0",
+        "drupal/jsonapi_extras": "^3.16.0",
+        "drupal/maxlength": "^1.0.0",
+        "drupal/media_entity_imagemagick": "^3.0.0",
+        "drupal/php_ffmpeg": "^1.1.0",
+        "drupal/redirect_after_login": "^2.7.0",
+        "drupal/search_api": "^1.19.0",
+        "drupal/select2": "^1.12.0",
+        "drupal/taxonomy_access_fix": "^3.0.0",
+        "drupal/term_merge": "^1.0.0",
+        "drupal/userprotect": "^1.1.0",
+        "drupal/video_embed_field": "^2.4.0",
+        "npm-asset/dropzone": "^5.7.6",
+        "npm-asset/jquery-ui-touch-punch": "^0.2.3",
+        "npm-asset/select2": "^4.0.13"
+    },
+    "suggest": {
+        "drupal/maillog": "Allows logging outgoing emails.",
+        "drupal/exception_mailer": "Allows sending alert emails on errors and exceptions.",
+        "drupal/admin_toolbar": "Better admin toolbar.",
+        "drupal/adminimal_admin_toolbar": "Prettier theme for admin_toolbar."
+    },
+    "extra": {
+        "patches": {
+            "drupal/core": {
+                "Datetime form element cannot validate when using a format without seconds": "https://www.drupal.org/files/issues/2019-07-24/drupal-datetime_form_element_cannot_validate_without_seconds-2723159-53.patch",
+                "Summary attributes bugfix": "https://www.drupal.org/files/issues/2018-12-17/core-undefined-index-summary_attributes-2998194-9.patch",
+                "Add permission 'View unpublished {bundle} media'": "https://www.drupal.org/files/issues/2019-11-27/2936652-media-view-any-unpublished-per-bundle-25.patch",
+                "Implement a generic revision UI": "https://www.drupal.org/files/issues/2021-02-04/2350939-156-9.1.x.patch",
+                "Remove jsonapi's file filter restriction": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-core/8.x/jsonapi-file-filter-restriction-remove.patch"
+            },
+            "drupal/filehash": {
+                "Check duplicates only for media last revision. Link media on duplicate.": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-module/filehash/1.x/filehash-validate-last-media-revision-link-media.2.patch"
+            }
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
+        "installer-paths": {
+            "web/core": ["type:drupal-core"],
+            "web/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+            "web/modules/contrib/{$name}": ["type:drupal-module"],
+            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/Commands/contrib/{$name}": ["type:drupal-drush"],
+            "web/modules/custom/{$name}": ["type:drupal-custom-module"],
+            "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
+        },
+        "installer-types": ["bower-asset", "npm-asset"]
+    }
+}

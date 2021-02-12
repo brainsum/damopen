@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @file
+ * Assets list.
+ */
+
+# DamNavigationBlock | Does this belong here?
+
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_toolbar().
+ */
+function damopen_assets_lister_toolbar() {
+  $currentUser = Drupal::currentUser();
+
+  $route = _damopen_assets_lister_determine_unpublished_view($currentUser);
+
+  if ($route) {
+    return [
+      'damopen_assets_lister' => [
+        '#cache' => [
+          'contexts' => [
+            'user',
+          ],
+        ],
+        '#type' => 'toolbar_item',
+        'tab' => [
+          '#type' => 'link',
+          '#title' => t('Assets waiting for approval'),
+          '#url' => Url::fromRoute($route),
+          '#attributes' => [
+            'title' => t('Assets waiting for approval'),
+            'class' => ['toolbar-icon', 'toolbar-icon-unpublished-assets'],
+          ],
+        ],
+        '#weight' => -10,
+        // @todo: Attach custom lib with custom icons.
+        // Previously used: shortcut/drupal.shortcut.
+        '#attached' => [],
+      ],
+    ];
+  }
+
+  return [];
+}
+
+/**
+ * Determines view route for "Assets waiting for approval" toolbar link.
+ *
+ * @param \Drupal\Core\Session\AccountProxyInterface $user
+ *   The user.
+ *
+ * @return string|null
+ *   The route, if it exists.
+ */
+function _damopen_assets_lister_determine_unpublished_view(AccountProxyInterface $user): ?string {
+  $roles = $user->getRoles();
+
+  // @todo: Use permissions instead of this mess.
+  if (
+    $user->id() === 1
+    || in_array('manager', $roles, TRUE)
+    || in_array('administrator', $roles, TRUE)
+  ) {
+    return 'view.unpublished_assets.unpublished_assets';
+  }
+
+  if (in_array('agency', $roles, TRUE)) {
+    return 'view.unpublished_assets.user_unpublished_assets';
+  }
+
+  // @note: This shouldn't be reachable under normal circumstances either.
+  // @todo: Add proper return point.
+  return NULL;
+}
+
+/**
+ * Implements hook_toolbar_alter().
+ */
+function damopen_assets_lister_toolbar_alter(array &$items) {
+  $currentUser = Drupal::currentUser();
+
+  if (!in_array('administrator', $currentUser->getRoles(), TRUE)) {
+    // Hide toolbar search from regular users.
+    // @todo: Patch for admin toolbar (admin_toolbar_toolbar_alter), add perm.
+    // @todo: Hide "administrator" only when no items are under it.
+    unset($items['administration_search'], $items['administration']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_lister_preprocess_image(array &$variables) {
+  if (!isset($variables['attributes'])) {
+    $variables['attributes'] = [];
+  }
+
+  $variables['attributes']['loading'] = 'lazy';
+}

@@ -1,0 +1,71 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.media_library
+  module:
+    - entity_browser_entity_form
+    - views
+name: media_embed
+label: 'Media Embed'
+display: iframe
+display_configuration:
+  width: 100%
+  height: '768'
+  link_text: 'Select media'
+  auto_open: true
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: tabs
+widget_selector_configuration: {  }
+widgets:
+  1672850b-3c24-400f-a0ed-a160efa55310:
+    settings:
+      view: media_library
+      view_display: media_select_modal
+      submit_text: 'Select media'
+      auto_select: false
+    uuid: 1672850b-3c24-400f-a0ed-a160efa55310
+    weight: -10
+    label: 'All media'
+    id: view
+  6eea7af9-0310-4b02-a243-3eadc488a077:
+    settings:
+      view: media_library
+      view_display: user_media_select_modal
+      submit_text: 'Select media'
+      auto_select: false
+    uuid: 6eea7af9-0310-4b02-a243-3eadc488a077
+    weight: -9
+    label: 'My media'
+    id: view
+  927280a8-090f-4de8-b66a-932c81ed13c3:
+    settings:
+      entity_type: media
+      bundle: video
+      form_mode: default
+      submit_text: 'Save video'
+    uuid: 927280a8-090f-4de8-b66a-932c81ed13c3
+    weight: -7
+    label: 'Add video'
+    id: entity_form
+  36be8762-7efd-4caf-8101-a95614aa35fd:
+    settings:
+      entity_type: media
+      bundle: video_file
+      form_mode: default
+      submit_text: 'Save video'
+    uuid: 36be8762-7efd-4caf-8101-a95614aa35fd
+    weight: -6
+    label: 'Add video file'
+    id: entity_form
+  0f5720cd-76c0-4304-b77f-a7b75e28288f:
+    settings:
+      entity_type: media
+      bundle: image
+      form_mode: default
+      submit_text: 'Save image'
+    uuid: 0f5720cd-76c0-4304-b77f-a7b75e28288f
+    weight: -8
+    label: 'Add image'
+    id: entity_form

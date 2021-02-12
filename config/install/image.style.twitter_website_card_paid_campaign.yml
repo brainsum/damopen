@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: twitter_website_card_paid_campaign
+label: 'Twitter Website card (paid campaign)'
+effects:
+  f0700920-138a-4657-a842-bbf4d3e1de77:
+    uuid: f0700920-138a-4657-a842-bbf4d3e1de77
+    id: focal_point_scale_and_crop
+    weight: -10
+    data:
+      width: 800
+      height: 418
+      crop_type: focal_point
+  01ba1ab8-175d-4f83-8913-072d66b61623:
+    uuid: 01ba1ab8-175d-4f83-8913-072d66b61623
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

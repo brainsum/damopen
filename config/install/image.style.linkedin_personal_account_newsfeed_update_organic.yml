@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: linkedin_personal_account_newsfeed_update_organic
+label: 'LinkedIn, personal account newsfeed update (organic)'
+effects:
+  2851607d-532d-4dc7-9d75-670646a19124:
+    uuid: 2851607d-532d-4dc7-9d75-670646a19124
+    id: focal_point_scale_and_crop
+    weight: -10
+    data:
+      width: 520
+      height: 272
+      crop_type: focal_point
+  6d044c8b-0439-459d-afad-12f5367d3b2f:
+    uuid: 6d044c8b-0439-459d-afad-12f5367d3b2f
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

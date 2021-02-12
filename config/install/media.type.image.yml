@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: field_image
+  media_upload:
+    upload_target_field: field_image
+    enabled: 1
+id: image
+label: Image
+description: "<p>We have our own image bank with images that reflect our brand and the work we do. You can download images in different sizes and with and without our logo. Guiding principles for our images.</p>\r\n\r\n<ol type='A'>\r\n\t<li><strong>Real people and real situations:</strong><br />\r\n\tSolutions are present in all of society and are a part of everyday life. When creating the image bank, our focus has been portraying the end-user to show that our solutions benefit both people and companies. Using natural light and real environments instead of a studio are important to create an authentic feeling.<br />\r\n\t&nbsp;</li>\r\n\t<li><strong>Dynamic and interesting:</strong><br />\r\n\tBy using unexpected angles, such as shooting behind a door or through a glass reflection, the images can become multifaceted and interesting.<br />\r\n\t&nbsp;</li>\r\n\t<li><strong>Bold and confident:</strong><br />\r\n\tComposition, expression, and choice of setting should reflect a company that thinks big and is well-prepared for the future.</li>\r\n</ol>\r\n"
+source: image
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_image
+  gather_exif: false
+field_map: {  }

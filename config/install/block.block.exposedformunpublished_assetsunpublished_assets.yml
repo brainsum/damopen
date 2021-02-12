@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.unpublished_assets
+  module:
+    - system
+    - views
+  theme:
+    - damo_theme
+id: exposedformunpublished_assetsunpublished_assets
+theme: damo_theme
+region: navigation
+weight: -2
+provider: null
+plugin: 'views_exposed_filter_block:unpublished_assets-unpublished_assets'
+settings:
+  id: 'views_exposed_filter_block:unpublished_assets-unpublished_assets'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    pages: /admin/assets/all-unpublished
+    negate: false
+    context_mapping: {  }

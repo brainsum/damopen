@@ -1,0 +1,7 @@
+services:
+  damopen_common.file_system:
+    class: Drupal\damopen_common\Service\DamoFileSystem
+    arguments:
+      - '@stream_wrapper_manager'
+      - '@settings'
+      - '@logger.channel.file'

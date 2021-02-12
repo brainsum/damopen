@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the damo install profile.
+ *
+ * @todo: https://www.drupal.org/docs/8/distributions/creating-distributions/how-to-write-a-drupal-8-installation-profile#s-install-file
+ */
+
+/**
+ * Install the damopen_common module.
+ */
+function damopen_update_8001() {
+  Drupal::service('module_installer')->install(['damopen_common']);
+}
+
+/**
+ * Switch to the imagemagick toolkit.
+ */
+function damopen_update_8002() {
+  Drupal::service('module_installer')->install(['imagemagick']);
+
+  $configFactory = Drupal::configFactory();
+  $config = $configFactory->getEditable('system.image');
+  $config->set('toolkit', 'imagemagick');
+  $config->save(TRUE);
+  $config = $configFactory->getEditable('imagemagick.settings');
+  $config->set('quality', 80);
+  $config->save(TRUE);
+}
+
+/**
+ * Remove deprecated modules.
+ */
+function damopen_update_8003() {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
+  $installer = Drupal::service('module_installer');
+  $installer->uninstall([
+    'better_formats',
+    'jquery_ui_datepicker',
+  ]);
+}
+
+
+/**
+ * Remove deprecated modules.
+ */
+function damopen_update_8004() {
+  $configFactory = Drupal::configFactory();
+  $config = $configFactory->getEditable('system.mail');
+  $interface = $config->get('interface');
+  $interface['default'] = 'php_mail';
+  $config->set('interface', $interface);
+  $config->save(TRUE);
+
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
+  $installer = Drupal::service('module_installer');
+  $installer->uninstall([
+    'maillog',
+    'exception_mailer',
+  ]);
+}
+
+/**
+ * Remove deprecated modules.
+ */
+function damopen_update_8005() {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
+  $installer = Drupal::service('module_installer');
+  $installer->uninstall([
+    'r4032login',
+  ]);
+}

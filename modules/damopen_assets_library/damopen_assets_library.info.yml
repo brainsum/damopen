@@ -1,0 +1,12 @@
+name: "Media Assets Library"
+type: module
+description: Media assets library functionality.
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+dependencies:
+  - drupal:media
+  - drupal:file
+  - drupal:image
+  - filehash:filehash

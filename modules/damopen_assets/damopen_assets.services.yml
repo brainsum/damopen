@@ -1,0 +1,10 @@
+services:
+  damopen_assets.route_title_subscriber:
+    class: Drupal\damopen_assets\Routing\RouteTitleAlterSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  damopen_assets.media_upload_route_subscriber:
+    class: Drupal\damopen_assets\Routing\MediaUploadRouteSubscriber
+    tags:
+      - { name: event_subscriber }

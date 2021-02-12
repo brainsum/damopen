@@ -1,0 +1,106 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - crop.type.media_crop
+id: crop--media_crop
+disabled: true
+path: crop/media_crop
+resourceType: crop--media_crop
+resourceFields:
+  cid:
+    fieldName: cid
+    publicName: cid
+    enhancer:
+      id: ''
+    disabled: false
+  uuid:
+    fieldName: uuid
+    publicName: uuid
+    enhancer:
+      id: ''
+    disabled: false
+  vid:
+    fieldName: vid
+    publicName: vid
+    enhancer:
+      id: ''
+    disabled: false
+  type:
+    fieldName: type
+    publicName: type
+    enhancer:
+      id: ''
+    disabled: false
+  langcode:
+    fieldName: langcode
+    publicName: langcode
+    enhancer:
+      id: ''
+    disabled: false
+  entity_id:
+    fieldName: entity_id
+    publicName: entity_id
+    enhancer:
+      id: ''
+    disabled: false
+  entity_type:
+    fieldName: entity_type
+    publicName: entity_type
+    enhancer:
+      id: ''
+    disabled: false
+  uri:
+    fieldName: uri
+    publicName: uri
+    enhancer:
+      id: ''
+    disabled: false
+  height:
+    fieldName: height
+    publicName: height
+    enhancer:
+      id: ''
+    disabled: false
+  width:
+    fieldName: width
+    publicName: width
+    enhancer:
+      id: ''
+    disabled: false
+  x:
+    fieldName: x
+    publicName: x
+    enhancer:
+      id: ''
+    disabled: false
+  'y':
+    fieldName: 'y'
+    publicName: 'y'
+    enhancer:
+      id: ''
+    disabled: false
+  revision_timestamp:
+    fieldName: revision_timestamp
+    publicName: revision_timestamp
+    enhancer:
+      id: ''
+    disabled: false
+  revision_uid:
+    fieldName: revision_uid
+    publicName: revision_uid
+    enhancer:
+      id: ''
+    disabled: false
+  revision_log:
+    fieldName: revision_log
+    publicName: revision_log
+    enhancer:
+      id: ''
+    disabled: false
+  default_langcode:
+    fieldName: default_langcode
+    publicName: default_langcode
+    enhancer:
+      id: ''
+    disabled: false

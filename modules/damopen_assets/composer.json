@@ -1,0 +1,30 @@
+{
+    "name": "drupal/damopen_assets",
+    "description": "Assets module for media assets.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "repositories": {
+        "drupal-8": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "require": {
+        "brainsum/media_upload": "^4.0",
+        "drupal/dropzonejs": "^2.0",
+        "drupal/entity_browser": "^2.2",
+        "drupal/userprotect": "^1.1",
+        "npm-asset/dropzone": "^5.7"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}

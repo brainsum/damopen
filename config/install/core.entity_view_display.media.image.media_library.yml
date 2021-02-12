@@ -1,0 +1,66 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.image.field_category
+    - field.field.media.image.field_gps_gpslatitude
+    - field.field.media.image.field_gps_gpslongitude
+    - field.field.media.image.field_image
+    - field.field.media.image.field_iptc_by_line
+    - field.field.media.image.field_iptc_caption
+    - field.field.media.image.field_iptc_object_name
+    - field.field.media.image.field_keywords
+    - image.style.gallery_item
+    - media.type.image
+  module:
+    - image
+id: media.image.media_library
+targetEntityType: media
+bundle: image
+mode: media_library
+content:
+  field_category:
+    type: entity_reference_label
+    weight: 2
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_keywords:
+    type: entity_reference_label
+    weight: 3
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    region: content
+  thumbnail:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: gallery_item
+      image_link: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  field_gps_gpslatitude: true
+  field_gps_gpslongitude: true
+  field_image: true
+  field_iptc_by_line: true
+  field_iptc_caption: true
+  field_iptc_object_name: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

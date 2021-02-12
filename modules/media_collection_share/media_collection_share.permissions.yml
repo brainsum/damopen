@@ -1,0 +1,16 @@
+add media collection (shared) entities:
+  title: 'Create new Media collection (shared) entities'
+
+administer media collection (shared) entities:
+  title: 'Administer Media collection (shared) entities'
+  description: 'Allow to access the administration form to configure Media collection (shared) entities.'
+  restrict access: true
+
+delete media collection (shared) entities:
+  title: 'Delete Media collection (shared) entities'
+
+edit media collection (shared) entities:
+  title: 'Edit Media collection (shared) entities'
+
+view shared media collection entities:
+  title: 'View shared collections'

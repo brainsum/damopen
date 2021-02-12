@@ -1,0 +1,27 @@
+{#
+/**
+ * @file media_collection_item.html.twig
+ * Default theme implementation to present Media collection item data.
+ *
+ * This template is used when viewing Media collection item pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_media_collection_item()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('media_collection_item') }}>
+  {% if content %}
+    {{ content }}
+            <p>ASSET TYPE: <span class="asset-type">{{ additional_item_data.asset_type }}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

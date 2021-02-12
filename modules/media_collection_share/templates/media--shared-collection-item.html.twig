@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present a media entity.
+ *
+ * Available variables:
+ * - name: Name of the media.
+ * - content: Media content.
+ *
+ * @see template_preprocess_media()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if content %}
+  <div class="col-md-4 col-sm-12">
+    <div class="card">
+      <div  class="card-img-top">
+        <a class="card-img-overlay"></a>
+        {{ content.thumbnail }}
+      </div>
+      <div class="card-body">
+        <div class="text-overlay">
+          <div class="card--inner-text">
+            <p class="title">{{ content.name }}</p>
+            <p class="keywords">{{ content.field_keywords }}</p>
+          </div>
+{% endif %}

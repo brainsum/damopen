@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: instagram_photo_size
+label: 'Instagram Photo Size'
+effects:
+  61d042e2-a92c-4df5-a97c-39ab549d35eb:
+    uuid: 61d042e2-a92c-4df5-a97c-39ab549d35eb
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1080
+      height: 1080
+      crop_type: focal_point
+  5d0afea6-a7a0-44d9-aae2-12d1f5d532cb:
+    uuid: 5d0afea6-a7a0-44d9-aae2-12d1f5d532cb
+    id: image_effects_watermark
+    weight: 2
+    data:
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''

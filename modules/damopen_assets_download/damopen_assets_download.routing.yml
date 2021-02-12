@@ -1,0 +1,25 @@
+damopen_assets_download.asset_download:
+  path: '/asset-download/{media}'
+  defaults:
+    _title: 'Asset download'
+    _controller: '\Drupal\damopen_assets_download\Controller\DownloadController::download'
+  requirements:
+    _permission: 'view media'
+  options:
+    parameters:
+      media:
+        type: 'entity:media'
+
+damopen_assets_download.styled_asset_download:
+  path: '/asset-download/{media}/style/{style}'
+  defaults:
+    _title: 'Asset download'
+    _controller: '\Drupal\damopen_assets_download\Controller\DownloadController::styledDownload'
+  requirements:
+    _permission: 'view media'
+  options:
+    parameters:
+      media:
+        type: 'entity:media'
+      style:
+        type: 'entity:image_style'

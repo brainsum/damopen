@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.keyword_contributor
+  module:
+    - user
+id: user_add_role_action.keyword_contributor
+label: 'Add the Keyword contributor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: keyword_contributor

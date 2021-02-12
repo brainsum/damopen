@@ -1,0 +1,66 @@
+# Collections
+add media collection entities:
+  title: 'Create new Media collection entities'
+
+view own media collection entities:
+  title: 'View own Media collection entities'
+
+delete own media collection entities:
+  title: 'Delete own Media collection entities'
+
+edit own media collection entities:
+  title: 'Edit own Media collection entities'
+
+# @todo: Move to "share" module.
+view shared media collection entities:
+  title: 'View any shared media collection'
+
+view any media collection entities:
+  title: 'View Any Media collection entities'
+  restrict access: true
+
+delete any media collection entities:
+  title: 'Delete Any Media collection entities'
+  restrict access: true
+
+edit any media collection entities:
+  title: 'Edit any Media collection entities'
+  restrict access: true
+
+administer media collection entities:
+  title: 'Administer Media collection entities'
+  description: 'Allow to access the administration form to configure Media collection entities.'
+  restrict access: true
+
+# Collection items
+add media collection item entities:
+  title: 'Create new Media collection item entities'
+
+view own media collection item entities:
+  title: 'View own Media collection item entities'
+
+delete own media collection item entities:
+  title: 'Delete own Media collection item entities'
+
+edit own media collection item entities:
+  title: 'Edit own Media collection item entities'
+
+view shared media collection item entities:
+  title: 'View any shared media items in their respective shared collections'
+
+view any media collection item entities:
+  title: 'View Any Media collection item entities'
+  restrict access: true
+
+delete any media collection item entities:
+  title: 'Delete Any Media collection item entities'
+  restrict access: true
+
+edit any media collection item entities:
+  title: 'Edit any Media collection item entities'
+  restrict access: true
+
+administer media collection item entities:
+  title: 'Administer Media collection item entities'
+  description: 'Allow to access the administration form to configure Media collection item entities.'
+  restrict access: true

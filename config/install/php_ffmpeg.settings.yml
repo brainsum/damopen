@@ -1,0 +1,4 @@
+ffmpeg_binary: ''
+ffprobe_binary: ''
+execution_timeout: 15
+threads_amount: 0

@@ -1,0 +1,384 @@
+body {
+    background-color: white !important;
+}
+
+.collection_share_btn {
+    margin-left: 1rem;
+}
+
+.media_collection {
+    margin-top: 20px;
+}
+
+.media_collection h1 {
+    color: black;
+    font-size: 30px;
+}
+
+.collection_icon {
+    width: 30px;
+    position: absolute;
+    margin-left: -35px;
+}
+
+.collection_btn {
+    border: 0;
+    border-radius: 55px;
+    padding: 15px 35px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-bottom: 30px;
+}
+
+.collection_download_btn {
+    background-color: #6cc04a;
+    color: white;
+}
+
+.collection_share_btn {
+    background-color: #e2e2e2;
+    color: black;
+}
+
+.collection-links-wrapper {
+    margin-bottom: 50px;
+}
+
+.card {
+    border: 0 !important;
+    height: 300px;
+}
+
+.card-body {
+    padding: 10px;
+    height: 80px;
+    background-color: #fafafa;
+}
+
+.card-body .asset-type {
+    font-weight: normal;
+}
+
+.card-img-top {
+    background-color: #e3e3e3;
+    height: 200px;
+}
+
+.card-img-top .spotlight-group {
+    height: 200px;
+}
+
+.card-img-top img {
+    height: 100%;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+
+.remove-icon-collection-list {
+    position: absolute;
+    height: 34px !important;
+    margin: 10px !important;
+    right: 0;
+    cursor: pointer;
+    z-index: 1000;
+    visibility: hidden;
+}
+
+.text-overlay-hover .remove-icon-collection-list {
+    visibility: visible !important;
+}
+
+.remove-icon-collection-list-hidden {
+    display: none !important;
+}
+
+
+.text-overlay {
+    position: absolute;
+    height: 40px;
+    margin-top: -55px;
+    margin-bottom: 0;
+    visibility: hidden;
+}
+
+.path-collection .title {
+    font-size: 13px;
+    margin-bottom: 0;
+    color: white;
+    font-weight: 700;
+}
+
+.keywords {
+    color: rgb(191, 191, 191);
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.field--label {
+    font-weight: normal;
+}
+
+.card-body>p {
+    margin-top: 20px;
+    margin-left: 5px;
+    font-weight: 600;
+}
+
+.text-overlay-hover .text-overlay {
+    visibility: visible !important;
+}
+
+.card .card-img-overlay {
+    transition: all 250ms ease-in;
+    height: 200px;
+}
+
+.text-overlay-hover .card-img-overlay {
+    background: rgba(0, 0, 0, .5);
+}
+
+.view-media-library .card-content .btn {
+    margin: 5px;
+}
+
+.add-to-collection-text {
+    padding: 13px 5px !important;
+    vertical-align: middle;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.link .plus {
+    height: 14px;
+}
+
+.link .disabled img {
+    display: none;
+}
+
+.path-collection .ui-dialog {
+    z-index: 1000;
+    top: 155px !important;
+}
+
+.ui-dialog-titlebar-close {
+    background-repeat: no-repeat !important;
+}
+
+.ui-widget-overlay {
+    z-index: 1;
+}
+
+
+
+/*
+Share modal
+*/
+.path-collection .ui-widget-header {
+    background: transparent;
+    padding: 0;
+}
+
+.path-collection .ui-widget-header span{
+    display: none;
+}
+.path-collection .ui-widget-header button {
+    background-size: 13px;
+    background-position-x: 15px;
+    background-position-y: 12px;
+    background-color: white !important;
+    width: 100px !important;
+    height: 36px !important;
+    border-radius: 20px;
+    margin-top: -60px;
+    margin-right: -55px;
+    text-indent: 0;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 0;
+    padding-left: 15px;
+    padding-top: 2px;
+}
+
+.path-collection .ui-widget-header .ui-icon-closethick {
+    width: 16px;
+}
+
+.path-collection .ui-widget {
+    width: 964px !important;
+    padding: 30px 40px;
+}
+
+.path-collection .form-control-label {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.path-collection .form-type-url {
+    margin-bottom: 80px;
+}
+
+.path-collection .description {
+    color: #bfbfbf;
+}
+
+.path-collection input {
+    height: 50px;
+}
+
+.path-collection .form-item-emails input {
+    width: 50%;
+    float: right;
+    margin-right: 205px;
+}
+
+.path-collection .form-item-emails small {
+    float: right;
+    margin-right: 208px;
+}
+
+.path-collection .js-form-submit {
+    position: absolute;
+    bottom: 116px;
+    right: 55px;
+    border-radius: 50px;
+    width: 191px;
+    height: 44px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/*
+Shared collection
+*/
+.path-collection .shared-collection-header {
+    color: black;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.path-collection .shared_media_collection p {
+    margin: 0;
+}
+
+.media_collection .collection-links-wrapper {
+    margin-top: 30px;
+    display: flex;
+    height: 5rem;
+    flex-basis: 150px;
+}
+
+.media_collection .collection-links-wrapper a:hover,
+.media_collection .collection-links-wrapper a:focus {
+    color: #666 !important;
+}
+
+.media_collection .collection-links-wrapper .collection_download_btn {
+    order: 1;
+}
+
+.media_collection .collection-links-wrapper .empty_the_collection_btn {
+    order: 3;
+    background-color: #e2e2e2;
+    color: black;
+    margin-left: auto;
+}
+
+.media_collection .collection-links-wrapper .collection_share_btn {
+    order: 2;
+}
+
+.shared_media_collection .collection-links-wrapper {
+    margin-top: 20px;
+}
+
+.shared_media_collection .item-download-btn {
+    background-color: #6cc04a;
+    color: white;
+    border: 0;
+    border-radius: 55px;
+    padding: 15px 35px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    position: absolute;
+    left: calc(50% - 75px);
+    top: 80px;
+    margin: 0;
+    visibility: hidden;
+}
+
+.shared_media_collection .text-overlay-hover .item-download-btn {
+    visibility: visible !important;
+}
+
+.shared_media_collection .card {
+    height: unset;
+}
+.shared_media_collection .card-body {
+    height: 128px;
+}
+
+.shared_media_collection .card-body div:last-of-type:not(.keywords) {
+    position: absolute;
+    bottom: 15px;
+    cursor: pointer;
+    width: 300px;
+}
+
+
+.shared_media_collection .card-body div:last-of-type:not(.keywords) i{
+    font-size: 24px;
+    margin-right: 5px;
+    opacity: 0.5;
+}
+.shared_media_collection .field--name-field-keywords,
+.shared_media_collection .field--name-name {
+    margin-bottom: -10px;
+    color: #bfbfbf;
+}
+
+.shared_media_collection .field--name-field-keywords .field--item,
+.shared_media_collection .field--name-field-keywords .field--name-name{
+    width: 300px;
+    font-size: 13px;
+    margin-bottom: 0;
+    color: white;
+    font-weight: 700;
+}
+
+.shared_media_collection .dam-media-description-title {
+    vertical-align: super;
+}
+
+.zoom-width {
+    -webkit-animation-name: zoomWidthAndFontSize;
+    -webkit-animation-duration: 1s;
+    animation-name: zoomWidthAndFontSize;
+    animation-iteration-count: 1;
+    animation-duration: 1s;
+}
+
+@keyframes zoomWidthAndFontSize {
+    0% {
+        margin-right: 0;
+    }
+    50% {
+        margin-right: 50px;
+    }
+    100% {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,306 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Media Library module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Queue\SuspendQueueException;
+use Drupal\Core\Site\Settings;
+
+/**
+ * Change the schema from public to private.
+ */
+function damopen_assets_library_update_8001() {
+  $config_factory = Drupal::configFactory();
+  $config = $config_factory->getEditable('field.storage.media.field_image');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_custom_thumbnail');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_files');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_images');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_file');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_template_file');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+
+  $config = $config_factory->getEditable('field.storage.media.field_video_file');
+  $settings = $config->get('settings');
+  $settings['uri_scheme'] = 'private';
+  $config->set('settings', $settings);
+  $config->save(TRUE);
+}
+
+/**
+ * DAM-52: change plain text to HTML formatted.
+ */
+function damopen_assets_library_update_8002() {
+  /* Original from: https://www.drupal.org/project/drupal/issues/2843108 . */
+
+  $field_names = ['field_logo_description', 'field_template_description'];
+  $entity_type = 'media';
+  $database = Drupal::database();
+  /** @var \Drupal\field\FieldStorageConfigStorage $fieldStorageConfigStorage */
+  $fieldStorageConfigStorage = Drupal::entityTypeManager()->getStorage('field_storage_config');
+  /** @var \Drupal\field\FieldConfigStorage $fieldConfigStorage */
+  $fieldConfigStorage = Drupal::entityTypeManager()->getStorage('field_config');
+
+  foreach ($field_names as $field_name) {
+    $table = $entity_type . '__' . $field_name;
+    $revision_table = $entity_type . '_revision__' . $field_name;
+
+    // Step 1: Get field storage.
+    $field_storage = $fieldStorageConfigStorage->load($entity_type . '.' . $field_name);
+
+    // Check if field not found.
+    if (NULL === $field_storage) {
+      continue;
+    }
+
+    // Step 2: Store data.
+    $rows = NULL;
+    $revision_rows = NULL;
+    if ($database->schema()->tableExists($table)) {
+      // The table data to restore after the update is completed.
+      $rows = $database->select($table, 'n')
+        ->fields('n')
+        ->execute()
+        ->fetchAll();
+      $revision_rows = $database->select($revision_table, 'n')
+        ->fields('n')
+        ->execute()
+        ->fetchAll();
+    }
+
+    // Step 3: Save new field configs.
+    $new_fields = [];
+    // Use existing field config for new field.
+    foreach ($field_storage->getBundles() as $bundle => $label) {
+      $field = $fieldConfigStorage->load($entity_type . '.' . $bundle . '.' . $field_name);
+      $new_field = $field->toArray();
+      $new_field['field_type'] = 'text_long';
+      $new_field['settings'] = [];
+
+      $new_fields[] = $new_field;
+    }
+
+    // Step 4: Create new storage configs from existing & delete existing
+    // fields.
+    $new_field_storage = $field_storage->toArray();
+    $new_field_storage['type'] = 'text_long';
+    $new_field_storage['module'] = 'text';
+    $new_field_storage['settings'] = [];
+
+    // Deleting field storage which will also delete bundles(fields).
+    $field_storage->delete();
+
+    // Step 5: Purge deleted fields data.
+    // This is required to create new fields.
+    // Purge field data now to allow new field and field_storage with same name
+    // to be created. You may need to increase batch size.
+    field_purge_batch(250);
+
+    // Step 6: Create new fieldstorage.
+    $new_field_storage = $fieldStorageConfigStorage->create($new_field_storage);
+    $new_field_storage->save();
+
+    // Step 7: Create new fields for all bundles.
+    foreach ($new_fields as $new_field) {
+      $new_field = $fieldConfigStorage->create($new_field);
+      $new_field->save();
+    }
+
+    // Restore existing data in the same table.
+    if (NULL !== $rows) {
+      foreach ($rows as $row) {
+        $rowi = (array) $row;
+        $rowi[$field_name . '_format'] = 'restricted_html';
+        $database->insert($table)
+          ->fields($rowi)
+          ->execute();
+      }
+    }
+    if (NULL !== $revision_rows) {
+      foreach ($revision_rows as $row) {
+        $rowi = (array) $row;
+        $rowi[$field_name . '_format'] = 'restricted_html';
+        $database->insert($revision_table)
+          ->fields($rowi)
+          ->execute();
+      }
+    }
+  }
+}
+
+/**
+ * DAM-89: generate filehash for uploaded files.
+ */
+function damopen_assets_library_update_8003() {
+  $fileStorage = Drupal::entityTypeManager()->getStorage('file');
+
+  $enabled = Drupal::service('module_installer')->install(['filehash'], TRUE);
+  if ($enabled) {
+    $config_path = Settings::get('config_sync_directory');
+    $source = new FileStorage($config_path);
+    $config_storage = Drupal::service('config.storage');
+    $config_storage->write('filehash.settings', $source->read('filehash.settings'));
+    drupal_flush_all_caches();
+    /** @var \Drupal\file\FileInterface[] $files */
+    $files = $fileStorage->loadMultiple();
+    foreach ($files as $file) {
+      filehash_hash($file);
+      filehash_save($file);
+    }
+  }
+}
+
+/**
+ * Enable DBEE and run encrypt.
+ */
+function damopen_assets_library_update_8004() {
+  // Check encrypt.key file.
+  $file = 'private://keys/encrypt.key';
+  if (!is_file($file) || !is_readable($file)) {
+    throw new Exception("Required encrypt key doesn't exist or isn't readable.");
+  }
+
+  Drupal::service('module_installer')->install(['dbee']);
+
+  $projectConfigPath = Settings::get('config_sync_directory');
+  $source = new FileStorage($projectConfigPath);
+  $configStorage = Drupal::service('config.storage');
+
+  $configs = [
+    'key.key.dbee',
+    'encrypt.profile.dbee',
+  ];
+
+  foreach ($configs as $config) {
+    $configStorage->write($config, $source->read($config));
+  }
+
+  // @todo: How to handle this? Require dbee?
+  module_load_include('inc', 'dbee', 'dbee.users');
+  dbee_update_crypt_all('encrypt');
+}
+
+/**
+ * Enable field encryption module, import configs, run fields encrypt.
+ */
+function damopen_assets_library_update_8005() {
+  // Enable field encryption module.
+  Drupal::service('module_installer')->install(['field_encrypt'], TRUE);
+  drupal_flush_all_caches();
+  // Import field encryption configuration from sync directory.
+  _damopen_assets_library_import_field_encryption_config();
+  // Import field encryption configuration for fields and run encryption.
+  _damopen_assets_library_field_encryption();
+}
+
+/**
+ * Import field encryption configuration from sync directory.
+ */
+function _damopen_assets_library_import_field_encryption_config() {
+  $projectConfigPath = Settings::get('config_sync_directory');
+  $source = new FileStorage($projectConfigPath);
+  $configStorage = Drupal::service('config.storage');
+
+  $configs = [
+    'field_encrypt.settings',
+    'key.key.encrypt',
+    'encrypt.profile.encrypt',
+  ];
+
+  foreach ($configs as $config) {
+    $configStorage->write($config, $source->read($config));
+  }
+}
+
+/**
+ * Import field encryption configuration for fields and run encryption.
+ */
+function _damopen_assets_library_field_encryption() {
+  $projectConfigPath = Settings::get('config_sync_directory');
+  $source = new FileStorage($projectConfigPath);
+  $config_factory = Drupal::configFactory();
+  $queue_factory = Drupal::service('queue');
+  $queue_manager = Drupal::service('plugin.manager.queue_worker');
+
+  $field_configs = [
+    'field.storage.user.field_user_fullname',
+  ];
+
+  $i = 0;
+  $messenger = Drupal::messenger();
+
+  foreach ($field_configs as $field_config) {
+    $field_settings = $source->read($field_config);
+    $field_storage_config = $config_factory->getEditable($field_config);
+    $field_storage_config->setData($field_settings);
+    $field_storage_config->save();
+    drupal_flush_all_caches();
+
+    /** @var \Drupal\Core\Queue\QueueInterface $queue */
+    $queue = $queue_factory->get('cron_encrypted_field_update');
+    /** @var \Drupal\Core\Queue\QueueWorkerInterface $queue_worker */
+    $queue_worker = $queue_manager->createInstance('cron_encrypted_field_update');
+    while ($item = $queue->claimItem()) {
+      $i++;
+      try {
+        $messenger->addMessage(t('Updating @field_name on @entity_type with ID @entity_id', [
+          '@field_name' => $item->data['field_name'],
+          '@entity_type' => $item->data['entity_type'],
+          '@entity_id' => $item->data['entity_id'],
+        ]));
+
+        $queue_worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (SuspendQueueException $e) {
+        $queue->releaseItem($item);
+      }
+      catch (Exception $e) {
+        watchdog_exception('field_encrypt', $e);
+      }
+    }
+  }
+  $message = Drupal::translation()->formatPlural($i, 'One field updated.', '@count fields updated.');
+  $messenger->addMessage($message);
+}
+
+/**
+ * Clean out the stuck media_entity module.
+ */
+function damopen_assets_library_update_8501() {
+  Drupal::database()
+    ->delete('key_value')
+    ->condition('collection', 'system.schema')
+    ->condition('name', 'media_entity')
+    ->execute();
+}

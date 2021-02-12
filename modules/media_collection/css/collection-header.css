@@ -1,0 +1,40 @@
+.dam-media-collection-link {
+    background: transparent !important;
+}
+
+.collection-item-number-wrapper {
+    width: 15px;
+    height: 10px;
+    z-index: 2;
+    position: fixed;
+    margin-left: 14px;
+}
+
+.collection-item-number {
+    text-align: center;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.collection-text {
+    padding-left: 33px;
+}
+.empty-collection-text {
+    padding-left: 30px;
+}
+
+.collection-icon {
+    width: 35px;
+    margin-top: -10px;
+    position: absolute;
+}
+
+.empty-collection-icon {
+    width: 35px;
+    margin-top: -10px;
+    position: absolute;
+}
+
+.card-content .disabled {
+    pointer-events: all !important;
+}

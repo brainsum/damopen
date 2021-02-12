@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_template_description
+    - media.type.guideline
+  module:
+    - text
+id: media.guideline.field_template_description
+field_name: field_template_description
+entity_type: media
+bundle: guideline
+label: Description
+description: 'The description of the guideline.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

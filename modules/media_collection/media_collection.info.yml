@@ -1,0 +1,15 @@
+name: 'Media collection'
+type: module
+description: 'Collection/Basket/Cart feature for media items.'
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+dependencies:
+  - damopen:damopen_assets_download
+  - damopen:damopen_common
+  - drupal:media
+  - drupal:image
+  - drupal:file
+  - drupal:user
+  - drupal:jsonapi

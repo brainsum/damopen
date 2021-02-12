@@ -1,0 +1,51 @@
+cdn_provider: ''
+navbar_inverse: 1
+navbar_position: static-top
+region_wells:
+  navigation: ''
+  navigation_collapsible: ''
+  header: ''
+  highlighted: ''
+  help: ''
+  content: ''
+  sidebar_first: ''
+  sidebar_second: ''
+  footer: ''
+button_iconize: 0
+forms_smart_descriptions: 0
+table_hover: 0
+table_responsive: '1'
+modal_enabled: 0
+modal_animation: 0
+modal_show: 0
+popover_enabled: 0
+popover_animation: 0
+popover_placement: 'auto right'
+popover_selector: '[data-toggle="popover"]'
+popover_title: Help
+tooltip_placement: 'auto top'
+tooltip_selector: '[data-toggle="tooltip"]'
+favicon:
+  mimetype: image/vnd.microsoft.icon
+  path: ''
+  url: /themes/contrib/bootstrap/favicon.ico
+  use_default: true
+schemas:
+  bootstrap: 8000
+  damo_theme: 8000
+logo:
+  path: 'private://brainsum-dam-logo-v3_03.png'
+  url: ''
+  use_default: true
+cdn_theme: ''
+cdn_cache_ttl_versions: 0
+cdn_cache_ttl_themes: 0
+cdn_cache_ttl_assets: 0
+cdn_cache_ttl_library: 0
+reset_http_request_cache: ''
+table: ''
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  node_user_picture: false

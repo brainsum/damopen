@@ -1,0 +1,26 @@
+{
+    "name": "drupal/media_collection_share",
+    "description": "Allows sharing Collections of media assets.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "repositories": {
+        "drupal-8": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "require": {
+        "ext-json": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}

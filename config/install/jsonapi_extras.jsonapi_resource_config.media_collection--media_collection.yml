@@ -1,0 +1,52 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_collection
+id: media_collection--media_collection
+disabled: true
+path: media_collection/media_collection
+resourceType: media_collection--media_collection
+resourceFields:
+  id:
+    fieldName: id
+    publicName: id
+    enhancer:
+      id: ''
+    disabled: false
+  uuid:
+    fieldName: uuid
+    publicName: uuid
+    enhancer:
+      id: ''
+    disabled: false
+  langcode:
+    fieldName: langcode
+    publicName: langcode
+    enhancer:
+      id: ''
+    disabled: false
+  uid:
+    fieldName: uid
+    publicName: uid
+    enhancer:
+      id: ''
+    disabled: false
+  created:
+    fieldName: created
+    publicName: created
+    enhancer:
+      id: ''
+    disabled: false
+  items:
+    fieldName: items
+    publicName: items
+    enhancer:
+      id: ''
+    disabled: false
+  default_langcode:
+    fieldName: default_langcode
+    publicName: default_langcode
+    enhancer:
+      id: ''
+    disabled: false

@@ -1,0 +1,10 @@
+services:
+  damopen_assets_thumbnails.video_thumbnail:
+    class: Drupal\damopen_assets_thumbnails\Service\VideoThumbnail
+    arguments:
+      - '@php_ffmpeg'
+      - '@damopen_common.file_system'
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@config.factory'
+      - '@stream_wrapper_manager'

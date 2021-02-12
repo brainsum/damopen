@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: linkedin_personal_account_newsfeed_update_organic_no_badge
+label: 'LinkedIn, personal account newsfeed update (organic) (no badge)'
+effects:
+  bc90cd50-27a6-4d3d-b10f-43ae4ea7676f:
+    uuid: bc90cd50-27a6-4d3d-b10f-43ae4ea7676f
+    id: focal_point_scale_and_crop
+    weight: 2
+    data:
+      width: 520
+      height: 272
+      crop_type: focal_point

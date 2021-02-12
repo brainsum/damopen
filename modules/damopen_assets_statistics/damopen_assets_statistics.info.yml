@@ -1,0 +1,10 @@
+name: "Media Statistics"
+type: module
+description: Media statistics.
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+dependencies:
+  - drupal:media
+  - drupal:block

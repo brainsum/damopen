@@ -1,0 +1,25 @@
+date_format_exif: null
+granularity: 0
+update_metadata: true
+write_empty_values: true
+extraction_solution: php_extensions
+exiftool_location: exiftool
+vocabulary: '0'
+mediatypes:
+  image: image
+  document: '0'
+  gallery: '0'
+  instagram: '0'
+  logo: '0'
+  template: '0'
+  tweet: '0'
+  video: '0'
+  video_file: '0'
+nodetypes:
+  blog: '0'
+  main_page_box: '0'
+  media_asset: '0'
+  newsletter: '0'
+  static_page: '0'
+  website_content: '0'
+filetypes: {  }

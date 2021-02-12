@@ -1,0 +1,10 @@
+name: 'Media collection share'
+type: module
+description: 'Share feature for the media_collection module.'
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+dependencies:
+  - damopen:damopen_assets_download
+  - media_collection:media_collection

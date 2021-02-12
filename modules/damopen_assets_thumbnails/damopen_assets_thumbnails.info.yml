@@ -1,0 +1,13 @@
+name: "Media Asset Thumbnails"
+type: module
+description: Media assets thumbnails functionality
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - damopen:damopen_common
+  - drupal:media
+  - drupal:file
+  - php_ffmpeg:php_ffmpeg

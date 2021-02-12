@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - damopen_assets
+    - system
+  theme:
+    - damo_theme
+id: damo_theme_assets_navigation
+theme: damo_theme
+region: navigation
+weight: -4
+provider: null
+plugin: dam_navigation_block
+settings:
+  id: dam_navigation_block
+  label: 'DAM Navigation'
+  provider: damopen_assets
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "<front>\r\n/media/*\r\n/user/*\r\n/admin/content/media\r\n/collection"
+    negate: false
+    context_mapping: {  }

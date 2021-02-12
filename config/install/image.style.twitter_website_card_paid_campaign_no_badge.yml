@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: twitter_website_card_paid_campaign_no_badge
+label: 'Twitter Website card (paid campaign) (no badge)'
+effects:
+  aa6ca414-7f84-44d9-9fae-47c1d6142af9:
+    uuid: aa6ca414-7f84-44d9-9fae-47c1d6142af9
+    id: focal_point_scale_and_crop
+    weight: 2
+    data:
+      width: 800
+      height: 418
+      crop_type: focal_point

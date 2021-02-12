@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+id: dam
+label: DAM
+weight: 2
+is_admin: null
+permissions:
+  - 'view any published media'
+  - 'view media'
+  - 'view shared media collection entities'
+  - 'view shared media collection item entities'

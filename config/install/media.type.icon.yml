@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_entity_imagemagick
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: field_file
+  media_upload:
+    enabled: 1
+    upload_target_field: field_file
+id: icon
+label: Icon
+description: 'Use Icon to upload icons.'
+source: imagemagick
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_file
+  custom_thumbnail_field: field_custom_thumbnail
+  imagemagick_operation: convert
+  apply_operation: '1'
+  conversion_output_type: png
+field_map: {  }

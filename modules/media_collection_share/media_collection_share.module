@@ -1,0 +1,440 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\media\MediaInterface;
+use Drupal\media_collection\Entity\MediaCollectionItemInterface;
+use Drupal\media_collection_share\Entity\SharedMediaCollectionInterface;
+use Drupal\media_collection_share\Service\CollectionMailer;
+
+/**
+ * Implements hook_theme().
+ */
+function media_collection_share_theme($existing, $type, $theme, $path) {
+  return [
+    'shared_media_collection' => [
+      'render element' => 'content',
+    ],
+    'media_collection_item__shared' => [
+      'render element' => 'content',
+      'base hook' => 'media_collection_item',
+    ],
+    'media__shared_collection_item' => [
+      'render element' => 'content',
+      'base hook' => 'media',
+    ],
+    'notification__collection_shared' => [
+      'variables' => [
+        'data' => [],
+        'elements' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_share_preprocess_media_collection(array &$variables) {
+  /* @todo:
+   * Unify with media_collection_share_preprocess_shared_media_collection.
+   */
+  /* @todo
+   * Fix user permissions.
+   */
+  /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $collection */
+  $collection = $variables['content']['#media_collection'];
+
+  if (empty($variables['additional_collection_data']['render']['links'])) {
+    $variables['additional_collection_data'] = [];
+    $variables['additional_collection_data']['render'] = [];
+    $variables['additional_collection_data']['render']['links'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'collection-links-wrapper',
+        ],
+      ],
+    ];
+  }
+
+  $currentUser = Drupal::currentUser();
+  $shareFormUrl = Url::fromRoute('media_collection_share.collection.share_form');
+
+  if ($collection->itemCount() > 0 && $shareFormUrl->access($currentUser)) {
+    $variables['additional_collection_data']['render']['links']['share'] = [
+      '#type' => 'link',
+      '#title' => new TranslatableMarkup('Share the current state of this collection'),
+      '#url' => $shareFormUrl,
+      '#attributes' => [
+        'class' => [
+          'use-ajax',
+          'collection_btn',
+          'collection_share_btn',
+        ],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => json_encode(['width' => '70%']),
+      ],
+      '#cache' => [
+        'tags' => $collection->getCacheTags(),
+        'contexts' => $collection->getCacheContexts(),
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_share_preprocess_shared_media_collection(array &$variables) {
+  /** @var \Drupal\media_collection_share\Entity\SharedMediaCollectionInterface $sharedCollection */
+  $sharedCollection = $variables['content']['#shared_media_collection'];
+
+  $collectionUser = $sharedCollection->getOwner();
+  $assetsDir = drupal_get_path('module', 'media_collection') . '/assets';
+
+  $variables['additional_collection_data']['data']['icons'] = [
+    'regular' => [
+      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon.png"))
+        ->getUri(),
+    ],
+    'blue' => [
+      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon-blue.png"))
+        ->getUri(),
+    ],
+  ];
+
+  $variables['additional_collection_data']['render']['header'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h1',
+    '#value' => t('This set of assets was created by %owner_name (%owner_mail)', [
+      '%owner_name' => $collectionUser->get('field_user_fullname')->value ?? $collectionUser->getDisplayName(),
+      '%owner_mail' => $collectionUser->getEmail(),
+    ]),
+    '#attributes' => [
+      'class' => [
+        'shared-collection-header',
+      ],
+    ],
+  ];
+
+  /** @var \Drupal\media_collection\Service\FileSizeCalculator $sizeCalculator */
+  $sizeCalculator = Drupal::service('media_collection.file_size_calculator');
+
+  $variables['additional_collection_data']['data']['item_count'] = $sharedCollection->itemCount();
+  $variables['additional_collection_data']['data']['collection_size'] = $sizeCalculator->formattedCollectionSize($sharedCollection);
+
+  /* @todo
+   * The design says "It was shared via email on ..". How to?
+   */
+  $variables['additional_collection_data']['render']['share_date'] = [
+    '#markup' => new TranslatableMarkup('It was shared on %share_date', [
+      '%share_date' => Drupal::service('date.formatter')
+        ->format($sharedCollection->getCreatedTime(), 'custom', 'jS M Y'),
+    ]),
+  ];
+  $variables['additional_collection_data']['render']['size_info'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'p',
+    '#value' => t('There are %count items in your collection. Filesize: %size', [
+      '%count' => $variables['additional_collection_data']['data']['item_count'],
+      '%size' => $variables['additional_collection_data']['data']['collection_size'],
+    ]),
+  ];
+
+  $variables['additional_collection_data']['render']['share_url'] = [
+    '#markup' => new TranslatableMarkup('For further sharing use this URL, share only with trusted contacts: %share_url', [
+      '%share_url' => $sharedCollection->shareAbsoluteUrl(),
+    ]),
+  ];
+
+  /* @todo:
+   * If file does not exist, add classes, disable download.
+   */
+
+  $variables['additional_collection_data']['render']['links'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => [
+        'collection-links-wrapper',
+      ],
+    ],
+  ];
+
+  // @todo: Clean up the "date" creation, maybe add helper for the collection.
+  $variables['additional_collection_data']['render']['links']['download_all'] = [
+    '#type' => 'link',
+    '#title' => new TranslatableMarkup('Download all'),
+    '#url' => Url::fromRoute('media_collection_share.collection.shared.asset_download', [
+      'date' => Drupal::service('date.formatter')
+        ->format($sharedCollection->getCreatedTime(), 'custom', 'Y-m-d'),
+      'uuid' => $sharedCollection->uuid(),
+    ]),
+    '#attributes' => [
+      'class' => [
+        'collection_btn',
+        'collection_download_btn',
+      ],
+      'download' => '',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_share_preprocess_media_collection_item(array &$variables) {
+  if ($variables['content']['#view_mode'] === 'shared') {
+    /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $item */
+    $item = $variables['content']['#media_collection_item'];
+
+    if (!isset($variables['additional_shared_item_data'])) {
+      $variables['additional_shared_item_data'] = [];
+    }
+
+    $variables['additional_shared_item_data']['item_download_link'] = [
+      '#type' => 'link',
+      '#title' => new TranslatableMarkup('Download'),
+      '#url' => Url::fromRoute(
+        'media_collection_share.collection.shared.item_download',
+        [
+          'uuid' => $item->uuid(),
+        ]
+      ),
+      '#attributes' => [
+        'class' => [
+          'btn',
+          'item-download-btn',
+        ],
+      ],
+    ];
+
+    $mediaTypeStorage = Drupal::entityTypeManager()->getStorage('media_type');
+
+    if ($mediaType = $mediaTypeStorage->load($item->media()->bundle())) {
+      /** @var \Drupal\media\MediaTypeInterface $mediaType */
+      $variables['additional_shared_item_data']['usage_advice'] = [
+        '#type' => 'container',
+        'title' => [
+          '#prefix' => '<i class="icon icon-help"></i><span class="dam-media-description-title">',
+          '#suffix' => '</span>',
+          '#markup' => new TranslatableMarkup('Usage advice'),
+        ],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function media_collection_share_entity_base_field_info(EntityTypeInterface $entityType) {
+  if ($entityType->id() === 'media_collection_item') {
+    $fields = [];
+    $fields['shared_parent'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Parent (shared)'))
+      ->setDescription(new TranslatableMarkup('Parent collection (shared) of the item.'))
+      ->setSetting('target_type', 'shared_media_collection')
+      ->setSetting('handler', 'default')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setCardinality(1)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'author',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    return $fields;
+  }
+
+  return [];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function media_collection_share_media_collection_item_access(MediaCollectionItemInterface $item, $operation, AccountInterface $account) {
+  if (
+    $operation === 'view'
+    && _media_collection_share_is_item_shared($item)
+    && _media_collection_share_on_shared_collection_url($item)
+  ) {
+    return AccessResult::allowedIfHasPermission($account, 'view shared media collection item entities');
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Check if an item is shared or not.
+ *
+ * @param \Drupal\media_collection\Entity\MediaCollectionItemInterface $item
+ *   The item.
+ *
+ * @return bool
+ *   TRUE if the item is shared.
+ *
+ * @todo: Move to service.
+ */
+function _media_collection_share_is_item_shared(MediaCollectionItemInterface $item): bool {
+  return $item->hasField('shared_parent') && !$item->get('shared_parent')
+      ->isEmpty();
+}
+
+/**
+ * Return whether we are on a shared URL for a collection containing the item.
+ *
+ * @param \Drupal\media_collection\Entity\MediaCollectionItemInterface $item
+ *   The item.
+ *
+ * @return bool
+ *   TRUE if we are on a collection shared URL where the item is visible.
+ *
+ * @todo: Move to service.
+ */
+function _media_collection_share_on_shared_collection_url(MediaCollectionItemInterface $item): bool {
+  if (
+    !$item->hasField('shared_parent')
+    || $item->get('shared_parent')->isEmpty()
+    || Drupal::routeMatch()
+      ->getRouteName() !== 'media_collection_share.collection.shared'
+  ) {
+    return FALSE;
+  }
+
+  /** @var \Drupal\media_collection_share\Entity\SharedMediaCollectionInterface $parent */
+  $parent = $item->get('shared_parent')->entity;
+
+  return Drupal::request()->getPathInfo() === $parent->shareUrl();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function media_collection_share_shared_media_collection_insert(SharedMediaCollectionInterface $collection) {
+  /** @var \Drupal\media_collection_share\Service\CollectionMailer $mailer */
+  $mailer = Drupal::service('media_collection_share.mailer');
+  $mailer->sendCollection($collection);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function media_collection_share_shared_media_collection_update(SharedMediaCollectionInterface $collection) {
+  /** @var \Drupal\media_collection_share\Service\CollectionMailer $mailer */
+  $mailer = Drupal::service('media_collection_share.mailer');
+  $mailer->sendCollection($collection);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function media_collection_share_mail($key, &$message, $params) {
+  if ($key === CollectionMailer::MAIL_KEY) {
+    $message['from'] = Drupal::config('system.site')->get('mail');
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['message'];
+    $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+    $message['params']['format'] = 'text/html';
+    $message['params']['plain'] = NULL;
+  }
+}
+
+/**
+ * Implements hook_entity_view_mode_alter().
+ */
+function media_collection_share_entity_view_mode_alter(&$view_mode, EntityInterface $entity, $context) {
+  //  $request = \Drupal::request();
+  //  $route = $request->attributes->get('_route', NULL);
+  //
+  //  if (
+  //    $route === 'media_collection_share.collection.shared'
+  //    && $entity->getEntityTypeId() === 'media'
+  //  ) {
+  //    $view_mode = 'shared_collection_item';
+  //  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function media_collection_share_media_collection_item_predelete(MediaCollectionItemInterface $item) {
+  /** @var \Drupal\media_collection_share\Entity\SharedMediaCollectionInterface|null $parentCollection */
+  $parentCollection = $item->get('shared_parent')->entity;
+
+  if (!$parentCollection) {
+    // @todo: Log, items should always have a parent entity.
+    return;
+  }
+
+  $parentCollection->removeItem($item);
+  // Maybe:
+  // empty($parentCollection->items()) ? $parentCollection->delete() : $parentCollection->save();.
+  $parentCollection->save();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function media_collection_share_media_access(MediaInterface $media, $operation, AccountInterface $account) {
+  // Only allow view op for media on the share page when the media belongs
+  // to that shared collection.
+  $routeMatch = Drupal::routeMatch();
+
+  if ($operation !== 'view' || $routeMatch->getRouteName() !== 'media_collection_share.collection.shared') {
+    return AccessResult::neutral();
+  }
+
+  $currentUuid = $routeMatch->getParameter('uuid');
+
+  if (!$currentUuid) {
+    return AccessResult::neutral();
+  }
+
+  $entityTypeManager = Drupal::entityTypeManager();
+  $sharedStorage = $entityTypeManager->getStorage('shared_media_collection');
+  $sharedCollections = $sharedStorage->loadByProperties(['uuid' => $currentUuid]);
+  /** @var \Drupal\media_collection_share\Entity\SharedMediaCollectionInterface|null $sharedCollection */
+  $sharedCollection = reset($sharedCollections);
+
+  if (!$sharedCollection) {
+    return AccessResult::neutral();
+  }
+
+  $mediaId = $media->id();
+  $items = array_filter(
+    $sharedCollection->items(),
+    static function (MediaCollectionItemInterface $item) use ($mediaId) {
+      return $item->media()->id() === $mediaId;
+    }
+  );
+
+  if (empty($items)) {
+    return AccessResult::neutral();
+  }
+
+  return AccessResult::allowedIfHasPermission($account, 'view shared media collection item entities');
+}

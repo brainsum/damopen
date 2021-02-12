@@ -1,0 +1,263 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_category
+    - field.storage.media.field_file
+    - field.storage.media.field_files
+    - field.storage.media.field_image
+    - field.storage.media.field_images
+    - field.storage.media.field_keywords
+    - field.storage.media.field_template_file
+    - field.storage.media.field_video_file
+    - search_api.server.local_database_server
+  module:
+    - media
+    - file
+    - taxonomy
+    - search_api
+id: database_media
+name: database_media
+description: 'DB Index for media entities.'
+read_only: false
+field_settings:
+  author:
+    label: 'Authored by'
+    datasource_id: 'entity:media'
+    property_path: uid
+    type: integer
+    dependencies:
+      module:
+        - media
+  changed:
+    label: Changed
+    datasource_id: 'entity:media'
+    property_path: changed
+    type: date
+    dependencies:
+      module:
+        - media
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:media'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - media
+  file_filename:
+    label: 'File Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_file:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_file
+      module:
+        - file
+        - file
+  files_filename:
+    label: 'Files Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_files:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_files
+      module:
+        - file
+        - file
+  image_filename:
+    label: 'Image Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_image:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_image
+      module:
+        - file
+        - file
+  images_filename:
+    label: 'Images Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_images:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_images
+      module:
+        - file
+        - file
+  media_bundle:
+    label: 'Media type'
+    datasource_id: 'entity:media'
+    property_path: bundle
+    type: text
+    dependencies:
+      module:
+        - media
+  media_category:
+    label: Category
+    datasource_id: 'entity:media'
+    property_path: field_category
+    type: integer
+    dependencies:
+      config:
+        - field.storage.media.field_category
+  media_keywords:
+    label: Keywords
+    datasource_id: 'entity:media'
+    property_path: field_keywords
+    type: integer
+    dependencies:
+      config:
+        - field.storage.media.field_keywords
+  media_keywords_name:
+    label: 'Keywords Name'
+    datasource_id: 'entity:media'
+    property_path: 'field_keywords:entity:name'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_keywords
+      module:
+        - taxonomy
+        - taxonomy
+  media_name:
+    label: 'Media name'
+    datasource_id: 'entity:media'
+    property_path: name
+    type: text
+    dependencies:
+      module:
+        - media
+  media_status:
+    label: Published
+    datasource_id: 'entity:media'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - media
+  template_filename:
+    label: 'Template Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_template_file:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_template_file
+      module:
+        - file
+        - file
+  video_filename:
+    label: 'Video Filename'
+    datasource_id: 'entity:media'
+    property_path: 'field_video_file:entity:filename'
+    type: text
+    dependencies:
+      config:
+        - field.storage.media.field_video_file
+      module:
+        - file
+        - file
+datasource_settings:
+  'entity:media':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  hierarchy:
+    fields:
+      media_category: taxonomy_term-parent
+      media_keywords: taxonomy_term-parent
+    weights:
+      preprocess_index: -45
+  highlight:
+    highlight: always
+    highlight_partial: false
+    excerpt: true
+    excerpt_length: 256
+    exclude_fields: {  }
+    prefix: '<strong>'
+    suffix: '</strong>'
+    weights:
+      postprocess_query: 0
+  html_filter:
+    all_fields: false
+    fields:
+      - file_filename
+      - files_filename
+      - image_filename
+      - images_filename
+      - media_bundle
+      - media_keywords_name
+      - media_name
+      - template_filename
+      - video_filename
+    title: true
+    alt: true
+    tags:
+      b: 2
+      em: 1
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+      u: 1
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+  ignore_character:
+    all_fields: false
+    fields:
+      - file_filename
+      - files_filename
+      - image_filename
+      - images_filename
+      - media_bundle
+      - media_keywords_name
+      - media_name
+      - template_filename
+      - video_filename
+    ignorable: '[''¿¡!?,.:;]'
+    ignorable_classes:
+      - Pc
+      - Pd
+      - Pe
+      - Pf
+      - Pi
+      - Po
+      - Ps
+    weights:
+      preprocess_index: -10
+      preprocess_query: -10
+  language_with_fallback: {  }
+  rendered_item: {  }
+  type_boost:
+    boosts:
+      'entity:media':
+        datasource_boost: !!float 1
+        bundle_boosts:
+          guideline: !!float 0
+          icon: !!float 0
+          image: !!float 0
+          logo: !!float 0
+          template: !!float 0
+          video: !!float 0
+          video_file: !!float 0
+    weights:
+      preprocess_index: 0
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  cron_limit: 500
+server: local_database_server

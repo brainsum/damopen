@@ -1,0 +1,34 @@
+{
+    "name": "drupal/damopen_assets_thumbnails",
+    "description": "Thumbnail module for the DAMo drupal distribution.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": {
+        "drupal-8": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "drupal/php_ffmpeg": "^1.0"
+    },
+    "extra": {
+        "patches": {
+            "drupal/php_ffmpeg": {
+                "Fix for preg_match": "https://www.drupal.org/files/issues/2019-05-31/cache_needs_to_return_string-2851222-7.patch"
+            }
+        }
+    }
+}

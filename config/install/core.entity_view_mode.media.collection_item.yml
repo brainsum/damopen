@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.collection_item
+label: 'Collection item'
+targetEntityType: media
+cache: true

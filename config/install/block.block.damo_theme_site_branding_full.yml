@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - damo_theme
+id: damo_theme_site_branding_full
+theme: damo_theme
+region: navigation
+weight: -5
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding (full)'
+  provider: system
+  label_display: '0'
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

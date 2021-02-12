@@ -1,0 +1,5 @@
+access media asset library:
+  title: 'Access media asset library'
+  description: 'Allows access for the media asset library (the frontpage)'
+
+# @todo: Move to damopen_assets_lister? Or move that here?

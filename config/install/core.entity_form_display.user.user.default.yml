@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_user_fullname
+  module:
+    - user
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  account:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  contact:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_user_fullname:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  language:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  timezone:
+    weight: 6
+    region: content
+hidden:
+  langcode: true

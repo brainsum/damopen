@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: twitter_in_stream_photo
+label: 'Twitter In-Stream Photo'
+effects:
+  da3806a1-dd3e-45b5-975c-af76d7736e21:
+    uuid: da3806a1-dd3e-45b5-975c-af76d7736e21
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1024
+      height: 512
+      crop_type: focal_point
+  6f37f632-de94-4096-a852-6fcb4a7d5380:
+    uuid: 6f37f632-de94-4096-a852-6fcb4a7d5380
+    id: image_effects_watermark
+    weight: 2
+    data:
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''

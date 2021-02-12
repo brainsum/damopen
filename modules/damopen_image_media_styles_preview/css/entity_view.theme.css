@@ -1,0 +1,114 @@
+/**
+ * @file
+ * CSS rules for damopen_assets module.
+ */
+
+.media-asset-filter-form .form-item-platform,
+.media-asset-filter-form .form-actions {
+  display: inline-block;
+}
+
+.media-asset-filter-form .form-group {
+  margin-bottom: 0;
+}
+
+/* @fixme what if no javascript? */
+.media-asset-filter-form .form-actions {
+  display: none;
+}
+
+.social-media-assets tbody tr td {
+  vertical-align: middle;
+  border-top: 2px solid #e3e3e3;
+}
+
+.social-media-assets caption {
+  caption-side: top;
+}
+
+.social-media-assets .media-actions {
+  text-align: center;
+}
+
+.social-media-assets .media-size {
+  font-size: .8em;
+  margin: .5em 0;
+  color: grey;
+  font-weight: bold;
+}
+
+.social-media-assets .media-style {
+  font-weight: bold;
+}
+.social-media-assets .media-platform {
+  padding: 0;
+  border-top: 0;
+  width: 40px;
+}
+
+@media screen and (max-width: 900px) {
+  .social-media-assets tbody tr td {
+    display: block;
+    width: 100% !important;
+    text-align: center;
+    border: 0;
+  }
+
+  .social-media-assets .media-style {
+    padding: 0;
+  }
+
+  .social-media-assets .media-platform {
+    margin-bottom: 1em;
+  }
+}
+
+.social-media-assets .media-platform-linkedin {
+  background-color: #007bb6;
+}
+
+.social-media-assets .media-platform-twitter {
+  background-color: #00aced;
+}
+
+.social-media-assets .media-platform-instagram {
+  background: #fed575;
+  background: -moz-linear-gradient(45deg, #fed575 0%, #e03a61 50%, #9437bf 100%);
+  background: -webkit-gradient(left bottom, right top, color-stop(0%, #fed575), color-stop(50%, #e03a61), color-stop(100%, #9437bf));
+  background: -webkit-linear-gradient(45deg, #fed575 0%, #e03a61 50%, #9437bf 100%);
+  background: -o-linear-gradient(45deg, #fed575 0%, #e03a61 50%, #9437bf 100%);
+  background: -ms-linear-gradient(45deg, #fed575 0%, #e03a61 50%, #9437bf 100%);
+  background: linear-gradient(45deg, #fed575 0%, #e03a61 50%, #9437bf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fed575', endColorstr='#9437bf', GradientType=1);
+}
+
+.social-media-assets .media-platform-ms {
+  background-color: #fed575;
+}
+
+.social-media-assets .media-platform-other {
+  background-color: #888;
+}
+.social-media-assets .media-platform-facebook {
+  background-color: #3b5998;
+}
+
+.single .icon--item-in-collection {
+  display: none;
+}
+
+.controller:not(.single) .icon--item-in-collection {
+  display: none;
+  position: absolute;
+  height: 21px;
+  margin-left: -25px;
+}
+.controller .button--remove-style-from-collection {
+  display: none;
+  color: #62b3e5;
+}
+
+.controller:not(.single) .in-collection .icon--item-in-collection,
+.controller .in-collection .button--remove-style-from-collection {
+  display: unset;
+}

@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+name: other_hi_res_no_badge
+label: 'Original ratio (no badge)'
+effects: {  }

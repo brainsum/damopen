@@ -1,0 +1,16 @@
+name: "Image media styles preview"
+type: module
+description: "Adds a style preview feature for Image media entities"
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - damopen:damopen_assets_download
+  - damopen:damopen_common
+  - drupal:media
+  - drupal:file
+  - drupal:image
+  - focal_point:focal_point
+  - image_effects:image_effects

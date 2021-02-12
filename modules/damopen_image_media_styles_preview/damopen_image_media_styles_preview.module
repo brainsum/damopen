@@ -1,0 +1,117 @@
+<?php
+
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\damopen_image_media_styles_preview\Render\AssetPreviewListMarkup;
+use Drupal\file\FileInterface;
+use Symfony\Component\Validator\Exception\InvalidArgumentException;
+
+/**
+ * Implements hook_theme().
+ */
+function damopen_image_media_styles_preview_theme($existing, $type, $theme, $path) {
+  return [
+    'media_column_image' => [
+      'variables' => [
+        'thumbnail' => NULL,
+      ],
+    ],
+    'media_column_metadata' => [
+      'variables' => [
+        'style' => NULL,
+      ],
+    ],
+    'media_display_page' => [
+      'variables' => [
+        'rows' => NULL,
+        'title' => NULL,
+        'metadata' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Helper function to determine if the Entity is a media image asset.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity object in question.
+ *
+ * @return bool
+ *   Whether it is a valid media image asset or not.
+ */
+function _damopen_image_media_styles_preview_is_media_image(EntityInterface $entity) {
+  return ($entity->getEntityTypeId() === 'media' && $entity->bundle() === 'image');
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function damopen_image_media_styles_preview_entity_view_alter(array &$view_mode, EntityInterface $entity, EntityViewDisplay $context) {
+  if ($view_mode['#view_mode'] === 'full' && _damopen_image_media_styles_preview_is_media_image($entity)) {
+    /** @var \Drupal\media\MediaInterface $entity */
+    $view_mode['field_image_preview_list'] = AssetPreviewListMarkup::create(Drupal::getContainer())->render($entity);
+  }
+}
+
+/**
+ * Returns the name of the field which contains the media file.
+ *
+ * @param string $type
+ *   Entity bundle in which we search for the field.
+ *
+ * @return string
+ *   The field name.
+ */
+function _damopen_image_media_styles_preview_get_entity_media_field_name(string $type) {
+  return ($type === 'video' ? 'thumbnail' : 'field_image');
+}
+
+/**
+ * Gets the URI of an image file.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The image file.
+ *
+ * @return string
+ *   The image source.
+ *
+ * @throws InvalidArgumentException
+ */
+function _damopen_image_media_styles_preview_get_image_uri(FileInterface $file) {
+  /** @var \Drupal\Core\Image\Image $image_loaded */
+  $image_loaded = Drupal::service('image.factory')->get($file->getFileUri());
+
+  if (!$image_loaded->isValid()) {
+    throw new InvalidArgumentException('The file with id ' . $file->id() . ' is not an image.');
+  }
+
+  return $image_loaded->getSource();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ *
+ * The image gets cached with the previous focal point value. We need to flush
+ * it so the changes get displayed instantly.
+ */
+function damopen_image_media_styles_preview_media_update(EntityInterface $entity) {
+  if ($entity->bundle() === 'image') {
+    // @note: We could check whether the focal point value has been changed.
+    // $entity->original vs $entity
+    $field_name = _damopen_image_media_styles_preview_get_entity_media_field_name($entity->bundle());
+
+    $image = $entity->{$field_name}->first();
+    /** @var \Drupal\file\FileStorageInterface $fileStorage */
+    $fileStorage = Drupal::entityTypeManager()->getStorage('file');
+    /** @var \Drupal\file\FileInterface|null $file */
+    $file = $fileStorage->load($image->target_id);
+
+    if ($file === NULL) {
+      return;
+    }
+
+    // @see Drupal\focal_point\Controller\FocalPointPreviewController::content()
+    image_path_flush(_damopen_image_media_styles_preview_get_image_uri($file));
+  }
+}

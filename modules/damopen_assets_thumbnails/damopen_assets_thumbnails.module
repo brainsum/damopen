@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Hooks.
+ */
+
+use Drupal\media\MediaInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function damopen_assets_thumbnails_media_presave(MediaInterface $media) {
+  // @todo: Remove custom-thumbnail, expose thumbnail on forms, etc?
+  // @todo: Add condition about thumbnail being the default.
+  // @todo: Also regenerate when the video changes.
+  if (
+    $media->bundle() === 'video_file'
+    && $media->get('field_custom_thumbnail')->isEmpty()
+  ) {
+    /** @var \Drupal\damopen_assets_thumbnails\Service\VideoThumbnail $service */
+    $service = Drupal::service('damopen_assets_thumbnails.video_thumbnail');
+    try {
+      $thumbnail = $service->generateAssetThumbnail($media);
+      $media->set('thumbnail', $thumbnail);
+    }
+    catch (Exception $exception) {
+      Drupal::messenger()->addError(t('The thumbnail for the video could not be generated automatically.'));
+      Drupal::logger('damopen_assets_thumbnails')->error($exception->getMessage());
+    }
+  }
+}

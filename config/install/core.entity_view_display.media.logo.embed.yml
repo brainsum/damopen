@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embed
+    - field.field.media.logo.field_custom_thumbnail
+    - field.field.media.logo.field_files
+    - field.field.media.logo.field_keywords
+    - field.field.media.logo.field_logo_description
+    - media.type.logo
+  module:
+    - file
+id: media.logo.embed
+targetEntityType: media
+bundle: logo
+mode: embed
+content:
+  field_files:
+    type: file_default
+    weight: 3
+    label: visually_hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  field_custom_thumbnail: true
+  field_keywords: true
+  field_logo_description: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

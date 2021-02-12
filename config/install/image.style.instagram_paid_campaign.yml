@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: instagram_paid_campaign
+label: 'Instagram (paid campaign)'
+effects:
+  30904388-63e0-40b8-915b-db5b0ae46cb5:
+    uuid: 30904388-63e0-40b8-915b-db5b0ae46cb5
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 628
+      crop_type: focal_point
+  52903f68-ef70-4743-bf1a-9ce7c29a6449:
+    uuid: 52903f68-ef70-4743-bf1a-9ce7c29a6449
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

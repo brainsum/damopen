@@ -1,0 +1,10 @@
+lister:
+  version: 1.0
+  css:
+    theme:
+      css/entity_view.theme.css: {}
+  js:
+    js/filter.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

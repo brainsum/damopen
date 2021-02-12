@@ -1,0 +1,24 @@
+{#
+/**
+ * @file media_collection.html.twig
+ * Default theme implementation to present Media collection data.
+ *
+ * This template is used when viewing Media collection pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_media_collection()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('media_collection') }}>
+  {{ additional_collection_data.render.header }}
+  {{ additional_collection_data.render.size_info }}
+  {{ additional_collection_data.render.links }}
+
+  {{ content }}
+</div>

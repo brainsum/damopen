@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.video.field_id
+    - field.field.media.video.field_keywords
+    - field.field.media.video.field_source
+    - field.field.media.video.field_video
+    - media.type.video
+  module:
+    - video_embed_field
+id: media.video.default
+targetEntityType: media
+bundle: video
+mode: default
+content:
+  field_keywords:
+    weight: 4
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  name:
+    label: hidden
+    type: string
+    weight: 0
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  field_id: true
+  field_source: true
+  field_video: true
+  langcode: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

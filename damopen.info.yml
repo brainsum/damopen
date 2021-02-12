@@ -1,0 +1,87 @@
+name: 'Digital Media Assets Management'
+type: profile
+description: 'Distribution for quickly starting a new Digital Media Assets Management system with Drupal'
+
+core_version_requirement: ^9.1
+php: 7.3
+
+distribution:
+  name: 'Digital Media Assets Management'
+
+# Soft dependencies; these may be uninstalled.
+install:
+  # Core.
+  - drupal:breakpoint
+  - drupal:config
+  - drupal:dblog
+  - drupal:dynamic_page_cache
+  - drupal:language
+  - drupal:page_cache
+  - drupal:rest
+  - drupal:toolbar
+  - drupal:update
+  # Contrib.
+  - search_api:search_api
+  - search_api:search_api_db
+  # Optional as it's pending removal.
+  - video_embed_field:video_embed_field
+  - video_embed_field:video_embed_media
+  - video_embed_field:video_embed_wysiwyg
+  # DAMo
+  - damopen:damopen_assets_statistics
+  - damopen:damopen_assets_thumbnails
+  - damopen:damopen_image_media_styles_preview
+  - damopen:media_collection
+  - damopen:media_collection_share
+  - damopen:damopen_default_content
+
+# Required dependencies.
+dependencies:
+  # damo
+  - damopen:damopen_assets
+  - damopen:damopen_assets_api
+  - damopen:damopen_assets_download
+  - damopen:damopen_assets_library
+  - damopen:damopen_assets_lister
+  - damopen:damopen_common
+  # Core.
+  - drupal:basic_auth
+  - drupal:block
+  - drupal:ckeditor
+  - drupal:editor
+  - drupal:field
+  - drupal:file
+  - drupal:filter
+  - drupal:image
+  - drupal:jsonapi
+  - drupal:media
+  - drupal:path
+  - drupal:serialization
+  - drupal:taxonomy
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  # Contrib
+  - better_exposed_filters:better_exposed_filters
+  - dropzonejs:dropzonejs
+  - dropzonejs:dropzonejs_eb_widget
+  - entity_browser:entity_browser
+  - entity_browser:entity_browser_entity_form
+  - entity_embed:entity_embed
+  - exif:exif
+  - field_group:field_group
+  - filehash:filehash
+  - focal_point:focal_point
+  - image_effects:image_effects
+  - jsonapi_extras:jsonapi_extras
+  - maxlength:maxlength
+  - media_entity_imagemagick:media_entity_imagemagick
+  - media_upload:media_upload
+  - redirect_after_login:redirect_after_login
+  - taxonomy_access_fix:taxonomy_access_fix
+  - term_merge:term_merge
+  - userprotect:userprotect
+
+# @todo: Rename theme to damopen_theme.
+themes:
+  - damo_theme

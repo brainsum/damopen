@@ -1,0 +1,33 @@
+media_collection_share.collection.shared:
+  path: '/collection/shared/{date}/{uuid}'
+  defaults:
+    _controller: '\Drupal\media_collection_share\Controller\CollectionShareController::sharedCollection'
+    _title: 'Shared collection'
+  requirements:
+    _permission: 'view shared media collection entities'
+
+media_collection_share.collection.share_form:
+  path: '/collection/share-form'
+  defaults:
+    _form: '\Drupal\media_collection_share\Form\CollectionShareModalForm'
+    _title: 'Share your collection'
+  requirements:
+    # @note: Same permissions as for accessing your own collection.
+    _permission: 'add media collection entities,edit own media collection entities,add media collection item entities,edit own media collection item entities'
+
+media_collection_share.collection.shared.asset_download:
+  path: '/collection/download/shared/{date}/{uuid}'
+  defaults:
+    _controller: 'media_collection_share.download_handler:downloadSharedCollection'
+    _title: 'Asset download'
+  requirements:
+    # @todo: Add custom permission for download.
+    _permission: 'view shared media collection entities'
+
+media_collection_share.collection.shared.item_download:
+  path: '/collection/download/shared-item/{uuid}'
+  defaults:
+    _controller: 'media_collection_share.download_handler:downloadSharedItem'
+    _title: 'Item download'
+  requirements:
+    _permission: 'view shared media collection entities'

@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_video_file
+    - media.type.video_file
+  module:
+    - file
+id: media.video_file.field_video_file
+field_name: field_video_file
+entity_type: media
+bundle: video_file
+label: Video
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'media/video_file/file/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'webm ogg ogv mp4 m4v flv asf mov 3gp'
+  max_filesize: '500 MB'
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

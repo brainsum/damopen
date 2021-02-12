@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: linkedin_organic_or_paid_image
+label: 'LinkedIn paid image (paid campaign, image and link)'
+effects:
+  8425c065-67f9-42ce-814c-3677e1748a22:
+    uuid: 8425c065-67f9-42ce-814c-3677e1748a22
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 627
+      crop_type: focal_point
+  9a3250fc-8581-47af-8f22-fd34696c69be:
+    uuid: 9a3250fc-8581-47af-8f22-fd34696c69be
+    id: image_effects_watermark
+    weight: 2
+    data:
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''

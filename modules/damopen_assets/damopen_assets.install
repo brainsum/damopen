@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Update and install routines for damopen_assets.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function damopen_assets_update_8001() {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
+  $moduleHandler = Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists('select2')) {
+    /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
+    $moduleInstaller = Drupal::service('module_installer');
+    $moduleInstaller->install(['select2']);
+  }
+}

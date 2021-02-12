@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_logo_description
+    - media.type.logo
+  module:
+    - text
+id: media.logo.field_logo_description
+field_name: field_logo_description
+entity_type: media
+bundle: logo
+label: Description
+description: 'The description of the logo.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

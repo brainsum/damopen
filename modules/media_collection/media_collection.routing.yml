@@ -1,0 +1,61 @@
+media_collection.collection.current_user:
+  path: '/collection'
+  defaults:
+    _controller: '\Drupal\media_collection\Controller\CollectionController:currentUserCollection'
+    _title: 'My collection'
+  requirements:
+    _permission: 'add media collection entities,edit own media collection entities,add media collection item entities,edit own media collection item entities'
+
+media_collection.collection.current_user.asset_download:
+  path: '/collection/download'
+  defaults:
+    _controller: 'media_collection.download_handler:currentUserDownload'
+    _title: 'Asset download'
+  requirements:
+    # @todo: Add custom permission for download.
+    _permission: 'view own media collection entities,view own media collection item entities'
+
+media_collection.collection.current_user.clear:
+  path: '/collection/clear'
+  defaults:
+    _controller: '\Drupal\media_collection\Controller\CollectionController:clearCollectionForCurrentUser'
+    _title: 'Empty the collection'
+  requirements:
+    _permission: 'delete own media collection entities,delete own media collection item entities'
+
+# Admin paths.
+media_collection.collection.given_user:
+  path: '/admin/media-collection/collection/{user}'
+  defaults:
+    _controller: '\Drupal\media_collection\Controller\CollectionController:givenUserCollection'
+    _title_callback: '\Drupal\media_collection\Controller\CollectionController:givenUserCollectionTitle'
+  requirements:
+    _permission: 'administer media collection entities,administer media collection item entities'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+media_collection.collection.given_user.asset_download:
+  path: '/admin/media-collection/collection/{user}/download'
+  defaults:
+    _controller: 'media_collection.download_handler:givenUserDownload'
+    _title: 'Asset download'
+  requirements:
+    _permission: 'administer media collection entities,administer media collection item entities'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'
+
+media_collection.collection.given_user.clear:
+  path: '/admin/media-collection/collection/{user}/clear'
+  defaults:
+    _controller: '\Drupal\media_collection\Controller\CollectionController:clearCollectionForGivenUser'
+    _title: 'Empty the collection'
+  requirements:
+    _permission: 'administer media collection entities,administer media collection item entities'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_collection_share
+id: shared_media_collection.shared_media_collection.default
+targetEntityType: shared_media_collection
+bundle: shared_media_collection
+mode: default
+content:
+  items:
+    type: entity_reference_autocomplete
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+hidden:
+  assets_archive: true
+  emails: true
+  url: true

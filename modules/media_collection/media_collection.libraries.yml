@@ -1,0 +1,13 @@
+collection:
+  version: 0.4
+  css:
+    component:
+      css/collection-header.css: {  }
+      css/collection-page.css: {  }
+      css/collection-card.css: {  }
+  js:
+    js/collection.js: {  }
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupalSettings

@@ -1,0 +1,133 @@
+<?php
+
+/**
+ * @file
+ * Module implementation file.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add 'Login with AD' link to login form if ldap_sso module is installed.
+ */
+function damopen_assets_library_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#cache']['contexts'][] = 'url.query_args:destination';
+
+  if (Drupal::moduleHandler()->moduleExists('ldap_sso')) {
+    $options = [];
+    $destination = Drupal::request()->query->get('destination') ?? '/';
+    $options['query']['destination'] = $destination;
+
+    $form['actions']['ldap_sso_login'] = [
+      '#type' => 'link',
+      '#title' => t('Login with AD'),
+      '#url' => Url::fromRoute('ldap_sso.login_controller', [], $options),
+      '#attributes' => ['class' => ['button']],
+    ];
+  }
+}
+
+/**
+ * Implements hook_form_ENTITY_TYPE_presave().
+ *
+ * Add the DAM role to newly created AD user.
+ */
+function damopen_assets_library_user_presave(UserInterface $user) {
+  if (
+    $user->isNew()
+    && $user->hasField('ldap_user_puid')
+    && $user->get('ldap_user_puid')->value
+    && Drupal::moduleHandler()->moduleExists('ldap_user')
+  ) {
+    // @todo: Create the dam role.
+    $user->addRole('dam');
+  }
+}
+
+/**
+ * Implements hook_entity_access().
+ *
+ * Allow file access for private image styles.
+ *
+ * @todo: Move to damopen_assets_access module?
+ */
+function damopen_assets_library_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ('download' === $operation && 'file' === $entity->getEntityTypeId()) {
+    $route_name = Drupal::routeMatch()->getRouteName();
+
+    if ('image.style_private' === $route_name) {
+      return AccessResult::allowed();
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add filehash validation if needed to media_bulk_upload form.
+ */
+function damopen_assets_library_form_media_upload_bulk_upload_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // @todo: Require this dep?
+  if (
+    Drupal::moduleHandler()->moduleExists('filehash')
+    && Drupal::config('filehash.settings')->get('dedupe')
+  ) {
+    $form['#validate'][] = '_damopen_assets_library_media_upload_bulk_upload_validate';
+  }
+}
+
+/**
+ * Validate files on bulk upload with filehash_file_validate.
+ */
+function _damopen_assets_library_media_upload_bulk_upload_validate($form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  if (empty($values['dropzonejs']) || empty($values['dropzonejs']['uploaded_files'])) {
+    return;
+  }
+
+  $files = $values['dropzonejs']['uploaded_files'];
+  $tmpFiles = [];
+
+  /** @var \Drupal\file\FileStorageInterface $fileStorage */
+  $fileStorage = Drupal::entityTypeManager()->getStorage('file');
+
+  foreach ($files as $key => $file) {
+    // Set uri for filehash.
+    $file['uri'] = $file['path'];
+    $tmpFile = $fileStorage->create($file);
+    $tmpFiles[$key] = $tmpFile;
+  }
+
+  $messenger = Drupal::messenger();
+
+  foreach ($tmpFiles as $key => $tmpFile) {
+    $errors = filehash_file_validate($tmpFile);
+    if (!empty($errors)) {
+      foreach ($errors as $error) {
+        $messenger->addMessage(t('%filename: @error', ['%filename' => $files[$key]['filename'], '@error' => $error]), 'warning');
+      }
+      unset($files[$key]);
+    }
+  }
+  $values['dropzonejs']['uploaded_files'] = $files;
+  $form_state->setValue('dropzonejs', $values['dropzonejs']);
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function damopen_assets_library_menu_links_discovered_alter(array &$links) {
+  // @todo: This should be instance-specific?
+  // Content is not used on the site, point to media instead.
+  // @see: DAM-212
+  $links['system.admin_content']['route_name'] = 'entity.media.collection';
+}

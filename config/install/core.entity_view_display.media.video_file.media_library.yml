@@ -1,0 +1,57 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.video_file.field_custom_thumbnail
+    - field.field.media.video_file.field_keywords
+    - field.field.media.video_file.field_video_file
+    - image.style.gallery_item
+    - media.type.video_file
+  module:
+    - image
+id: media.video_file.media_library
+targetEntityType: media
+bundle: video_file
+mode: media_library
+content:
+  field_custom_thumbnail:
+    type: image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      image_style: gallery_item
+      image_link: ''
+    third_party_settings: {  }
+  field_keywords:
+    type: entity_reference_label
+    weight: 4
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  name:
+    type: string
+    weight: 2
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    region: content
+  thumbnail:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: gallery_item
+      image_link: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  field_video_file: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

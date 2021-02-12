@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: maintainer
+label: Maintainer
+weight: 8
+is_admin: null
+permissions:
+  - 'view shared media collection entities'
+  - 'view shared media collection item entities'

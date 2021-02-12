@@ -1,0 +1,21 @@
+# Media collection (shared) routing definition
+shared_media_collection.settings_tab:
+  route_name: shared_media_collection.settings
+  title: 'Settings'
+  base_route: shared_media_collection.settings
+
+entity.shared_media_collection.canonical:
+  route_name: entity.shared_media_collection.canonical
+  base_route: entity.shared_media_collection.canonical
+  title: 'View'
+
+entity.shared_media_collection.edit_form:
+  route_name: entity.shared_media_collection.edit_form
+  base_route: entity.shared_media_collection.canonical
+  title: 'Edit'
+
+entity.shared_media_collection.delete_form:
+  route_name:  entity.shared_media_collection.delete_form
+  base_route:  entity.shared_media_collection.canonical
+  title: Delete
+  weight: 10

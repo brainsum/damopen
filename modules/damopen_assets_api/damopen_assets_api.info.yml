@@ -1,0 +1,17 @@
+name: 'Media Assets API'
+type: module
+description: 'Media assets API functionality'
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - damopen:damopen_common
+  - drupal:jsonapi
+  - drupal:rest
+  - drupal:basic_auth
+  - drupal:user
+  - drupal:taxonomy
+  - drupal:image
+  - jsonapi_extras:jsonapi_extras

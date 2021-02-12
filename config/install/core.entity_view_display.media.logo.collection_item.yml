@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.collection_item
+    - field.field.media.logo.field_custom_thumbnail
+    - field.field.media.logo.field_files
+    - field.field.media.logo.field_keywords
+    - field.field.media.logo.field_logo_description
+    - image.style.gallery_item
+    - media.type.logo
+  module:
+    - image
+id: media.logo.collection_item
+targetEntityType: media
+bundle: logo
+mode: collection_item
+content:
+  field_keywords:
+    type: entity_reference_label
+    weight: 3
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  name:
+    type: string
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    region: content
+  thumbnail:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: gallery_item
+      image_link: ''
+    third_party_settings: {  }
+    region: content
+hidden:
+  created: true
+  field_custom_thumbnail: true
+  field_files: true
+  field_logo_description: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

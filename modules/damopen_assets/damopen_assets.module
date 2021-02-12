@@ -1,0 +1,521 @@
+<?php
+
+/**
+ * @file
+ * Module file for the Media Asset module.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\media\MediaForm;
+use Drupal\media\MediaInterface;
+use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function damopen_assets_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form['#id'] === 'views-exposed-form-asset-search-asset-search') {
+    hide($form['type']);
+    $current_user = Drupal::currentUser()->id();
+    $userStorage = Drupal::entityTypeManager()->getStorage('user');
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $userStorage->load($current_user);
+    if (!$user->hasRole('manager')) {
+      hide($form['status']);
+    }
+  }
+}
+
+/**
+ * Return the media type from the request.
+ *
+ * @param \Symfony\Component\HttpFoundation\Request $request
+ *   The request.
+ *
+ * @return string|null
+ *   The type or NULL.
+ */
+function _damopen_assets_request_to_type(Request $request) {
+  if ($media = $request->attributes->get('media', NULL)) {
+    /** @var \Drupal\media\MediaInterface $media */
+    return $media->bundle();
+  }
+
+  // We select the first from bundles.
+  $mediaTypes = $request->query->get('type');
+
+  if ($mediaTypes === NULL) {
+    return 'image';
+  }
+
+  $types = explode(' ', strtolower($mediaTypes));
+  $type = reset($types);
+  return $type ?? NULL;
+}
+
+/**
+ * Render array for usage guide.
+ *
+ * @param string|null $type
+ *   The given media type, if available.
+ *
+ * @return array
+ *   The render array.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _damopen_assets_usage_guide_markup(?string $type): array {
+  $build = [
+    '#type' => 'markup',
+    '#prefix' => '<div class="dam-media-description-wrapper">',
+    '#suffix' => '</div>',
+  ];
+
+  if ($type === NULL) {
+    return $build;
+  }
+
+  $mediaTypeStorage = Drupal::entityTypeManager()->getStorage('media_type');
+
+  /** @var \Drupal\media\MediaTypeInterface $mediaType */
+  $mediaType = $mediaTypeStorage->load($type);
+
+  if ($mediaType !== NULL) {
+    $build['content'] = [
+      'title' => [
+        '#prefix' => '<span class="dam-media-description-title">',
+        '#suffix' => '</span>',
+        '#markup' => (new TranslatableMarkup('General usage advice'))->render(),
+      ],
+      'description' => [
+        '#prefix' => '<span class="dam-media-description">',
+        '#suffix' => '</span>',
+        '#markup' => Markup::create($mediaType->getDescription()),
+      ],
+    ];
+  }
+
+  return $build;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_views_view__asset_search(array &$variables) {
+  // We select the first from bundles.
+  $type = _damopen_assets_request_to_type(Drupal::request());
+
+  if (!in_array($type, ['', 'image'], TRUE)) {
+    // @todo: This might not be the best approach.
+    // But it seems to be working!
+    unset($variables['exposed']);
+  }
+
+  $variables['media_description'] = _damopen_assets_usage_guide_markup($type);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function damopen_assets_preprocess_page(array &$variables) {
+  $routeMatch = Drupal::routeMatch();
+  $routeName = $routeMatch->getRouteName();
+
+  if ($routeName !== 'entity.media.add_page') {
+    $type = _damopen_assets_request_to_type(Drupal::request());
+    $variables['media_description'] = _damopen_assets_usage_guide_markup($type);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_html(array &$variables) {
+  $routeMatch = Drupal::routeMatch();
+  $routeName = $routeMatch->getRouteName();
+  switch ($routeName) {
+    case 'entity.media.canonical':
+      $variables['attributes']['class'][] = 'media--view';
+      break;
+
+    case 'entity.media.edit_form':
+      $variables['attributes']['class'][] = 'media--edit';
+      break;
+
+    case 'entity.media.add_form':
+      $variables['attributes']['class'][] = 'media--add';
+      break;
+  }
+
+  if (_damopen_assets_request_to_type(Drupal::request()) !== 'image') {
+    $variables['attributes']['class'][] = 'no-filter';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function damopen_assets_media_presave(MediaInterface $media) {
+  $currentUser = Drupal::currentUser();
+  $owner = ($media->getOwner()->id() === $currentUser->id()) ? 'own' : 'any';
+
+  if (!$currentUser->hasPermission("publish $owner media")) {
+    $media->setPublished(FALSE);
+  }
+
+  // If the user doesn't add an alt text for the image,
+  // autofill from asset name.
+  if ($media->bundle() === 'image') {
+    /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $item */
+    foreach ($media->get('field_image') as $index => $item) {
+      if (empty(trim($item->get('alt')->getString()))) {
+        $item->set('alt', $media->getName());
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function damopen_assets_form_media_type_edit_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\Core\Entity\EntityFormInterface $formObject */
+  $formObject = $form_state->getFormObject();
+  /** @var \Drupal\media\MediaTypeInterface $mediaType */
+  $mediaType = $formObject->getEntity();
+
+  // DAM-100 | enable HTML formatting.
+  $form['description'] = [
+    '#title' => t('Description'),
+    '#type' => 'text_format',
+    '#default_value' => $mediaType->getDescription(),
+    '#description' => t('Describe this media bundle. The text will be displayed on the <em>Add new content</em> page.'),
+    '#weight' => -80,
+  ];
+
+  // Add submit handler to set the Description.
+  $form['actions']['submit']['#submit'] = array_merge(['damopen_assets_form_media_type_edit_form_submit'], $form['actions']['submit']['#submit']);
+}
+
+/**
+ * Form submission handler for media_type_edit_form().
+ *
+ * @see damopen_assets_form_media_bundle_edit_form_alter()
+ */
+function damopen_assets_form_media_type_edit_form_submit(array $form, FormStateInterface $form_state) {
+  $form_state->setValue('description', $form['description']['value']['#value']);
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function damopen_assets_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($display_id === 'asset_search' && $view->id() === 'asset_search') {
+    $filters = $view->getExposedInput();
+    if (empty($filters['type'])) {
+      $filters['type'] = 'image';
+      $view->setExposedInput($filters);
+    }
+  }
+}
+
+/**
+ * Implements hook_views_post_render().
+ */
+function damopen_assets_views_post_render(ViewExecutable $view) {
+  // Replace the page title for asset_search view.
+  if ($view->id() === 'asset_search') {
+    $title = $view->getTitle();
+    $filters = $view->getExposedInput();
+    if ($filters['type'] === 'video video_file') {
+      $title = 'Video files & embeds';
+    }
+    else {
+      /** @var \Drupal\media\MediaTypeInterface $mediaType */
+      $mediaType = Drupal::entityTypeManager()
+        ->getStorage('media_type')
+        ->load($filters['type']);
+      if ($mediaType !== NULL) {
+        // @todo: Drupal 8.9 should allow plurals on bundle labels.
+        // @see: https://www.drupal.org/project/drupal/issues/2765065
+        $title = "{$mediaType->label()}s";
+      }
+    }
+
+    // Set the view title.
+    $view->setTitle($title);
+    // Set the route title.
+    /** @var \Symfony\Component\Routing\Route $route */
+    $route = Drupal::routeMatch()->getCurrentRouteMatch()->getRouteObject();
+    $route->setDefault('_title', $title);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_entity_add_list(array &$variables) {
+  // @todo: Fix "media bulk" page ordering, too?
+  $routeName = Drupal::routeMatch()->getRouteName();
+
+  if ($routeName !== 'entity.media.add_page') {
+    return;
+  }
+
+  if (isset($variables['bundles']['image']['add_link'])) {
+    $imageBulkAddUrl = new Url('media_upload.bulk_media_upload', [
+      'type' => 'image',
+    ]);
+    // The 'add_link' is an instance of \Drupal\Core\Link.
+    $variables['bundles']['image']['add_link']->setUrl($imageBulkAddUrl);
+  }
+
+  foreach ($variables['bundles'] as $bundle_name => $bundles) {
+    unset($variables['bundles'][$bundle_name]['description']);
+  }
+
+  _damopen_assets_order_bundles($variables['bundles']);
+}
+
+/**
+ * Order an array of media bundles keyed by their bundle machine names.
+ *
+ * @param array $bundles
+ *   Associative array with media bundles as keys.
+ */
+function _damopen_assets_order_bundles(array &$bundles) {
+  $ordering = _damopen_assets_assets_type_ordering();
+
+  uksort($bundles, static function ($first, $second) use ($ordering) {
+    if (!isset($ordering[$first], $ordering[$second])) {
+      return 0;
+    }
+
+    if ($ordering[$first] === $ordering[$second]) {
+      return 0;
+    }
+
+    return $ordering[$first] > $ordering[$second] ? 1 : -1;
+  });
+}
+
+/**
+ * Returns ordering of bundles.
+ *
+ * Intended to be used in menus.
+ *
+ * @return array
+ *   The types with weights.
+ *
+ * @todo: Add 3rd party settings to media types, order by that instead.
+ */
+function _damopen_assets_assets_type_ordering(): array {
+  return [
+    'image' => 0,
+    'video' => 10,
+    'video_file' => 10,
+    'audio' => 20,
+    'template' => 30,
+    'logo' => 40,
+    'guideline' => 50,
+    'icon' => 60,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_media(array &$variables) {
+  /* @todo:
+   * Find a better way, e.g specifying a custom thumbnail field from config
+   * on the UI.
+   */
+  /** @var \Drupal\media\MediaInterface $media */
+  $media = $variables['media'];
+
+  if (
+    $media->hasField('thumbnail')
+    && $media->hasField('field_custom_thumbnail')
+  ) {
+    $thumbField = $media->get('thumbnail');
+    $customThumbField = $media->get('field_custom_thumbnail');
+
+    /** @var \Drupal\file\FileInterface $thumbFile */
+    if (
+      isset($variables['content']['thumbnail'], $variables['content']['field_custom_thumbnail'])
+      && !$customThumbField->isEmpty()
+      && !$thumbField->isEmpty()
+      && ($thumbFile = $media->get('thumbnail')->entity)
+      && strpos($thumbFile->getFileUri(), 'media-icons/generic') !== FALSE
+    ) {
+      $variables['content']['thumbnail'] = $variables['content']['field_custom_thumbnail'];
+      unset($variables['content']['field_custom_thumbnail']);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function damopen_assets_media_view_alter(array &$build, MediaInterface $media, EntityViewDisplayInterface $display) {
+  // @todo: Find a better way.
+  $bundle = $media->bundle();
+  // Image is handled entirely differently.
+  if ($build['#view_mode'] !== 'full' || $bundle === 'image') {
+    return;
+  }
+
+  $specialBundles = [
+    'audio',
+    'video',
+    'video_file',
+  ];
+
+  $build['asset_preview'] = [];
+
+  if (!in_array($bundle, $specialBundles, TRUE)) {
+    // @todo: Get this from the default view, don't hardcode.
+    $displayOptions = [
+      'type' => 'image',
+      'weight' => '10',
+      'label' => 'hidden',
+      'settings' => [
+        'image_style' => 'crop_thumbnail',
+        'image_link' => '',
+      ],
+      'third_party_settings' => [],
+      'region' => 'content',
+    ];
+
+    if ($preview = _damopen_assets_generate_field_view($media, 'field_custom_thumbnail', $displayOptions)) {
+      $build['asset_preview'] = $preview;
+    }
+    elseif ($preview = _damopen_assets_generate_field_view($media, 'thumbnail', $displayOptions)) {
+      $build['asset_preview'] = $preview;
+    }
+  }
+  elseif ($bundle === 'video') {
+    // @todo: Get this from the default view, don't hardcode.
+    $displayOptions = [
+      'type' => 'video_embed_field_video',
+      'weight' => '1',
+      'label' => 'hidden',
+      'settings' => [
+        'responsive' => 'true',
+        'width' => '854',
+        'height' => '480',
+        'autoplay' => 'false',
+      ],
+      'third_party_settings' => [],
+      'region' => 'content',
+    ];
+
+    if ($preview = _damopen_assets_generate_field_view($media, 'field_video', $displayOptions)) {
+      $build['asset_preview'] = $preview;
+    }
+  }
+  elseif ($bundle === 'video_file') {
+    // @todo: Get this from the default view, don't hardcode.
+    $displayOptions = [
+      'type' => 'file_video',
+      'weight' => '1',
+      'label' => 'hidden',
+      'settings' => [
+        'controls' => TRUE,
+        'multiple_file_display_type' => 'tags',
+        'width' => 640,
+        'height' => 480,
+        'autoplay' => FALSE,
+        'loop' => FALSE,
+        'muted' => FALSE,
+      ],
+      'third_party_settings' => [],
+      'region' => 'content',
+    ];
+
+    if ($preview = _damopen_assets_generate_field_view($media, 'field_video_file', $displayOptions)) {
+      $build['asset_preview'] = $preview;
+    }
+  }
+  elseif ($bundle === 'audio') {
+    // @todo: Get this from the default view, don't hardcode.
+    $displayOptions = [
+      'type' => 'file_audio',
+      'weight' => '1',
+      'label' => 'hidden',
+      'settings' => [
+        'controls' => TRUE,
+        'multiple_file_display_type' => 'tags',
+        'autoplay' => FALSE,
+        'loop' => FALSE,
+      ],
+      'third_party_settings' => [],
+      'region' => 'content',
+    ];
+
+    if ($preview = _damopen_assets_generate_field_view($media, 'field_file', $displayOptions)) {
+      $build['asset_preview'] = $preview;
+    }
+  }
+}
+
+/**
+ * Return the view array of a given field.
+ *
+ * @param \Drupal\media\MediaInterface $media
+ *   The media.
+ * @param string $name
+ *   The field name.
+ * @param array $options
+ *   Render options.
+ *
+ * @return array|null
+ *   The render array or NULL.
+ */
+function _damopen_assets_generate_field_view(MediaInterface $media, string $name, array $options): ?array {
+  if (
+    $media->hasField($name)
+    && ($field = $media->get($name))
+    && !$field->isEmpty()
+  ) {
+    return $field->view($options);
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_menu_local_actions_alter().
+ */
+function damopen_assets_menu_local_actions_alter(array &$actions) {
+  unset($actions['media_upload.bulk_media_upload_list']);
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function damopen_assets_menu_links_discovered_alter(array &$links) {
+  unset($links['media_upload.bulk_media_upload_list']);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function damopen_assets_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\media\MediaForm $formObject */
+  $formObject = $form_state->getFormObject();
+
+  if (
+    isset($form['revision_information'])
+    && get_class($formObject) === MediaForm::class
+    && $formObject->getOperation() === 'add'
+  ) {
+    $form['revision_information']['#open'] = FALSE;
+  }
+}

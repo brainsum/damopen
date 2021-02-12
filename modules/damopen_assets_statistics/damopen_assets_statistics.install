@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Media Statistics module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function damopen_assets_statistics_schema() {
+  $schema['damopen_assets_statistics'] = [
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The id of the log entry.',
+      ],
+      'fid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The {file_managed}.fid of the downloaded file.',
+      ],
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The {user}.uid of user who downloaded the file.',
+      ],
+      'ip_address' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'The IP address of user who downloaded the file.',
+      ],
+      'downloaded' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'The Unix timestamp when the file was downloaded.',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: ms_powerpoint
+label: PowerPoint
+effects:
+  c3440817-4aa5-424c-ab03-54d16547f4fa:
+    uuid: c3440817-4aa5-424c-ab03-54d16547f4fa
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1600
+      height: 900
+      crop_type: focal_point
+  63354761-5247-4978-8647-98d891d95505:
+    uuid: 63354761-5247-4978-8647-98d891d95505
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

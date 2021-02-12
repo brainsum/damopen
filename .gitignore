@@ -1,0 +1,6 @@
+.idea
+composer.lock
+web
+tmp
+vendor
+testsite

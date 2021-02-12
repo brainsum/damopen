@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: twitter_in_stream_photo_no_badge
+label: 'Twitter In-Stream Photo (no badge)'
+effects:
+  6bae6b6d-a69b-4b5f-8694-276f27b42166:
+    uuid: 6bae6b6d-a69b-4b5f-8694-276f27b42166
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1024
+      height: 512
+      crop_type: focal_point

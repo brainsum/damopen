@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.keyword_contributor
+  module:
+    - user
+id: user_remove_role_action.keyword_contributor
+label: 'Remove the Keyword contributor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: keyword_contributor

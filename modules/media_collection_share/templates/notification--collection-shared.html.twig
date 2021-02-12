@@ -1,0 +1,36 @@
+{#
+Available variables:
+
+elements: Contains the render arrays used by the template, contains the following keys:
+  - recipient_email
+  - sender_name
+  - sender_email
+  - site_name
+  - share_url
+
+data: Raw data used in the template, contains the following keys:
+  - recipient_email
+  - sender_name
+  - sender_email
+  - site_name
+  - share_url
+#}
+<html lang="{{ elements.langcode }}">
+  <head>
+    <title>{{ elements.subject }}</title>
+  </head>
+  <body>
+    <div class="collection--shared-collection--email-content-wrapper" id="shared-collection--email-content-wrapper">
+      Dear {{ elements.recipient_email }},<br/><br/>
+      {# @todo: Use sitename or smth, not Media Library. #}
+      {{ elements.sender_name }} ({{ elements.sender_email }}) created a set of assets for you in the Media Library.<br/><br/>
+
+      You can access it here: <br/>
+      {{ elements.share_url }} <br/><br/>
+
+      Best regards,<br/>
+      {# @todo: Configurable sender. #}
+      Media Library
+    </div>
+  </body>
+</html>

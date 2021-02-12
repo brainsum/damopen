@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_collection
+id: media_collection_item.shared
+label: Shared
+targetEntityType: media_collection_item
+cache: true

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media_collection_item.shared
+  module:
+    - media_collection
+id: media_collection_item.media_collection_item.shared
+targetEntityType: media_collection_item
+bundle: media_collection_item
+mode: shared
+content:
+  media:
+    label: hidden
+    type: entity_reference_entity_view
+    weight: 0
+    region: content
+    settings:
+      view_mode: collection_item
+      link: false
+    third_party_settings: {  }
+hidden:
+  langcode: true
+  parent: true
+  search_api_excerpt: true
+  shared_parent: true
+  style: true
+  uid: true

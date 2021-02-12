@@ -1,0 +1,591 @@
+<?php
+
+/**
+ * @file
+ * Contains media_collection.module.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\ContentEntityDeleteForm;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\damopen_common\Temporary\ImageStyleLoader;
+use Drupal\media\MediaInterface;
+use Drupal\media_collection\Entity\MediaCollectionItemInterface;
+use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * Implements hook_help().
+ */
+function media_collection_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the media_collection module.
+    case 'help.page.media_collection':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Collection for media items.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function media_collection_theme() {
+  return [
+    'media_collection' => [
+      'render element' => 'content',
+    ],
+    'media_collection_item' => [
+      'render element' => 'content',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function media_collection_theme_suggestions_media_collection_item_alter(array &$suggestions, array $variables) {
+  if (isset($variables['content']['#view_mode'])) {
+    $suggestions[] = "media_collection_item__{$variables['content']['#view_mode']}";
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_media(array &$variables) {
+  $currentUser = Drupal::currentUser();
+
+  if (!$currentUser->hasPermission('add media collection item entities')) {
+    return;
+  }
+
+  /** @var \Drupal\media\MediaInterface $media */
+  $media = $variables['elements']['#media'];
+  $mediaUuid = $media->uuid();
+
+  /** @var \Drupal\media_collection\Service\CollectionHandler $handler */
+  $handler = Drupal::service('media_collection.collection_handler');
+  // @todo: Maybe load the user from the {user} slug when on the admin page..?
+  $inCollection = FALSE;
+  /* @var \Drupal\media_collection\Entity\MediaCollectionItemInterface|null $currentItem */
+  $currentItem = NULL;
+
+  if ($collection = $handler->loadCollectionForUser($currentUser->id())) {
+    /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $item */
+    foreach ($collection->items() as $item) {
+
+      if ($item->media()->uuid() === $mediaUuid) {
+        $inCollection = TRUE;
+        $currentItem = $item;
+        break;
+      }
+    }
+  }
+
+  if (!$inCollection && $media->bundle() === 'image') {
+    return;
+  }
+
+  $variables['media_collection']['add_to_collection'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'a',
+    '#attributes' => [
+      'title' => t('Add to collection'),
+      'data-media-uuid' => $mediaUuid,
+      'data-media-type' => $media->bundle(),
+      'class' => [
+        'collection-button',
+        'btn-sm',
+        'glyphicon',
+      ],
+    ],
+    '0' => [
+      '#type' => 'html_tag',
+      '#tag' => 'img',
+    ],
+  ];
+
+  if ($inCollection === TRUE) {
+    $variables['media_collection']['add_to_collection']['#attributes']['class'][] = 'in-collection';
+    $variables['media_collection']['add_to_collection']['0']['#attributes']['src'] = '/modules/custom/media_collection/assets/added-to-collection.png';
+    $variables['media_collection']['add_to_collection']['#attributes']['data-collection-item-uuid'] = $currentItem->uuid();
+    $variables['media_collection']['add_to_collection']['#cache'] = [
+      'tags' => $currentItem->getCacheTags(),
+      'contexts' => $currentItem->getCacheContexts(),
+    ];
+  }
+  else {
+    $variables['media_collection']['add_to_collection']['0']['#attributes']['src'] = '/modules/custom/media_collection/assets/add-to-collection.png';
+    $variables['media_collection']['add_to_collection']['#attributes']['class'][] = 'button--add-to-collection';
+  }
+}
+
+/**
+ * Helper function for loading the default image style.
+ *
+ * @return string|null
+ *   The style UUID or null, if not found.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _media_collection_default_image_style() {
+  /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $imageStyleStorage */
+  $imageStyleStorage = Drupal::entityTypeManager()->getStorage('image_style');
+  // @todo: Maybe add config form for setting up the default style.
+  /** @var \Drupal\image\ImageStyleInterface $defaultImageStyle */
+  $defaultImageStyle = $imageStyleStorage->load('other_hi_res_no_badge');
+
+  return $defaultImageStyle ? $defaultImageStyle->uuid() : NULL;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_page(array &$variables) {
+  // @todo: Maybe don't add to every page.
+  $variables['#attached']['library'][] = 'media_collection/collection';
+
+  $collectionData = [
+    'collection_uuid' => NULL,
+    'default_image_style_uuid' => _media_collection_default_image_style(),
+    'items_in_collection' => [],
+  ];
+
+  /** @var \Drupal\media_collection\Service\CollectionHandler $handler */
+  $handler = Drupal::service('media_collection.collection_handler');
+
+  // @todo: Maybe load the user from the {user} slug when on the admin page..?
+  if ($collection = $handler->loadCollectionForUser(Drupal::currentUser()
+    ->id())) {
+    $collectionData['collection_uuid'] = $collection->uuid();
+
+    /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $item */
+    foreach ($collection->items() as $item) {
+      $collectionData['items_in_collection'][] = [
+        'collectionItemId' => $item->uuid(),
+        'mediaType' => $item->media()->bundle(),
+        'mediaId' => $item->media()->uuid(),
+        'styleId' => $item->style() ? $item->style()->uuid() : NULL,
+      ];
+    }
+  }
+
+  $variables['#attached']['drupalSettings']['media_collection'] = $collectionData;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function media_collection_media_collection_item_insert(MediaCollectionItemInterface $item) {
+  /** @var \Drupal\media_collection\Service\CollectionHandler $handler */
+  $handler = Drupal::service('media_collection.collection_handler');
+  $handler->addItem($item);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function media_collection_media_collection_item_delete(MediaCollectionItemInterface $item) {
+  /** @var \Drupal\media_collection\Service\CollectionHandler $handler */
+  $handler = Drupal::service('media_collection.collection_handler');
+  $handler->removeItem($item);
+}
+
+/**
+ * Implements hook_options_list_alter().
+ */
+function media_collection_options_list_alter(array &$options, array $context) {
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $fieldDefinition */
+  if (
+    isset($context['entity'])
+    && $context['entity'] instanceof MediaCollectionItemInterface
+    && ($fieldDefinition = $context['fieldDefinition'])
+    && $fieldDefinition->getName() === 'style'
+  ) {
+    $allowed = ImageStyleLoader::loadImageStylesList(Drupal::entityTypeManager());
+    $allowed['_none'] = '';
+    $options = array_intersect_key($options, $allowed);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_media_collection(array &$variables) {
+  /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $collection */
+  $collection = $variables['content']['#media_collection'];
+
+  $collectionCache = [
+    'tags' => $collection->getCacheTags(),
+    'contexts' => $collection->getCacheContexts(),
+  ];
+
+  $collectionUser = $collection->getOwner();
+  $assetsDir = drupal_get_path('module', 'media_collection') . '/assets';
+
+  $variables['additional_collection_data']['data']['icons'] = [
+    'regular' => [
+      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon.png"))
+        ->getUri(),
+    ],
+    'blue' => [
+      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon-blue.png"))
+        ->getUri(),
+    ],
+  ];
+
+  $variables['additional_collection_data']['render']['header'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'img',
+    '#attributes' => [
+      'src' => $variables['additional_collection_data']['data']['icons']['regular']['uri'],
+      'alt' => t('Collection icon'),
+      'class' => [
+        'collection_icon',
+      ],
+    ],
+    '#prefix' => '<h1>',
+    '#suffix' => t('Collection') . '</h1>',
+  ];
+
+  /** @var \Drupal\media_collection\Service\FileSizeCalculator $sizeCalculator */
+  $sizeCalculator = Drupal::service('media_collection.file_size_calculator');
+
+  $variables['additional_collection_data']['data']['item_count'] = $collection->itemCount();
+  // @todo: Maybe only print a placeholder and load this via AJAX.
+  $variables['additional_collection_data']['data']['collection_size'] = $sizeCalculator->formattedCollectionSize($collection);
+
+  $variables['additional_collection_data']['render']['size_info'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'p',
+    '#value' => t('There are %count items in your collection. Filesize: %size', [
+      '%count' => $variables['additional_collection_data']['data']['item_count'],
+      '%size' => $variables['additional_collection_data']['data']['collection_size'],
+    ]),
+    '#cache' => $collectionCache,
+  ];
+
+  $variables['additional_collection_data']['render']['links'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => [
+        'collection-links-wrapper',
+      ],
+    ],
+    '#cache' => $collectionCache,
+  ];
+
+  if ($collection->itemCount() > 0) {
+    $request = Drupal::request();
+
+    $downloadAllRouting = _media_collection_determine_asset_download_routing($request, $collectionUser);
+    $variables['additional_collection_data']['render']['links']['download_all'] = [
+      '#type' => 'link',
+      '#title' => new TranslatableMarkup('Download all'),
+      '#url' => Url::fromRoute($downloadAllRouting['route'], $downloadAllRouting['options']),
+      '#attributes' => [
+        'class' => [
+          'collection_btn',
+          'collection_download_btn',
+        ],
+        'download' => '',
+      ],
+      '#cache' => $collectionCache,
+    ];
+
+    $clearCollectionRouting = _media_collection_determine_clear_collection_routing($request, $collectionUser);
+    $variables['additional_collection_data']['render']['links']['empty_collection'] = [
+      '#type' => 'link',
+      '#title' => new TranslatableMarkup('Empty the collection'),
+      '#url' => Url::fromRoute($clearCollectionRouting['route'], $clearCollectionRouting['options']),
+      '#attributes' => [
+        'class' => [
+          'collection_btn',
+          'empty_the_collection_btn',
+        ],
+      ],
+      '#cache' => $collectionCache,
+    ];
+  }
+}
+
+/**
+ * Return routing data for the "Empty the collection" link.
+ *
+ * @param \Symfony\Component\HttpFoundation\Request $request
+ *   The request.
+ * @param \Drupal\user\UserInterface $user
+ *   The given user.
+ *
+ * @return array
+ *   Data array with "route" and "options".
+ *
+ * @todo: Move to service.
+ */
+function _media_collection_determine_clear_collection_routing(Request $request, UserInterface $user) {
+  if (
+    ($currentRoute = $request->attributes->get('_route', NULL))
+    && $currentRoute === 'media_collection.collection.given_user'
+  ) {
+    return [
+      'route' => 'media_collection.collection.given_user.clear',
+      'options' => [
+        'user' => $user->id(),
+      ],
+    ];
+  }
+
+  return [
+    'route' => 'media_collection.collection.current_user.clear',
+    'options' => [],
+  ];
+}
+
+/**
+ * Return routing data for the "Download all" link.
+ *
+ * @param \Symfony\Component\HttpFoundation\Request $request
+ *   The request.
+ * @param \Drupal\user\UserInterface $user
+ *   The given user.
+ *
+ * @return array
+ *   Data array with "route" and "options".
+ *
+ * @todo: Move to service.
+ */
+function _media_collection_determine_asset_download_routing(Request $request, UserInterface $user) {
+  if (
+    ($currentRoute = $request->attributes->get('_route', NULL))
+    && $currentRoute === 'media_collection.collection.given_user'
+  ) {
+    return [
+      'route' => 'media_collection.collection.given_user.asset_download',
+      'options' => [
+        'user' => $user->id(),
+      ],
+    ];
+  }
+
+  return [
+    'route' => 'media_collection.collection.current_user.asset_download',
+    'options' => [],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_media_collection_item(array &$variables) {
+  /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $item */
+  $item = $variables['content']['#media_collection_item'];
+
+  // For some reason there's no way to get this from the entity itself.
+  $mediaType = Drupal::entityTypeManager()
+    ->getStorage('media_type')
+    ->load($item->media()->bundle());
+
+  $variables['additional_item_data']['asset_type'] = $item->style()
+    ? $item->style()->label()
+    : $mediaType->label();
+
+  $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
+}
+
+/**
+ * Helper function to determine if the Entity is a media image asset.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity object in question.
+ *
+ * @return bool
+ *   Whether it is a valid media image asset or not.
+ *
+ * @todo: Duplicate of _damopen_assets_is_media_image, refactor.
+ */
+function _media_collection_is_media_image(EntityInterface $entity) {
+  return ($entity->getEntityTypeId() === 'media' && $entity->bundle() === 'image');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function media_collection_media_view_alter(array &$build, MediaInterface $media, EntityViewDisplayInterface $display) {
+  if ($build['#view_mode'] === 'full' && !_media_collection_is_media_image($media)) {
+    $currentUser = Drupal::currentUser();
+
+    if (!$currentUser->hasPermission('add media collection item entities')) {
+      return;
+    }
+
+    if (!isset($build['media_collection_data'])) {
+      $build['media_collection_data'] = [];
+    }
+
+    if (!isset($build['buttons'])) {
+      $build['buttons'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'button-wrapper',
+          ],
+        ],
+      ];
+    }
+
+    /** @var \Drupal\media_collection\Service\CollectionHandler $handler */
+    $handler = Drupal::service('media_collection.collection_handler');
+    $collection = $handler->loadCollectionForUser($currentUser->id());
+
+    $modulePath = drupal_get_path('module', 'media_collection');
+
+    $collectionLink = [
+      '#type' => 'html_tag',
+      '#tag' => 'span',
+      '#attributes' => [
+        'title' => t('Add to collection'),
+        'data-media-uuid' => $media->uuid(),
+        'data-media-type' => $media->bundle(),
+        'data-style-uuid' => NULL,
+        'class' => [
+          'button',
+          'button--gray',
+          'button--add-to-collection',
+        ],
+      ],
+      '0' => [
+        '#type' => 'html_tag',
+        '#tag' => 'img',
+        '#attributes' => [
+          'src' => Url::fromUri(file_create_url("{$modulePath}/assets/plus-icon.svg"))
+            ->getUri(),
+          'class' => [
+            'plus',
+          ],
+        ],
+      ],
+      '1' => [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#value' => t('Add to collection'),
+        '#attributes' => [
+          'class' => [
+            'add-to-collection-text',
+          ],
+        ],
+      ],
+      '#weight' => 20,
+    ];
+
+    /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $collectionItem */
+    if (
+      $collection !== NULL
+      && ($collectionItem = $handler->itemWithGivenEntities($collection, $media))
+    ) {
+      $collectionLink['#attributes']['data-collection-item-uuid'] = $collectionItem->uuid();
+      $collectionLink['#attributes']['class'][] = 'style-in-collection';
+      $collectionLink['#cache'] = [
+        'tags' => Cache::mergeTags($collection->getCacheTags(), $collectionItem->getCacheTags()),
+        'contexts' => Cache::mergeContexts($collection->getCacheContexts(), $collectionItem->getCacheContexts()),
+      ];
+    }
+
+    $build['buttons']['add_to_collection'] = $collectionLink;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_html(array &$variables) {
+  /** @var \Drupal\media\MediaInterface $media */
+  if ($media = Drupal::request()->attributes->get('media', NULL)) {
+
+    if (!isset($variables['attributes']['class'])) {
+      $variables['attributes']['class'] = [];
+    }
+
+    $variables['attributes']['class'][] = "media-type--{$media->bundle()}";
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function media_collection_preprocess_page_title(array &$variables) {
+  $routeMatch = Drupal::routeMatch();
+  if (in_array($routeMatch->getRouteName(), [
+    'entity.media.canonical',
+    'media_collection.collection.current_user',
+    'media_collection.collection.given_user',
+  ], TRUE)
+  ) {
+    $variables['title'] = '';
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function media_collection_form_media_confirm_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\Core\Entity\ContentEntityDeleteForm $formObject */
+  $formObject = $form_state->getFormObject();
+
+  if (get_class($formObject) !== ContentEntityDeleteForm::class) {
+    return;
+  }
+
+  /** @var \Drupal\media\MediaInterface $media */
+  $media = $formObject->getEntity();
+
+  $itemStorage = Drupal::entityTypeManager()
+    ->getStorage('media_collection_item');
+
+  $count = (int) ($itemStorage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('media', $media->id())
+    ->count()
+    ->execute());
+
+  if ($count > 0) {
+    Drupal::messenger()
+      ->addWarning(t('This asset is in a collection. Removing it is going to change collections for you or other users.'));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function media_collection_media_predelete(MediaInterface $media) {
+  $itemStorage = Drupal::entityTypeManager()
+    ->getStorage('media_collection_item');
+  $itemStorage->delete($itemStorage->loadByProperties(['media' => $media->id()]));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function media_collection_media_collection_item_predelete(MediaCollectionItemInterface $item) {
+  /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $parentCollection */
+  $parentCollection = $item->get('parent')->entity;
+
+  if (!$parentCollection) {
+    // @todo: Log, items should always have a parent entity.
+    return;
+  }
+
+  $parentCollection->removeItem($item);
+  // Maybe:
+  // empty($parentCollection->items()) ? $parentCollection->delete() : $parentCollection->save();.
+  $parentCollection->save();
+}

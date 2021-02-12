@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: field_custom_thumbnail
+  media_upload:
+    upload_target_field: field_template_file
+    enabled: 1
+id: template
+label: Template
+description: 'Here you can download a variety of layouts for many areas. These documents have been created to help you to follow the brand and to save time. Some you can use on your own, others require help from our Marketing studio or by an agency.'
+source: image
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_custom_thumbnail
+  gather_exif: false
+field_map: {  }

@@ -1,0 +1,27 @@
+{
+    "name": "drupal/damopen_image_media_styles_preview",
+    "description": "Adds a style preview feature for Image media entities.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "repositories": {
+        "drupal-8": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "require": {
+        "drupal/image_effects": "^3.0",
+        "drupal/focal_point": "^1.2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}

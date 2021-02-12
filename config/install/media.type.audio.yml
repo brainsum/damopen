@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: _none
+  media_upload:
+    enabled: 1
+    upload_target_field: field_file
+id: audio
+label: Audio
+description: "<p>Use Audio for uploading audio assets.</p>\r\n"
+source: audio_file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_file
+field_map:
+  name: name
+  mimetype: field_file
+  filesize: field_file

@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: facebook_organic_no_badge
+label: 'Facebook (paid and organic) (no badge)'
+effects:
+  ed12dbdd-ccb1-4a49-9864-2ca27447b3cd:
+    uuid: ed12dbdd-ccb1-4a49-9864-2ca27447b3cd
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 628
+      crop_type: focal_point

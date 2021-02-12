@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Module file for the Media Statistics module.
+ */
+
+/**
+ * Implements hook_file_download.
+ *
+ * Archives the file download requests' data in the database.
+ */
+function damopen_assets_statistics_file_download($uri) {
+  $request = Drupal::request();
+
+  if ($request->get('download')) {
+    $entityTypeManager = Drupal::entityTypeManager();
+    $fileStorage = $entityTypeManager->getStorage('file');
+    $managedFiles = $fileStorage->loadByProperties([
+      'uri' => $uri,
+    ]);
+
+    $file_id = NULL;
+
+    if(!empty($managedFiles)) {
+      $file = reset($managedFiles);
+      $file_id = $file->id();
+    }
+
+    $current_user = Drupal::currentUser()->id();
+    $userStorage = $entityTypeManager->getStorage('user');
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $userStorage->load($current_user);
+
+    if ($user->hasRole('media_api')) {
+      $result = Drupal::database()->insert('damopen_assets_statistics')
+        ->fields([
+          'fid' => $file_id,
+          'uid' => $current_user,
+          'ip_address' => $request->getClientIp(),
+          'downloaded' => Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
+    }
+  }
+}

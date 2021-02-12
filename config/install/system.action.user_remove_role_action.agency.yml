@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.agency
+  module:
+    - user
+id: user_remove_role_action.agency
+label: 'Remove the Agency role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: agency

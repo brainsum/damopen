@@ -1,0 +1,54 @@
+<div class="media-page-wrapper">
+  <div class="images-wrapper left-wrapper">
+    {% for row in rows.images %}
+      <div class="image {{ row.metadata.data.identifier }} {% if loop.index == 2 %}active{% endif %}" identifier="{{ row.metadata.data.identifier }}">{{ row.image.data }}</div>
+    {% endfor %}
+  </div>
+  <div class="right-wrapper">
+    <div class="top-controls">
+      <h4 class="media-title">{{ title }}</h4>
+      <input type="checkbox" id="watermark" name="watermark" value="on"> <label for="watermark">Add the Company logo to the image</label>
+      {% for key, links in rows.controllers %}
+        <div class="controller {{ key }}">
+          {% for index, link in links %}
+            {% if link.identifier %}
+              <div class="link {% if loop.parent.loop.first and index == 1 %}active{% endif %}" identifier="{{ link.identifier }}">
+                {{ link.download_link }}
+              </div>
+            {% endif %}
+
+            {% if link.media_collection.add_to_collection_link %}
+              {% if link.identifier %}
+                <div class="link {% if loop.parent.loop.first and index == 1 %}active{% endif %}" identifier="{{ link.identifier }}">
+                  {{ link.media_collection.add_to_collection_link }}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="image-controls">
+      {% for key, links in rows.controllers %}
+        <div class="controller {{ key }} {{ links.classes }}">
+          <div class="title-wrapper {{ links.classes }}">
+            <span class="icon">
+               <i class="{{ links.icon_class }}"></i>
+            </span>
+            <h4> {{ key }} </h4>
+          </div>
+          {% for link in links %}
+            {% if link.badge %}
+              <div class="link {% if loop.parent.loop.first %}active{% endif %}" identifier="{{ link.identifier }}">
+                {{ metadata.media_collection.added_to_collection_icon }}
+                {{ link.label }}
+                {{ metadata.media_collection.remove_from_collection_text }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

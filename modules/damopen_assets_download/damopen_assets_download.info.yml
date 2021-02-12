@@ -1,0 +1,13 @@
+name: "Media Assets download"
+type: module
+description: Media assets download functionality
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - damopen:damopen_common
+  - drupal:media
+  - drupal:file
+  - drupal:user

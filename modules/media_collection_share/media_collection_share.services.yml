@@ -1,0 +1,32 @@
+services:
+  media_collection_share.collection_sharer:
+    class: Drupal\media_collection_share\Service\CollectionSharer
+    arguments:
+      - '@entity_type.manager'
+      - '@date.formatter'
+      - '@datetime.time'
+      - '@media_collection.collection_handler'
+      - '@media_collection.file_handler.media_collection'
+
+  media_collection_share.download_handler:
+    class: Drupal\media_collection_share\Service\DownloadHandler
+    arguments:
+      - '@entity_type.manager'
+      - '@file_system'
+      - '@media_collection.file_handler.media_collection_item'
+      - '@damopen_assets_download.file_response_builder'
+
+  media_collection_share.mail_storage:
+    class: Drupal\media_collection_share\Service\CollectionMailStorage
+    arguments:
+      - '@keyvalue'
+      - '@datetime.time'
+
+  media_collection_share.mailer:
+    class: Drupal\media_collection_share\Service\CollectionMailer
+    arguments:
+      - '@plugin.manager.mail'
+      - '@media_collection_share.mail_storage'
+      - '@config.factory'
+      - '@renderer'
+      - '@logger.factory'

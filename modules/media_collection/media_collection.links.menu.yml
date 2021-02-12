@@ -1,0 +1,28 @@
+
+# Media collection menu items definition
+entity.media_collection.collection:
+  title: 'Media collection list'
+  route_name: entity.media_collection.collection
+  description: 'List Media collection entities'
+  parent: system.admin_structure
+  weight: 100
+
+media_collection.admin.structure.settings:
+  title: 'Media collection settings'
+  description: 'Configure Media collection entities'
+  route_name: media_collection.settings
+  parent: system.admin_structure
+
+# Media collection item menu items definition
+entity.media_collection_item.collection:
+  title: 'Media collection item list'
+  route_name: entity.media_collection_item.collection
+  description: 'List Media collection item entities'
+  parent: system.admin_structure
+  weight: 100
+
+media_collection_item.admin.structure.settings:
+  title: 'Media collection item settings'
+  description: 'Configure Media collection item entities'
+  route_name: media_collection_item.settings
+  parent: system.admin_structure

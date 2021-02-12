@@ -1,0 +1,72 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+  module:
+    - ckeditor
+format: full_html
+editor: ckeditor
+settings:
+  toolbar:
+    rows:
+      -
+        -
+          name: Formatting
+          items:
+            - Bold
+            - Italic
+            - Strike
+            - Superscript
+            - Subscript
+            - '-'
+            - RemoveFormat
+        -
+          name: Links
+          items:
+            - DrupalLink
+            - DrupalUnlink
+        -
+          name: Lists
+          items:
+            - BulletedList
+            - NumberedList
+        -
+          name: Media
+          items:
+            - Blockquote
+            - DrupalImage
+            - video_embed
+            - Table
+            - HorizontalRule
+            - node
+        -
+          name: 'Block Formatting'
+          items:
+            - Format
+            - Styles
+        -
+          name: Tools
+          items:
+            - ShowBlocks
+            - Source
+  plugins:
+    stylescombo:
+      styles: "span.damo-silver|Silver\r\nspan.damo-blue|Blue\r\nspan.damo-orange|Orange\r\nspan.damo-white|White"
+    language:
+      language_list: un
+    video_embed:
+      defaults:
+        children:
+          autoplay: true
+          responsive: true
+          width: '854'
+          height: '480'
+image_upload:
+  status: true
+  scheme: private
+  directory: inline-images
+  max_size: ''
+  max_dimensions:
+    width: null
+    height: null

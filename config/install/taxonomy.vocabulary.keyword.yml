@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: Keyword
+vid: keyword
+description: 'Keyword meta tag.'
+weight: 0

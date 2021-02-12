@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: instagram_photo_size_no_badge
+label: 'Instagram Photo Size (no badge)'
+effects:
+  bd76675a-f226-485a-9cf7-31d07dd6e387:
+    uuid: bd76675a-f226-485a-9cf7-31d07dd6e387
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1080
+      height: 1080
+      crop_type: focal_point

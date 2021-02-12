@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.media_api
+  module:
+    - user
+id: user_add_role_action.media_api
+label: 'Add the Media API role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: media_api

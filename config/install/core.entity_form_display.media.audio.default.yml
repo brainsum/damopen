@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.audio.field_custom_thumbnail
+    - field.field.media.audio.field_description
+    - field.field.media.audio.field_file
+    - field.field.media.audio.field_keywords
+    - image.style.thumbnail
+    - media.type.audio
+  module:
+    - file
+    - focal_point
+    - image
+    - path
+id: media.audio.default
+targetEntityType: media
+bundle: audio
+mode: default
+content:
+  field_custom_thumbnail:
+    weight: 3
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+      preview_link: true
+      offsets: '50,50'
+    third_party_settings: {  }
+    type: image_focal_point
+    region: content
+  field_description:
+    weight: 4
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_file:
+    weight: 1
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+    region: content
+  field_keywords:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    third_party_settings: {  }
+    type: entity_reference_autocomplete_tags
+    region: content
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 6
+    region: content
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  uid: true

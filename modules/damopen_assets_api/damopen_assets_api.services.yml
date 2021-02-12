@@ -1,0 +1,15 @@
+services:
+  damopen_assets_api.normalizer.media_entity:
+    class: Drupal\damopen_assets_api\Normalizer\MediaEntityNormalizer
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_type.repository'
+      - '@entity_field.manager'
+
+    tags:
+      - { name: normalizer, priority: 9 }
+
+  damopen_assets_api.route_subscriber:
+    class: Drupal\damopen_assets_api\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

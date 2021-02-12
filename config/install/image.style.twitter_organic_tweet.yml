@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image_effects
+name: twitter_organic_tweet
+label: 'Twitter, organic tweet'
+effects:
+  7bcbe260-d467-439a-bb9c-7ce898be1fb5:
+    uuid: 7bcbe260-d467-439a-bb9c-7ce898be1fb5
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 675
+      crop_type: focal_point
+  d05c518f-233d-4578-a3df-23d1857fa55c:
+    uuid: d05c518f-233d-4578-a3df-23d1857fa55c
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

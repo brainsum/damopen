@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install and update code for damopen_default_content.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function damopen_default_content_install() {
+  /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+  $termStorage = Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  $categories = [
+    'Abstract',
+    'Food',
+    'Nature',
+    'Sport',
+    'People',
+  ];
+
+  foreach ($categories as $category) {
+    $term = $termStorage->create(['vid' => 'category', 'name' => $category]);
+    $termStorage->save($term);
+  }
+}

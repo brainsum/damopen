@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.asset_search
+  module:
+    - system
+    - views
+  theme:
+    - damo_theme
+id: damo_theme_exposed_asset_search_form
+theme: damo_theme
+region: navigation
+weight: -3
+provider: null
+plugin: 'views_exposed_filter_block:asset_search-asset_search'
+settings:
+  id: 'views_exposed_filter_block:asset_search-asset_search'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    pages: "<front>\r\n/assets"
+    negate: false
+    context_mapping: {  }

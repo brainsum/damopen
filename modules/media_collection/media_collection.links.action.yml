@@ -1,0 +1,10 @@
+entity.media_collection.add_form:
+  route_name: entity.media_collection.add_form
+  title: 'Add Media collection'
+  appears_on:
+    - entity.media_collection.collection
+entity.media_collection_item.add_form:
+  route_name: entity.media_collection_item.add_form
+  title: 'Add Media collection item'
+  appears_on:
+    - entity.media_collection_item.collection

@@ -1,0 +1,43 @@
+<?php
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\media\MediaInterface;
+use Drupal\damopen_assets_download\Render\MediaDownloadButton;
+
+/**
+ * Helper function to determine if the Entity is a media image asset.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity object in question.
+ *
+ * @return bool
+ *   Whether it is a valid media image asset or not.
+ */
+function _damopen_assets_download_is_media_image(EntityInterface $entity) {
+  return ($entity->getEntityTypeId() === 'media' && $entity->bundle() === 'image');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function damopen_assets_download_media_view_alter(array &$build, MediaInterface $media, EntityViewDisplayInterface $display) {
+  if (
+    $build['#view_mode'] === 'full'
+    && !_damopen_assets_download_is_media_image($media)
+    && $media->bundle() !== 'video'
+  ) {
+    if (!isset($build['buttons'])) {
+      $build['buttons'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'button-wrapper',
+          ],
+        ],
+      ];
+    }
+
+    $build['buttons']['download_button'] = MediaDownloadButton::build($media);
+  }
+}

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - crop
+    - media_upload
+third_party_settings:
+  crop:
+    image_field: field_custom_thumbnail
+  media_upload:
+    upload_target_field: field_images
+    enabled: 0
+id: guideline
+label: Guideline
+description: 'Here you will find information about how to use all the design elements in order to create the unique. Our visual identity strongly supports how we want to position our brand. If we speak with one voice and commit to unified brand communications, our customers will perceive us as consistent and convincing, which in turn will create trust, loyalty and good relations.'
+source: image
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_custom_thumbnail
+  gather_exif: false
+field_map: {  }

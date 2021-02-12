@@ -1,0 +1,12 @@
+name: "Image media lister"
+type: module
+description: "Lister for assets."
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - drupal:block
+  - drupal:views
+  - search_api:search_api

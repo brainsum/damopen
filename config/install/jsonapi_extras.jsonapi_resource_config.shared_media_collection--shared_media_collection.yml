@@ -1,0 +1,70 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_collection_share
+id: shared_media_collection--shared_media_collection
+disabled: true
+path: shared_media_collection/shared_media_collection
+resourceType: shared_media_collection--shared_media_collection
+resourceFields:
+  id:
+    fieldName: id
+    publicName: id
+    enhancer:
+      id: ''
+    disabled: false
+  uuid:
+    fieldName: uuid
+    publicName: uuid
+    enhancer:
+      id: ''
+    disabled: false
+  langcode:
+    fieldName: langcode
+    publicName: langcode
+    enhancer:
+      id: ''
+    disabled: false
+  uid:
+    fieldName: uid
+    publicName: uid
+    enhancer:
+      id: ''
+    disabled: false
+  created:
+    fieldName: created
+    publicName: created
+    enhancer:
+      id: ''
+    disabled: false
+  items:
+    fieldName: items
+    publicName: items
+    enhancer:
+      id: ''
+    disabled: false
+  url:
+    fieldName: url
+    publicName: url
+    enhancer:
+      id: ''
+    disabled: false
+  emails:
+    fieldName: emails
+    publicName: emails
+    enhancer:
+      id: ''
+    disabled: false
+  assets_archive:
+    fieldName: assets_archive
+    publicName: assets_archive
+    enhancer:
+      id: ''
+    disabled: false
+  default_langcode:
+    fieldName: default_langcode
+    publicName: default_langcode
+    enhancer:
+      id: ''
+    disabled: false

@@ -1,0 +1,27 @@
+{#
+/**
+ * @file shared_media_collection.html.twig
+ * Default theme implementation to present Media collection (shared) data.
+ *
+ * This template is used when viewing Media collection (shared) pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_shared_media_collection()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('shared_media_collection') }}>
+  {{ additional_collection_data.render.header }}
+  {{ additional_collection_data.render.share_date }}
+  {{ additional_collection_data.render.size_info }}
+  {{ additional_collection_data.render.share_url }}
+
+  {{ additional_collection_data.render.links }}
+
+  {{ content }}
+</div>

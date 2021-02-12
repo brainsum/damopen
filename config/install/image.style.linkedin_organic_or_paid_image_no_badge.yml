@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: linkedin_organic_or_paid_image_no_badge
+label: 'LinkedIn paid image (paid campaign, image and link) (no badge)'
+effects:
+  b7adea78-6dce-43d1-9a33-4f8d132b5516:
+    uuid: b7adea78-6dce-43d1-9a33-4f8d132b5516
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 627
+      crop_type: focal_point

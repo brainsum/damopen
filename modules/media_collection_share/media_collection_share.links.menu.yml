@@ -1,0 +1,14 @@
+
+# Media collection (shared) menu items definition
+entity.shared_media_collection.collection:
+  title: 'Media collection (shared) list'
+  route_name: entity.shared_media_collection.collection
+  description: 'List Media collection (shared) entities'
+  parent: system.admin_structure
+  weight: 100
+
+shared_media_collection.admin.structure.settings:
+  title: 'Media collection (shared) settings'
+  description: 'Configure Media collection (shared) entities'
+  route_name: shared_media_collection.settings
+  parent: system.admin_structure
