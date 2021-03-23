@@ -1,5 +1,5 @@
 {
-    "name": "drupal/damopen",
+    "name": "brainsum/damopen",
     "description": "Distribution for quickly starting a new Digital Media Assets Management system with Drupal",
     "type": "drupal-profile",
     "license": "GPL-2.0-or-later",
