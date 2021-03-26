@@ -73,6 +73,9 @@
             },
             "drupal/filehash": {
                 "Check duplicates only for media last revision. Link media on duplicate.": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-module/filehash/1.x/filehash-validate-last-media-revision-link-media.2.patch"
+            },
+            "drupal/exif": {
+                "Fix uriScheme function call": "https://www.drupal.org/files/issues/2021-03-26/exif.3173054.undefined-method-call-uriScheme.6.patch"
             }
         },
         "drupal-scaffold": {
