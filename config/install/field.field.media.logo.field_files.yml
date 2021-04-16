@@ -18,7 +18,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   file_directory: 'media/logo/files/[date:custom:Y]-[date:custom:m]'
-  file_extensions: 'ai svg eps png pdf'
+  file_extensions: 'ai svg eps png pdf jpg jpeg'
   max_filesize: '50 MB'
   description_field: true
   handler: 'default:file'
