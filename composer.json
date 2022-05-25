@@ -70,9 +70,6 @@
                 "Add permission 'View unpublished {bundle} media'": "https://www.drupal.org/files/issues/2019-11-27/2936652-media-view-any-unpublished-per-bundle-25.patch",
                 "Implement a generic revision UI": "https://www.drupal.org/files/issues/2021-11-12/2350939-202.patch",
                 "Remove jsonapi's file filter restriction": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-core/8.x/jsonapi-file-filter-restriction-remove.patch"
-            },
-            "drupal/filehash": {
-                "Check duplicates only for media last revision. Link media on duplicate.": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-module/filehash/1.x/filehash-validate-last-media-revision-link-media.2.patch"
             }
         },
         "drupal-scaffold": {
