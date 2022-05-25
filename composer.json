@@ -31,11 +31,11 @@
         "brainsum/damo_theme": ">=0.3 <1.0",
         "brainsum/media_upload": "^4.0.0",
         "drupal/better_exposed_filters": "^5.0.0",
-        "drupal/core": "^9.0",
+        "drupal/core": "^9.3",
         "drupal/dropzonejs": "^2.0.0",
         "drupal/entity_browser": "^2.3.0",
         "drupal/entity_embed": "^1.1.0",
-        "drupal/exif": "^2.2.0",
+        "drupal/exif": "^2.3.0",
         "drupal/field_group": "^3.1.0",
         "drupal/filehash": "1.4.0",
         "drupal/focal_point": "^1.5.0",
@@ -49,7 +49,7 @@
         "drupal/search_api": "^1.19.0",
         "drupal/select2": "^1.12.0",
         "drupal/taxonomy_access_fix": "^3.0.0",
-        "drupal/term_merge": "^1.0.0",
+        "drupal/term_merge": "^2.0.0-beta2",
         "drupal/userprotect": "^1.1.0",
         "drupal/video_embed_field": "^2.4.0",
         "npm-asset/dropzone": "^5.7.6",
@@ -68,14 +68,11 @@
                 "Datetime form element cannot validate when using a format without seconds": "https://www.drupal.org/files/issues/2019-07-24/drupal-datetime_form_element_cannot_validate_without_seconds-2723159-53.patch",
                 "Summary attributes bugfix": "https://www.drupal.org/files/issues/2018-12-17/core-undefined-index-summary_attributes-2998194-9.patch",
                 "Add permission 'View unpublished {bundle} media'": "https://www.drupal.org/files/issues/2019-11-27/2936652-media-view-any-unpublished-per-bundle-25.patch",
-                "Implement a generic revision UI": "https://www.drupal.org/files/issues/2021-02-04/2350939-156-9.1.x.patch",
+                "Implement a generic revision UI": "https://www.drupal.org/files/issues/2021-11-12/2350939-202.patch",
                 "Remove jsonapi's file filter restriction": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-core/8.x/jsonapi-file-filter-restriction-remove.patch"
             },
             "drupal/filehash": {
                 "Check duplicates only for media last revision. Link media on duplicate.": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-module/filehash/1.x/filehash-validate-last-media-revision-link-media.2.patch"
-            },
-            "drupal/exif": {
-                "Fix uriScheme function call": "https://www.drupal.org/files/issues/2021-03-26/exif.3173054.undefined-method-call-uriScheme.6.patch"
             }
         },
         "drupal-scaffold": {
