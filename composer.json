@@ -31,7 +31,7 @@
         "brainsum/damo_theme": ">=0.3 <1.0",
         "brainsum/media_upload": "^4.0.0",
         "drupal/better_exposed_filters": "^5.0.0",
-        "drupal/core": "^9.3",
+        "drupal/core": "^9.5",
         "drupal/dropzonejs": "^2.0.0",
         "drupal/entity_browser": "^2.3.0",
         "drupal/entity_embed": "^1.1.0",
@@ -68,7 +68,6 @@
                 "Datetime form element cannot validate when using a format without seconds": "https://www.drupal.org/files/issues/2019-07-24/drupal-datetime_form_element_cannot_validate_without_seconds-2723159-53.patch",
                 "Summary attributes bugfix": "https://www.drupal.org/files/issues/2018-12-17/core-undefined-index-summary_attributes-2998194-9.patch",
                 "Add permission 'View unpublished {bundle} media'": "https://www.drupal.org/files/issues/2019-11-27/2936652-media-view-any-unpublished-per-bundle-25.patch",
-                "Implement a generic revision UI": "https://www.drupal.org/files/issues/2021-11-12/2350939-202.patch",
                 "Remove jsonapi's file filter restriction": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-core/8.x/jsonapi-file-filter-restriction-remove.patch"
             }
         },
