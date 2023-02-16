@@ -25,7 +25,7 @@
         }
     },
     "require": {
-        "php": "^7.3",
+        "php": ">=7.3",
         "ext-json": "*",
         "ext-zip": "*",
         "brainsum/damo_theme": ">=0.3 <1.0",
