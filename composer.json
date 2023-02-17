@@ -42,7 +42,7 @@
         "drupal/image_effects": "^3.0.0",
         "drupal/inline_entity_form": "^1.0.0",
         "drupal/jsonapi_extras": "^3.16.0",
-        "drupal/maxlength": "^1.0.0",
+        "drupal/maxlength": "^2.0.0",
         "drupal/media_entity_imagemagick": "^3.0.0",
         "drupal/php_ffmpeg": "^1.1.0",
         "drupal/redirect_after_login": "^2.7.0",
