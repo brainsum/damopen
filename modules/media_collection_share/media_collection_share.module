@@ -70,7 +70,7 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
 
   $currentUser = Drupal::currentUser();
   $shareFormUrl = Url::fromRoute('media_collection_share.collection.share_form');
-
+  // $route_match = \Drupal::routeMatch()->getParameter('arg_0', NULL);
   if ($collection->itemCount() > 0 && $shareFormUrl->access($currentUser)) {
     $variables['additional_collection_data']['render']['links']['share'] = [
       '#type' => 'link',
