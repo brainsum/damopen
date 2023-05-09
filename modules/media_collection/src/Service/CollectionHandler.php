@@ -207,8 +207,13 @@ final class CollectionHandler {
    *
    * @throws \RuntimeException
    */
-  public function clearCollectionForUser(UserInterface $user): MediaCollectionInterface {
-    $collection = $this->loadCollectionForUser($user->id());
+  public function clearCollectionForUser(UserInterface $user, $collectionId): MediaCollectionInterface {
+    if ($collectionId) {
+      $collection = $this->collectionStorage->load($collectionId);
+    }
+    else {
+      $collection = $this->loadCollectionForUser($user->id());
+    }
 
     if ($collection === NULL) {
       /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $collection */

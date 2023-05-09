@@ -446,6 +446,7 @@ final class AssetPreviewListMarkup {
         ) {
           $controller[$group][$rowNumber]['media_collection']['in_collection'] = TRUE;
           $collectionLink['#attributes']['data-collection-item-uuid'] = $collectionItem->uuid();
+          $collectionLink['#attributes']['data-collection-uuid'] = $this->currentCollection->uuid();
           $collectionLink['#attributes']['class'][] = 'style-in-collection';
         }
 

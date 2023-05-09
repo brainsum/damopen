@@ -99,7 +99,7 @@ final class CollectionSharer {
    * @throws \RuntimeException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createSharedCollectionForUser(int $userId): SharedMediaCollectionInterface {
+  public function createSharedCollectionForUser(int $userId): SharedMediaCollectionInterface {    
     $collection = $this->collectionHandler->loadCollectionForUser($userId);
 
     if ($collection === NULL) {

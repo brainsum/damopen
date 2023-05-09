@@ -341,13 +341,16 @@ function _media_collection_determine_clear_collection_routing(Request $request, 
       'route' => 'media_collection.collection.given_user.clear',
       'options' => [
         'user' => $user->id(),
+        'collectionId' => \Drupal::routeMatch()->getParameter('arg_0', NULL),
       ],
     ];
   }
 
   return [
     'route' => 'media_collection.collection.current_user.clear',
-    'options' => [],
+    'options' => [
+      'collectionId' => \Drupal::routeMatch()->getParameter('arg_0', NULL),
+    ],
   ];
 }
 
@@ -372,14 +375,16 @@ function _media_collection_determine_asset_download_routing(Request $request, Us
     return [
       'route' => 'media_collection.collection.given_user.asset_download',
       'options' => [
+        'collectionId' => \Drupal::routeMatch()->getParameter('arg_0', NULL),
         'user' => $user->id(),
       ],
     ];
   }
-
   return [
     'route' => 'media_collection.collection.current_user.asset_download',
-    'options' => [],
+    'options' => [
+      'collectionId' => \Drupal::routeMatch()->getParameter('arg_0', NULL),
+    ],
   ];
 }
 
@@ -399,7 +404,14 @@ function media_collection_preprocess_media_collection_item(array &$variables) {
     ? $item->style()->label()
     : $mediaType->label();
 
+  $collection_id = \Drupal::routeMatch()->getParameters()->get('arg_0', NULL);
+  // Load collection.
+  $collection_id = $collection_id ? $collection_id : 1;
+  $collection = Drupal::entityTypeManager()
+    ->getStorage('media_collection')
+    ->load($collection_id);
   $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
+  $variables['attributes']['data-collection-uuid'] = $collection->uuid();
 }
 
 /**
