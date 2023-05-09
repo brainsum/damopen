@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function damo_extended_collection_theme($existing, $type, $theme, $path) {
+  return [
+    'create_collection' => [
+      'variables' => [
+        'url' => NULL,
+      ],
+    ],
+    'add_to_collection' => [
+      'variables' => [
+        'collections' => NULL,
+      ],
+    ],
+  ];
+}
