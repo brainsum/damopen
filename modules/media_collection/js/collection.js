@@ -89,6 +89,7 @@
 
           var selectedButton = $(".top-controls [identifier='" + identifier + "']:eq(1) span");
           var collectionItemUUID = selectedButton.attr("data-collection-item-uuid");
+          var collectionUUID = selectedButton.attr("data-collection-uuid");
 
           var styleUuid = '';
           var topControls = $(".top-controls .active:last span");
@@ -107,7 +108,7 @@
             }
           });
 
-          removeFromCollection(collectionItemUUID, token).done(function (res) {
+          removeFromCollection(collectionItemUUID, collectionUUID, token).done(function (res) {
             changeToAdd($(".top-controls [identifier='" + identifier + "']:eq(1) span"));
             $(".top-controls .active:eq(1) span").removeClass("in-collection").removeClass("disabled");
             $(that).parents(".link").removeClass("in-collection");
@@ -117,7 +118,8 @@
         $(document).on("click", ".button--remove-in-collection", function () {
           var that = this;
           var collectionItemUUID = $(this).parents(".media_collection_item").data("collection-item-uuid");
-          removeFromCollection(collectionItemUUID, token).done(function (res) {
+          var collectionUUID = $(this).parents(".media_collection_item").data("collection-uuid");
+          removeFromCollection(collectionItemUUID, collectionUUID, token).done(function (res) {
             $(that).parents(".field--item").remove();
           })
         });
@@ -215,16 +217,11 @@
           })
         }
 
-        function removeFromCollection(collectionItemUUID, token) {
+        function removeFromCollection(collectionItemUUID, collectionUUID, token) {
+          console.log(collectionUUID);
+          console.log(collectionItemUUID);
           return $.ajax({
-            url: '/jsonapi/media_collection_item/media_collection_item/' + collectionItemUUID,
-            type: 'delete',
-            headers: {
-              "Content-Type": "application/vnd.api+json",
-              "Accept": "application/vnd.api+json",
-              "X-CSRF-Token": token
-            },
-            dataType: 'json'
+            url: '/collections/remove/' + collectionUUID + '/' + collectionItemUUID,
           })
         }
 

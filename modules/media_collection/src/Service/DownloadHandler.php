@@ -74,8 +74,8 @@ final class DownloadHandler {
    * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
    *   TBD.
    */
-  public function currentUserDownload() {
-    return $this->downloadLatestArchiveForUser($this->currentUser->id());
+  public function currentUserDownload($collectionId) {
+    return $this->downloadLatestArchiveForUser($this->currentUser->id(), $collectionId);
   }
 
   /**
@@ -123,8 +123,14 @@ final class DownloadHandler {
    * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
    *   TBD.
    */
-  public function downloadLatestArchiveForUser(int $userId) {
-    $collection = $this->collectionHandler->loadCollectionForUser($userId);
+  public function downloadLatestArchiveForUser(int $userId, $collectionId = NULL) {
+    if (!$collectionId) {
+      $collection = $this->collectionHandler->loadCollectionForUser($userId);
+    }
+    else {
+      $collection = \Drupal::entityTypeManager()->getStorage('media_collection')->load($collectionId);
+      // $collection = $this->collectionHandler->loadCollection($collectionId);
+    }
 
     if ($collection === NULL) {
       return new Response(NULL, Response::HTTP_NOT_FOUND);

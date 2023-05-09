@@ -6,7 +6,8 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\media_collection\Service\CollectionHandler;
 use Drupal\user\UserInterface;
-use RuntimeException;
+use EasyRdf\Http\Response;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -106,7 +107,7 @@ class CollectionController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    */
-  public function clearCollectionForCurrentUser(): RedirectResponse {
+  public function clearCollectionForCurrentUser($collectionId): RedirectResponse {
     /** @var \Drupal\user\UserInterface|null $user */
     $user = $this->entityTypeManager()->getStorage('user')->load($this->currentUser()->id());
 
@@ -115,7 +116,7 @@ class CollectionController extends ControllerBase {
     }
 
     try {
-      $this->handler->clearCollectionForUser($user);
+      $this->handler->clearCollectionForUser($user, $collectionId);
     }
     catch (RuntimeException $exception) {
       throw new HttpException(500, $exception->getMessage());
@@ -168,5 +169,10 @@ class CollectionController extends ControllerBase {
 
     return new RedirectResponse($collectionUrl);
   }
+
+  // public function removeFromCollection($collectionId, $collectionItemId) {
+  //   $response = new Response(['status' => 200]);
+  //   return $response;
+  // }
 
 }
