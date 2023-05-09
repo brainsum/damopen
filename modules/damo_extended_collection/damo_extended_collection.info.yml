@@ -1,0 +1,10 @@
+name: 'Extended media collection'
+type: module
+description: 'Provides extended media collection functionality'
+
+core_version_requirement: ^9.1
+
+package: 'Digital Assets Management'
+
+dependencies:
+  - damopen:damopen_common
