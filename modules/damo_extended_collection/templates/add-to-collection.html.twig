@@ -1,0 +1,7 @@
+<ul>
+  {% for collection in collections %}
+    <li>
+      <a class="use-ajax" href="/collections/{{ collection.id }}/add/{{ collection.mid }}/other_hi_res_no_badge">{{ collection.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

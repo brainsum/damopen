@@ -1,0 +1,25 @@
+damo_extended_collection.add:
+  path: '/collections/add'
+  defaults:
+    _form: '\Drupal\damo_extended_collection\Form\AddCollectionForm'
+    _title: 'Add a new collection'
+  requirements:
+    _permission: 'access content'
+damo_extended_collection.add_to_collection:
+  path: '/collections/{collection}/add/{media}/{style}'
+  defaults: 
+    _controller: '\Drupal\damo_extended_collection\Controller\CollectionController::addMediaToCollection' 
+    _title: 'Add to collection'
+  requirements: 
+    _permission: 'access content' 
+damo_extended_collection.remove_from_collection:
+  path: '/collections/remove/{collection}/{media}'
+  defaults: 
+    _controller: '\Drupal\damo_extended_collection\Controller\CollectionController::removeMediaFromCollection' 
+    _title: 'Remove media from collection'
+  requirements: 
+    _permission: 'access content' 
+
+
+
+

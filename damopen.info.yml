@@ -44,6 +44,7 @@ dependencies:
   - damopen:damopen_assets_library
   - damopen:damopen_assets_lister
   - damopen:damopen_common
+  - damopen:damo_extended_collection
   # Core.
   - drupal:basic_auth
   - drupal:block
