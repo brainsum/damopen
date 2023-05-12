@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - damo_extended_collection
+    - system
+  theme:
+    - damo_theme
+id: createcollectionblock
+theme: damo_theme
+region: content
+weight: 0
+provider: null
+plugin: create_collection_block
+settings:
+  id: create_collection_block
+  label: 'Create collection block'
+  label_display: visible
+  provider: damo_extended_collection
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections
