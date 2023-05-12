@@ -31,7 +31,7 @@
         "brainsum/damo_theme": ">=0.3 <1.0",
         "brainsum/media_upload": "^4.3.0",
         "drupal/better_exposed_filters": "^6.0.0",
-        "drupal/core": "^10.0",
+        "drupal/core": "^9.5",
         "drupal/dropzonejs": "^2.7.0",
         "drupal/entity_browser": "^2.9.0",
         "drupal/entity_embed": "1.x-dev",
