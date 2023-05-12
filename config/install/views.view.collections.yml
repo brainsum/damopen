@@ -5,6 +5,8 @@ dependencies:
     - field.storage.media_collection.field_title
   module:
     - media_collection
+_core:
+  default_config_hash: Y3O0JTM_CSi0UaX8uOGcfXTkawO1eKeOmQW5WMFGhhM
 id: collections
 label: Collections
 module: views
@@ -342,8 +344,8 @@ display:
         - url.query_args
       tags:
         - 'config:field.storage.media_collection.field_title'
-  page_1:
-    id: page_1
+  collections_page:
+    id: collections_page
     display_title: Page
     display_plugin: page
     position: 1
