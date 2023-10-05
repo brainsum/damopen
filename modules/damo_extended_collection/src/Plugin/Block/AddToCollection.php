@@ -31,6 +31,9 @@ class AddToCollection extends BlockBase {
     $ids = $query->execute();
     $media_collections = \Drupal::entityTypeManager()->getStorage('media_collection')->loadMultiple($ids);
     $param = \Drupal::routeMatch()->getParameters();
+    if (!$param->has('media')) {
+      return [];
+    }
     $mid = $param->get('media')->id();
 
     foreach ($media_collections as $collection) {
