@@ -35,7 +35,7 @@
         "drupal/dropzonejs": "^2.7.0",
         "drupal/entity_browser": "^2.9.0",
         "drupal/entity_embed": "^1.5",
-        "drupal/exif": "2.x-dev",
+        "drupal/exif": "^2.5",
         "drupal/field_group": "^3.4.0",
         "drupal/filehash": "^2.0",
         "drupal/focal_point": "^2.0",
