@@ -43,7 +43,7 @@
         "drupal/inline_entity_form": "^3.0-alpha3",
         "drupal/jsonapi_extras": "^3.23.0",
         "drupal/maxlength": "2.1.x-dev",
-        "drupal/media_entity_imagemagick": "^3.0",
+        "drupal/media_entity_imagemagick": "^3.0-alpha3",
         "drupal/php_ffmpeg": "^1.1.0",
         "drupal/redirect_after_login": "^2.7.0",
         "drupal/search_api": "^1.28.0",
