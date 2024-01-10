@@ -40,7 +40,7 @@
         "drupal/filehash": "^2.0",
         "drupal/focal_point": "^2.0",
         "drupal/image_effects": "^3.4.0",
-        "drupal/inline_entity_form": "^3.0",
+        "drupal/inline_entity_form": "^3.0-alpha3",
         "drupal/jsonapi_extras": "^3.23.0",
         "drupal/maxlength": "2.0.x-dev",
         "drupal/media_entity_imagemagick": "^3.0",
