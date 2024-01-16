@@ -3,10 +3,13 @@
 namespace Drupal\damopen_image_media_styles_preview\Render;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -18,9 +21,7 @@ use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function array_shift;
 use function array_values;
-use function drupal_get_path;
 use function explode;
-use function file_create_url;
 use function file_exists;
 use function file_get_contents;
 use function getimagesize;
@@ -101,6 +102,27 @@ final class AssetPreviewListMarkup {
   protected $currentUser;
 
   /**
+   * Module extension list.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
+   * Url generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $urlGenerator;
+
+  /**
+   * Renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Create a class instance.
    *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -119,7 +141,10 @@ final class AssetPreviewListMarkup {
       $container->get('form_builder'),
       $container->get('entity_type.manager'),
       $container->get('image.factory'),
-      $collectionHandler
+      $collectionHandler,
+      $container->get('extension.list.module'),
+      $container->get('file_url_generator'),
+      $container->get('renderer')
     );
   }
 
@@ -142,13 +167,19 @@ final class AssetPreviewListMarkup {
     FormBuilderInterface $formBuilder,
     EntityTypeManagerInterface $entityTypeManager,
     ImageFactory $imageFactory,
-    $collectionHandler = NULL
+    $collectionHandler = NULL,
+    ModuleExtensionList $moduleExtensionList,
+    FileUrlGeneratorInterface $urlGenerator,
+    RendererInterface $renderer
   ) {
     $this->currentUser = $currentUser;
     $this->formBuilder = $formBuilder;
     $this->entityTypeManager = $entityTypeManager;
     $this->imageFactory = $imageFactory;
     $this->collectionHandler = $collectionHandler;
+    $this->moduleExtensionList = $moduleExtensionList;
+    $this->urlGenerator = $urlGenerator;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -167,15 +198,15 @@ final class AssetPreviewListMarkup {
     }
 
     $this->currentCollection = $this->collectionHandler->loadCollectionForUser($this->currentUser->id());
-    $modulePath = drupal_get_path('module', 'media_collection');
+    $modulePath = $this->moduleExtensionList->getPath('media_collection');
 
     if ($this->itemInCollectionIcon === NULL) {
       $this->itemInCollectionIcon = [
         '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
-          'src' => Url::fromUri(file_create_url("{$modulePath}/assets/added-to-collection.png"))
-            ->getUri(),
+          'src' => Url::fromUri($this->urlGenerator
+            ->generateAbsoluteString("{$modulePath}/assets/added-to-collection.png")),
           'class' => [
             'icon--item-in-collection',
           ],
@@ -188,8 +219,8 @@ final class AssetPreviewListMarkup {
         '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
-          'src' => Url::fromUri(file_create_url("{$modulePath}/assets/plus-icon.svg"))
-            ->getUri(),
+          'src' => Url::fromUri($this->urlGenerator
+            ->generateAbsoluteString("{$modulePath}/assets/plus-icon.svg")),
           'class' => [
             'plus',
           ],
@@ -241,7 +272,7 @@ final class AssetPreviewListMarkup {
     $form = $this->formBuilder->getForm(MediaAssetFilterForm::class);
 
     $build = [
-      '#prefix' => render($form),
+      '#prefix' => $this->renderer->renderRoot($form),
       '#theme' => 'media_display_page',
       '#rows' => $derivativeImages,
       '#title' => $media->getName(),
@@ -316,7 +347,8 @@ final class AssetPreviewListMarkup {
       }
     }
 
-    $modulePath = drupal_get_path('module', 'damopen_image_media_styles_preview');
+    $modulePath = $this->moduleExtensionList
+      ->getPath('damopen_image_media_styles_preview');
     $rows = [];
     $rowNumber = 0;
     $controller = [];
@@ -396,7 +428,7 @@ final class AssetPreviewListMarkup {
           $this->t('Download'),
           'damopen_assets_download.styled_asset_download',
           ['media' => $media->id(), 'style' => $style->id()],
-          [  
+          [
             'attributes' => [
               'class' => ['button', 'button--green'],
               'target' => '_blank',

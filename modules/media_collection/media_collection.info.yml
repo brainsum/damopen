@@ -2,7 +2,7 @@ name: 'Media collection'
 type: module
 description: 'Collection/Basket/Cart feature for media items.'
 
-core_version_requirement: ^9.1
+core_version_requirement: ^9.1 || ^10.0
 
 package: 'Digital Assets Management'
 dependencies:

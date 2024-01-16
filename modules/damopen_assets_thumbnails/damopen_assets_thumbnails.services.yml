@@ -8,3 +8,4 @@ services:
       - '@current_user'
       - '@config.factory'
       - '@stream_wrapper_manager'
+      - '@file_url_generator'

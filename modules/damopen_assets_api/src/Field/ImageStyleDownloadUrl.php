@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\DataDefinitionInterface;
+use Drupal\Core\TypedData\TraversableTypedDataInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
 use RuntimeException;
 use function file_url_transform_relative;
@@ -33,18 +34,22 @@ class ImageStyleDownloadUrl extends FieldItemList {
   protected $imageStyleStorage;
 
   /**
+   * File URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(
-    DataDefinitionInterface $definition,
-    $name = NULL,
-    TypedDataInterface $parent = NULL
-  ) {
-    parent::__construct($definition, $name, $parent);
+  public static function createInstance($definition, $name = NULL, TraversableTypedDataInterface $parent = NULL) {
+    $instance = parent::createInstance($definition, $name, $parent);
+    $instance->imageStyleStorage = Drupal::entityTypeManager()
+      ->getStorage('image_style');
+    $instance->fileUrlGenerator = Drupal::service('file_url_generator');
 
-    // @todo: Dep.inj.
-    // @see: https://www.drupal.org/project/drupal/issues/2053415
-    $this->imageStyleStorage = Drupal::entityTypeManager()->getStorage('image_style');
+    return $instance;
   }
 
   /**
@@ -64,7 +69,7 @@ class ImageStyleDownloadUrl extends FieldItemList {
     }
 
     $url = $style->buildUrl($uri);
-    return file_url_transform_relative(file_create_url($url));
+    return $this->fileUrlGenerator->generateString($url);
   }
 
   /**

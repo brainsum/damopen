@@ -2,7 +2,7 @@ name: "Media Assets Library"
 type: module
 description: Media assets library functionality.
 
-core_version_requirement: ^9.1
+core_version_requirement: ^9.1 || ^10.0
 
 package: 'Digital Assets Management'
 dependencies:

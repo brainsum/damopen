@@ -2,7 +2,7 @@ name: "Image media styles preview"
 type: module
 description: "Adds a style preview feature for Image media entities"
 
-core_version_requirement: ^9.1
+core_version_requirement: ^9.1 || ^10.0
 
 package: 'Digital Assets Management'
 

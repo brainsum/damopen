@@ -5,6 +5,7 @@ namespace Drupal\damopen_assets_thumbnails\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StreamWrapper\LocalStream;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
@@ -72,6 +73,13 @@ class VideoThumbnail {
   protected $streamWrapperManager;
 
   /**
+   * File URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * VideoThumbnail constructor.
    *
    * @param \FFMpeg\FFMpeg $ffMpeg
@@ -96,7 +104,8 @@ class VideoThumbnail {
     EntityTypeManagerInterface $entityTypeManager,
     AccountProxyInterface $currentUser,
     ConfigFactoryInterface $configFactory,
-    StreamWrapperManagerInterface $streamWrapperManager
+    StreamWrapperManagerInterface $streamWrapperManager,
+    FileUrlGeneratorInterface $fileUrlGenerator
   ) {
     $this->ffMpeg = $ffMpeg;
     $this->fileSystem = $fileSystem;
@@ -106,6 +115,7 @@ class VideoThumbnail {
       ->get('system.file')
       ->get('default_scheme');
     $this->streamWrapperManager = $streamWrapperManager;
+    $this->fileUrlGenerator = $fileUrlGenerator;
   }
 
   /**
@@ -211,7 +221,8 @@ class VideoThumbnail {
       return $video->getFileUri();
     }
 
-    return file_create_url($video->getFileUri());
+    return $this->fileUrlGenerator
+      ->generateAbsoluteString($video->getFileUri());
   }
 
   /**

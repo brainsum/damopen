@@ -251,6 +251,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
         ->condition('bundle', $types, 'in')
         ->condition('status', 1)
         ->count()
+        ->accessCheck(FALSE)
         ->execute();
     }
     catch (Exception $exception) {

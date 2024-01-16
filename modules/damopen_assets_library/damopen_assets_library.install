@@ -205,9 +205,13 @@ function damopen_assets_library_update_8004() {
     $configStorage->write($config, $source->read($config));
   }
 
-  // @todo: How to handle this? Require dbee?
-  module_load_include('inc', 'dbee', 'dbee.users');
-  dbee_update_crypt_all('encrypt');
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
+  $moduleHandler = Drupal::moduleHandler();
+  if ($moduleHandler->moduleExists('dbee')) {
+    // @todo: How to handle this? Require dbee?
+    \Drupal::moduleHandler()->loadInclude('dbee', 'inc', 'dbee.users');
+    dbee_update_crypt_all('encrypt');
+  }
 }
 
 /**
@@ -286,7 +290,8 @@ function _damopen_assets_library_field_encryption() {
         $queue->releaseItem($item);
       }
       catch (Exception $e) {
-        watchdog_exception('field_encrypt', $e);
+        $logger = \Drupal::logger('field_encrypt');
+        \Drupal\Core\Utility\Error::logException($logger, $e);
       }
     }
   }

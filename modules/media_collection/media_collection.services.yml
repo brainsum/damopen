@@ -55,6 +55,8 @@ services:
       - '@string_translation'
       - '@media_collection.collection_handler'
       - '@current_user'
+      - '@extension.list.module'
+      - '@file_url_generator'
 
   media_collection.file_size_calculator:
     class: Drupal\media_collection\Service\FileSizeCalculator

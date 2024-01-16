@@ -143,6 +143,7 @@ class MediaEntityResource extends ResourceBase implements DependentPluginInterfa
       /** @var int[] $media_ids */
       $media_ids = $this->mediaStorage->getQuery()
         ->condition('status', 1, '=')
+        ->accessCheck(FALSE)
         ->execute();
 
       /** @var \Drupal\media\MediaInterface[] $media_data */

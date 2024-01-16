@@ -3,11 +3,11 @@
 namespace Drupal\media_collection\Service;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
-use function drupal_get_path;
-use function file_create_url;
 
 /**
  * Class HeaderMarkupGenerator.
@@ -45,6 +45,20 @@ final class HeaderMarkupGenerator {
   private $currentUser;
 
   /**
+   * Module extension list.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
+   * File URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * HeaderMarkupGenerator constructor.
    *
    * @param \Drupal\Core\StringTranslation\TranslationInterface $translation
@@ -57,13 +71,18 @@ final class HeaderMarkupGenerator {
   public function __construct(
     TranslationInterface $translation,
     CollectionHandler $handler,
-    AccountProxyInterface $currentUser
+    AccountProxyInterface $currentUser,
+    ModuleExtensionList $moduleExtensionList,
+    FileUrlGeneratorInterface $fileUrlGenerator
   ) {
     $this->translation = $translation;
     $this->collectionHandler = $handler;
     $this->currentUser = $currentUser;
+    $this->moduleExtensionList = $moduleExtensionList;
+    $this->fileUrlGenerator = $fileUrlGenerator;
 
-    $this->modulePath = drupal_get_path('module', 'media_collection');
+    $this->modulePath = $this->moduleExtensionList
+      ->getPath('media_collection');
   }
 
   /**
@@ -219,7 +238,7 @@ final class HeaderMarkupGenerator {
    *   Generated URI.
    */
   private function generateFileUri($filePath): string {
-    return Url::fromUri(file_create_url($filePath))->getUri();
+    return Url::fromUri($this->fileUrlGenerator->generate($filePath))->getUri();
   }
 
 }

@@ -51,7 +51,8 @@ class BulkMediaUploadForm extends ContribForm {
       $container->get('entity_field.manager'),
       $container->get('logger.factory'),
       $container->get('token'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('file.repository')
     );
   }
 
@@ -211,7 +212,7 @@ class BulkMediaUploadForm extends ContribForm {
 
         $destination = $targetDirectory . '/' . $file['filename'];
         $data = file_get_contents($file['path']);
-        $fileEntity = file_save_data($data, $destination);
+        $fileEntity = $this->fileRepository->writeData($data, $destination);
 
         if (FALSE === $fileEntity) {
           $errorFlag = TRUE;

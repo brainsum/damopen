@@ -2,7 +2,7 @@ name: "Default content for DAMo"
 type: module
 description: "Adds default content"
 
-core_version_requirement: ^9.1
+core_version_requirement: ^9.1 || ^10.0
 
 package: 'Digital Assets Management'
 

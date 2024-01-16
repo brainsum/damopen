@@ -101,16 +101,17 @@ function media_collection_share_preprocess_shared_media_collection(array &$varia
   $sharedCollection = $variables['content']['#shared_media_collection'];
 
   $collectionUser = $sharedCollection->getOwner();
-  $assetsDir = drupal_get_path('module', 'media_collection') . '/assets';
+  $assetsDir = \Drupal::service('extension.list.module')
+      ->getPath('media_collection') . '/assets';
 
   $variables['additional_collection_data']['data']['icons'] = [
     'regular' => [
-      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon.png"))
-        ->getUri(),
+      'uri' => \Drupal::service('file_url_generator')
+        ->generate("$assetsDir/collection-icon.png")->getUri(),
     ],
     'blue' => [
-      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon-blue.png"))
-        ->getUri(),
+      'uri' => \Drupal::service('file_url_generator')
+        ->generate("$assetsDir/collection-icon-blue.png")->getUri(),
     ],
   ];
 

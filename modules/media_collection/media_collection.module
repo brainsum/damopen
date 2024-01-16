@@ -231,15 +231,18 @@ function media_collection_preprocess_media_collection(array &$variables) {
   ];
 
   $collectionUser = $collection->getOwner();
-  $assetsDir = drupal_get_path('module', 'media_collection') . '/assets';
+  $assetsDir = \Drupal::service('extension.list.module')
+      ->getPath('media_collection') . '/assets';
 
+  /** @var \Drupal\Core\Routing\UrlGeneratorInterface $url_generator */
+  $url_generator = \Drupal::service('file_url_generator');
   $variables['additional_collection_data']['data']['icons'] = [
     'regular' => [
-      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon.png"))
+      'uri' => $url_generator->generate("$assetsDir/collection-icon.png")
         ->getUri(),
     ],
     'blue' => [
-      'uri' => Url::fromUri(file_create_url("$assetsDir/collection-icon-blue.png"))
+      'uri' => $url_generator->generate("$assetsDir/collection-icon-blue.png")
         ->getUri(),
     ],
   ];
@@ -447,8 +450,12 @@ function media_collection_media_view_alter(array &$build, MediaInterface $media,
     $handler = Drupal::service('media_collection.collection_handler');
     $collection = $handler->loadCollectionForUser($currentUser->id());
 
-    $modulePath = drupal_get_path('module', 'media_collection');
+    $modulePath = \Drupal::service('extension.list.module')
+      ->getPath('media_collection');
 
+    /** @var \Drupal\Core\Url $url */
+    $url = \Drupal::service('file_url_generator')
+      ->generate("{$modulePath}/assets/plus-icon.svg");
     $collectionLink = [
       '#type' => 'html_tag',
       '#tag' => 'span',
@@ -467,8 +474,7 @@ function media_collection_media_view_alter(array &$build, MediaInterface $media,
         '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
-          'src' => Url::fromUri(file_create_url("{$modulePath}/assets/plus-icon.svg"))
-            ->getUri(),
+          'src' => $url->getUri(),
           'class' => [
             'plus',
           ],
