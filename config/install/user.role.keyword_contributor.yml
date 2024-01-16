@@ -6,17 +6,11 @@ label: 'Keyword contributor'
 weight: 3
 is_admin: null
 permissions:
-  - 'access shortcuts'
   - 'access toolbar'
-  - 'add terms in category'
-  - 'add terms in keyword'
   - 'edit terms in category'
   - 'edit terms in keyword'
-  - 'publish any media'
-  - 'unpublish any media'
   - 'update any media'
   - 'update media'
-  - 'view any published media'
   - 'view media'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'
