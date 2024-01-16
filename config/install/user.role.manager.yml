@@ -6,10 +6,7 @@ label: Manager
 weight: 6
 is_admin: null
 permissions:
-  - 'access image_browser entity browser pages'
   - 'access media asset usage statistics'
-  - 'access media_embed entity browser pages'
-  - 'access media_library entity browser pages'
   - 'access toolbar'
   - 'add media collection (shared) entities'
   - 'add media collection entities'
@@ -20,7 +17,6 @@ permissions:
   - 'create logo media'
   - 'create media'
   - 'create template media'
-  - 'create video media'
   - 'create video_file media'
   - 'delete any guideline media'
   - 'delete any icon media'
@@ -39,7 +35,6 @@ permissions:
   - 'delete own media collection entities'
   - 'delete own media collection item entities'
   - 'delete own template media'
-  - 'delete own video media'
   - 'delete own video_file media'
   - 'delete terms in category'
   - 'delete terms in keyword'
@@ -59,7 +54,6 @@ permissions:
   - 'edit own media collection entities'
   - 'edit own media collection item entities'
   - 'edit own template media'
-  - 'edit own video media'
   - 'edit own video_file media'
   - 'edit terms in category'
   - 'edit terms in keyword'
