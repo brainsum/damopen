@@ -10,7 +10,6 @@ permissions:
   - 'access content'
   - 'access content overview'
   - 'access files overview'
-  - 'access image_browser entity browser pages'
   - 'access media asset usage statistics'
   - 'access media overview'
   - 'access site in maintenance mode'
