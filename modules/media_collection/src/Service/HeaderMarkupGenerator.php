@@ -238,7 +238,7 @@ final class HeaderMarkupGenerator {
    *   Generated URI.
    */
   private function generateFileUri($filePath): string {
-    return Url::fromUri($this->fileUrlGenerator->generate($filePath))->getUri();
+    return $this->fileUrlGenerator->generateString($filePath);
   }
 
 }
