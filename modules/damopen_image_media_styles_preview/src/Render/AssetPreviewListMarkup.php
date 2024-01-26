@@ -12,7 +12,6 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\damopen_common\Temporary\ImageStyleLoader;
 use Drupal\damopen_image_media_styles_preview\Form\MediaAssetFilterForm;
 use Drupal\file\Entity\File;
@@ -167,7 +166,7 @@ final class AssetPreviewListMarkup {
     FormBuilderInterface $formBuilder,
     EntityTypeManagerInterface $entityTypeManager,
     ImageFactory $imageFactory,
-    $collectionHandler = NULL,
+    $collectionHandler,
     ModuleExtensionList $moduleExtensionList,
     FileUrlGeneratorInterface $urlGenerator,
     RendererInterface $renderer
@@ -205,8 +204,8 @@ final class AssetPreviewListMarkup {
         '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
-          'src' => Url::fromUri($this->urlGenerator
-            ->generateAbsoluteString("{$modulePath}/assets/added-to-collection.png")),
+          'src' => $this->urlGenerator
+            ->generateAbsoluteString("{$modulePath}/assets/added-to-collection.png"),
           'class' => [
             'icon--item-in-collection',
           ],
@@ -219,8 +218,8 @@ final class AssetPreviewListMarkup {
         '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
-          'src' => Url::fromUri($this->urlGenerator
-            ->generateAbsoluteString("{$modulePath}/assets/plus-icon.svg")),
+          'src' => $this->urlGenerator
+            ->generateAbsoluteString("{$modulePath}/assets/plus-icon.svg"),
           'class' => [
             'plus',
           ],
