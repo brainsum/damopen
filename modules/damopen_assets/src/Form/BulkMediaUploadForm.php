@@ -3,12 +3,8 @@
 namespace Drupal\damopen_assets\Form;
 
 use Drupal\Component\Render\PlainTextOutput;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Utility\Token;
 use Drupal\media\MediaTypeInterface;
 use Drupal\media_upload\Form\BulkMediaUploadForm as ContribForm;
 use Drupal\taxonomy\TermInterface;
@@ -46,43 +42,11 @@ class BulkMediaUploadForm extends ContribForm {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('entity_field.manager'),
-      $container->get('logger.factory'),
-      $container->get('token'),
-      $container->get('file_system'),
-      $container->get('file.repository')
-    );
-  }
+    $instance = parent::create($container);
+    $instance->termStorage = $container->get('entity_type.manager')
+      ->getStorage('taxonomy_term');
 
-  /**
-   * BulkMediaUploadForm constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity type manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   Entity field manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   Logger for the media_upload module.
-   * @param \Drupal\Core\Utility\Token $token
-   *   Token service.
-   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
-   *   The file system.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function __construct(
-    EntityTypeManagerInterface $entityTypeManager,
-    EntityFieldManagerInterface $entityFieldManager,
-    LoggerChannelFactoryInterface $logger,
-    Token $token,
-    FileSystemInterface $fileSystem
-  ) {
-    parent::__construct($entityTypeManager, $entityFieldManager, $logger, $token, $fileSystem);
-
-    $this->termStorage = $entityTypeManager->getStorage('taxonomy_term');
+    return $instance;
   }
 
   /**
