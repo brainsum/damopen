@@ -47,7 +47,7 @@ dependencies:
   # Core.
   - drupal:basic_auth
   - drupal:block
-  - drupal:ckeditor
+  - drupal:ckeditor5
   - drupal:editor
   - drupal:field
   - drupal:file

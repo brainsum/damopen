@@ -4,9 +4,9 @@ dependencies:
   config:
     - filter.format.newsletter
   module:
-    - ckeditor
+    - ckeditor5
 format: newsletter
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
     rows:
