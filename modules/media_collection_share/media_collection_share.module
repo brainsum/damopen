@@ -89,6 +89,11 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
         'tags' => $collection->getCacheTags(),
         'contexts' => $collection->getCacheContexts(),
       ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.dialog.ajax',
+        ],
+      ],
     ];
   }
 }
