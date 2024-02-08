@@ -83,7 +83,8 @@ function _damopen_assets_lister_determine_unpublished_view(AccountProxyInterface
 function damopen_assets_lister_toolbar_alter(array &$items) {
   $currentUser = Drupal::currentUser();
 
-  if (!in_array('administrator', $currentUser->getRoles(), TRUE)) {
+  if ($currentUser->id() !== '1'
+    && !in_array('administrator', $currentUser->getRoles(), TRUE)) {
     // Hide toolbar search from regular users.
     // @todo: Patch for admin toolbar (admin_toolbar_toolbar_alter), add perm.
     // @todo: Hide "administrator" only when no items are under it.

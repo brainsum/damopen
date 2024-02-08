@@ -1,0 +1,10 @@
+services:
+  damopen_assets_library.helper:
+    class: Drupal\damopen_assets_library\Helper
+    arguments:
+      - '@entity_type.manager'
+      - '@file.recursive_validator'
+      - '@validation.constraint'
+      - '@module_handler'
+      - '@config.factory'
+      - '@messenger'

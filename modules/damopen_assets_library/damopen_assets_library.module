@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\filehash\FileHashInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -76,50 +77,16 @@ function damopen_assets_library_entity_access(EntityInterface $entity, $operatio
  * Add filehash validation if needed to media_bulk_upload form.
  */
 function damopen_assets_library_form_media_upload_bulk_upload_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // @todo: Require this dep?
-  if (
-    Drupal::moduleHandler()->moduleExists('filehash')
-    && Drupal::config('filehash.settings')->get('dedupe')
-  ) {
-    $form['#validate'][] = '_damopen_assets_library_media_upload_bulk_upload_validate';
-  }
+  \Drupal::service('damopen_assets_library.helper')
+    ->formMediaUploadBulkUploadFormAlter($form, $form_state, $form_id);
 }
 
 /**
- * Validate files on bulk upload with filehash_file_validate.
+ * Implements hook_ENTITY_TYPE_delete().
  */
-function _damopen_assets_library_media_upload_bulk_upload_validate($form, FormStateInterface $form_state) {
-  $values = $form_state->getValues();
-  if (empty($values['dropzonejs']) || empty($values['dropzonejs']['uploaded_files'])) {
-    return;
-  }
-
-  $files = $values['dropzonejs']['uploaded_files'];
-  $tmpFiles = [];
-
-  /** @var \Drupal\file\FileStorageInterface $fileStorage */
-  $fileStorage = Drupal::entityTypeManager()->getStorage('file');
-
-  foreach ($files as $key => $file) {
-    // Set uri for filehash.
-    $file['uri'] = $file['path'];
-    $tmpFile = $fileStorage->create($file);
-    $tmpFiles[$key] = $tmpFile;
-  }
-
-  $messenger = Drupal::messenger();
-
-  foreach ($tmpFiles as $key => $tmpFile) {
-    $errors = filehash_file_validate($tmpFile);
-    if (!empty($errors)) {
-      foreach ($errors as $error) {
-        $messenger->addMessage(t('%filename: @error', ['%filename' => $files[$key]['filename'], '@error' => $error]), 'warning');
-      }
-      unset($files[$key]);
-    }
-  }
-  $values['dropzonejs']['uploaded_files'] = $files;
-  $form_state->setValue('dropzonejs', $values['dropzonejs']);
+function damopen_assets_library_media_delete(EntityInterface $entity) {
+  \Drupal::service('damopen_assets_library.helper')
+    ->mediaDelete($entity);
 }
 
 /**
