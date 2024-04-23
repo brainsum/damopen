@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\media\MediaForm;
 use Drupal\media\MediaInterface;
 use Drupal\views\ViewExecutable;
@@ -164,7 +165,6 @@ function damopen_assets_preprocess_html(array &$variables) {
 function damopen_assets_media_presave(MediaInterface $media) {
   $currentUser = Drupal::currentUser();
   $owner = ($media->getOwner()->id() === $currentUser->id()) ? 'own' : 'any';
-
   if (!$currentUser->hasPermission("publish $owner media")) {
     $media->setPublished(FALSE);
   }
@@ -177,6 +177,18 @@ function damopen_assets_media_presave(MediaInterface $media) {
       if (empty(trim($item->get('alt')->getString()))) {
         $item->set('alt', $media->getName());
       }
+    }
+  }
+
+  // For youtube videos, we only need the video ID.
+  if ($media->bundle() === 'video') {
+    $video_url = UrlHelper::parse($media->get('field_video')->getString());
+    if (preg_match('/youtube\.com/', $video_url['path'])) {
+      $video_url['query'] = [
+        'v' => $video_url['query']['v'],
+      ];
+      $new_url = Url::fromUri($video_url['path'], $video_url);
+      $media->set('field_video', $new_url->toString());
     }
   }
 }
