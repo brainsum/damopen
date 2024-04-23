@@ -3,13 +3,12 @@ status: true
 dependencies:
   config:
     - search_api.index.database_media
-    - taxonomy.vocabulary.category
   module:
     - better_exposed_filters
     - search_api
     - user
 _core:
-  default_config_hash: r4YxMdxXUxC_TQYTyjF4o8nrsXHnDedyVQQIQS2z8v0
+  default_config_hash: TxMnU2RzbIYutLB_rRiob9HDF_WY7KXkHkKHgSDM2fc
 id: asset_search
 label: 'Asset search'
 module: views
@@ -299,59 +298,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        media_category:
-          id: media_category
-          table: search_api_index_database_media
-          field: media_category
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_term
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: media_category_op
-            label: ''
-            description: ''
-            use_operator: false
-            operator: media_category_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: category
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              dam: '0'
-              keyword_contributor: '0'
-              media_api: '0'
-              agency: '0'
-              manager: '0'
-              administrator: '0'
-              maintainer: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: category
-          type: select
-          hierarchy: true
-          limit: true
-          error_message: true
       style:
         type: default
       row:
