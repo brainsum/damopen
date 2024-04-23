@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.media_type
+  module:
+    - facets
+    - system
+  theme:
+    - damo_theme
+id: damo_theme_mediatype
+theme: damo_theme
+region: highlighted
+weight: -3
+provider: null
+plugin: 'facet_block:media_type'
+settings:
+  id: 'facet_block:media_type'
+  label: 'Media type'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: damo_theme_mediatype
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /assets
