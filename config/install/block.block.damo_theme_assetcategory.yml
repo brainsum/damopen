@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.asset_category
+  module:
+    - facets
+  theme:
+    - damo_theme
+id: damo_theme_assetcategory
+theme: damo_theme
+region: highlighted
+weight: 0
+provider: null
+plugin: 'facet_block:asset_category'
+settings:
+  id: 'facet_block:asset_category'
+  label: 'Asset Category'
+  label_display: '0'
+  provider: facets
+  context_mapping: {  }
+  block_id: damo_theme_assetcategory
+visibility: {  }
