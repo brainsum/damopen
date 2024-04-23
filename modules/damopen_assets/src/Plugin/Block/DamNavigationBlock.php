@@ -284,18 +284,18 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
   public function build(): array {
     $build = [
       '#type' => 'container',
-      'tabs' => [
-        '#theme' => 'item_list',
-        '#list_type' => 'ul',
-        '#items' => $this->buildTabs(),
-        '#attributes' => [
-          'class' => [
-            'nav',
-          ],
-        ],
-        '#prefix' => '<nav class="tabs-wrapper clearfix">',
-        '#suffix' => '</nav>',
-      ],
+      // 'tabs' => [
+      //   '#theme' => 'item_list',
+      //   '#list_type' => 'ul',
+      //   '#items' => $this->buildTabs(),
+      //   '#attributes' => [
+      //     'class' => [
+      //       'nav',
+      //     ],
+      //   ],
+      //   '#prefix' => '<nav class="tabs-wrapper clearfix">',
+      //   '#suffix' => '</nav>',
+      // ],
     ];
     $routeName = $this->routeMatch->getRouteName();
 
@@ -358,3 +358,4 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
   }
 
 }
+
