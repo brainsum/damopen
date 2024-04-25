@@ -239,11 +239,11 @@ function media_collection_preprocess_media_collection(array &$variables) {
   $variables['additional_collection_data']['data']['icons'] = [
     'regular' => [
       'uri' => $url_generator->generate("$assetsDir/collection-icon.png")
-        ->getUri(),
+        ->getOptions()['path'],
     ],
     'blue' => [
       'uri' => $url_generator->generate("$assetsDir/collection-icon-blue.png")
-        ->getUri(),
+        ->getOptions()['path'],
     ],
   ];
 
