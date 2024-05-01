@@ -1,0 +1,8 @@
+damopen_common.publish:
+  path: '/damo_media/{id}/publish'
+  defaults:
+    _form: '\Drupal\damopen_common\Form\DamoPublishMediaForm'
+    _title: 'Confirm Deletion'
+  requirements:
+    _permission: 'administer site configuration'
+    id: ^\d+$

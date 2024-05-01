@@ -45,6 +45,7 @@
         "drupal/jsonapi_extras": "^3.23",
         "drupal/maxlength": "2.1.x-dev@dev",
         "drupal/media_entity_imagemagick": "^3.0@alpha",
+        "drupal/twig_tweak": "^3.3",
         "drupal/php_ffmpeg": "^1.1.0",
         "drupal/redirect_after_login": "^3.0.0",
         "drupal/search_api": "^1.28",

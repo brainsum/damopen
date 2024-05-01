@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function damopen_common_theme() {
+  return [
+    'damopen_common_header_menu' => [
+      'variables' => [
+        'menu' => [],
+      ],
+    ],
+    'damopen_common_edit_menu' => [
+      'variables' => [
+        'content' => [],
+      ],
+    ],
+  ];
+}
