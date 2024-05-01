@@ -82,6 +82,7 @@ dependencies:
   - term_merge:term_merge
   - userprotect:userprotect
   - facets:facets
+  - twig_tweak:twig_tweak
 
 # @todo: Rename theme to damopen_theme.
 themes:
