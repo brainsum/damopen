@@ -64,6 +64,7 @@ final class CollectionHandler {
    */
   public function addItem(MediaCollectionItemInterface $item): void {
     // @todo: Cleanup.
+    return;
     if ($item->hasField('shared_parent') && $item->get('shared_parent')->entity !== NULL) {
       return;
     }
@@ -97,6 +98,7 @@ final class CollectionHandler {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function removeItem(MediaCollectionItemInterface $item): void {
+    return;
     $user = $item->getOwner();
     $collection = $this->loadCollectionForUser((int) $user->id());
 
@@ -170,6 +172,9 @@ final class CollectionHandler {
     if ($collection === NULL) {
       return [
         '#markup' => $this->translation->translate("You don't currently have a collection. Add items to start one!"),
+        '#cache' => [
+          'max-age' => 0,
+        ],
       ];
     }
 
@@ -214,7 +219,6 @@ final class CollectionHandler {
     else {
       $collection = $this->loadCollectionForUser($user->id());
     }
-
     if ($collection === NULL) {
       /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $collection */
       $collection = $this->collectionStorage->create();

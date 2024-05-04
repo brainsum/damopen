@@ -13,21 +13,16 @@ class CollectionController extends ControllerBase {
 
   public function addMediaToCollection($collection, $media, $style) {
     $response = new AjaxResponse();
-    // devel_dump($collection);
     $collection = \Drupal::entityTypeManager()->getStorage('media_collection')->load($collection);
     $items = $collection->get('items')->getValue();
     // Create media_collection_item entity.
     $media_collection_item = \Drupal::entityTypeManager()->getStorage('media_collection_item')->create([
       'media' => $media,
-      'collection' => $collection->id(),
       'style' => 'other_hi_res_no_badge',
     ]);
     $media_collection_item->save();
     $items[] = ['target_id' => $media_collection_item->id()];
-    // devel_dump($items);
     $collection->set('items', $items);
-    // devel_dump($items);
-    // exit;
     $collection->save();
     $response->addCommand(new \Drupal\Core\Ajax\AlertCommand('Media added to collection'));
     return $response;
@@ -52,6 +47,42 @@ class CollectionController extends ControllerBase {
     $collection->set('items', $items);
     $collection->save();
     return $response;
+  }
+
+  /**
+   * Add to collection list.
+   */
+  public function addToCollectionList() {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    // Get media collections.
+    $query = \Drupal::entityQuery('media_collection')
+      ->condition('uid', \Drupal::currentUser()->id())
+      ->accessCheck(FALSE);
+
+    $ids = $query->execute();
+    $media_collections = \Drupal::entityTypeManager()->getStorage('media_collection')->loadMultiple($ids);
+    $param = \Drupal::routeMatch()->getParameters();
+    if (!$param->has('media')) {
+      return [];
+    }
+    $mid = $param->get('media')->id();
+
+    foreach ($media_collections as $collection) {
+      $results[] = [
+        'title' => $collection->get('field_title')->value,
+        'id' => $collection->id(),
+        'mid' => $mid,
+      ];
+    }
+    dpm($results);
+    dpm('sadasdasa');
+    return [
+      '#theme' => 'add_to_collection',
+      '#collections' => $results,
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
   }
 
 }
