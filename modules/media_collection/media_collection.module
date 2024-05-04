@@ -233,16 +233,16 @@ function media_collection_preprocess_media_collection(array &$variables) {
   $collectionUser = $collection->getOwner();
   $assetsDir = \Drupal::service('extension.list.module')
       ->getPath('media_collection') . '/assets';
-
+  
   /** @var \Drupal\Core\Routing\UrlGeneratorInterface $url_generator */
   $url_generator = \Drupal::service('file_url_generator');
   $variables['additional_collection_data']['data']['icons'] = [
     'regular' => [
-      'uri' => $url_generator->generate("$assetsDir/collection-icon.png")
+      'uri' => '/' . $url_generator->generate("$assetsDir/collection-icon.png")
         ->getOptions()['path'],
     ],
     'blue' => [
-      'uri' => $url_generator->generate("$assetsDir/collection-icon-blue.png")
+      'uri' => '/' . $url_generator->generate("$assetsDir/collection-icon-blue.png")
         ->getOptions()['path'],
     ],
   ];
@@ -413,8 +413,10 @@ function media_collection_preprocess_media_collection_item(array &$variables) {
   $collection = Drupal::entityTypeManager()
     ->getStorage('media_collection')
     ->load($collection_id);
-  $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
-  $variables['attributes']['data-collection-uuid'] = $collection->uuid();
+  if ($collection) {
+    $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
+    $variables['attributes']['data-collection-uuid'] = $collection->uuid();
+  }
 }
 
 /**

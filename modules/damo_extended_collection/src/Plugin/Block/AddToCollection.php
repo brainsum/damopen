@@ -26,7 +26,8 @@ class AddToCollection extends BlockBase {
 
     // Get media collections.
     $query = \Drupal::entityQuery('media_collection')
-      ->condition('uid', \Drupal::currentUser()->id());
+      ->condition('uid', \Drupal::currentUser()->id())
+      ->accessCheck(FALSE);
 
     $ids = $query->execute();
     $media_collections = \Drupal::entityTypeManager()->getStorage('media_collection')->loadMultiple($ids);

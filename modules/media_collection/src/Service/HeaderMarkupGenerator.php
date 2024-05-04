@@ -157,7 +157,7 @@ final class HeaderMarkupGenerator {
       [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => $this->translation->translate('Items in collection'),
+        '#value' => $this->translation->translate('Items in collections'),
         '#attributes' => [
           'class' => [
             'collection-text',
@@ -188,7 +188,8 @@ final class HeaderMarkupGenerator {
    *   The built link.
    */
   private function buildLink(array $content): array {
-    $url = Url::fromRoute('media_collection.collection.current_user');
+    // $url = Url::fromRoute('media_collection.collection.current_user');
+    $url = Url::fromRoute('view.collections.collections_page');
 
     if (!$url->access($this->currentUser)) {
       return [];

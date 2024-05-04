@@ -20,7 +20,7 @@
             {% if link.media_collection.add_to_collection_link %}
               {% if link.identifier %}
                 <div class="link {% if loop.parent.loop.first and index == 1 %}active{% endif %}" identifier="{{ link.identifier }}">
-                  {{ link.media_collection.add_to_collection_link }}
+                  <a href="/collections/list" class="use-ajax" data-dialog-type="modal"> {{ link.media_collection.add_to_collection_link }} </a>
                 </div>
               {% endif %}
             {% endif %}

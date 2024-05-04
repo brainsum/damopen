@@ -19,7 +19,10 @@ damo_extended_collection.remove_from_collection:
     _title: 'Remove media from collection'
   requirements: 
     _permission: 'access content' 
-
-
-
-
+damo_extended_collection.add_to_collection_list:
+  path: '/collections/list'
+  defaults:
+    _controller: '\Drupal\damo_extended_collection\Controller\CollectionController::addToCollectionList'
+    _title: 'Add to collection'
+  requirements:
+    _permission: 'access content'
