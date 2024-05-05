@@ -62,7 +62,8 @@ class AddCollectionForm extends FormBase {
       'uid' => \Drupal::currentUser()->id(),
     ]);
     $media_collection->save();
-    $form_state->setRedirect('view.collections.collections_page');
+
+    // $form_state->setRedirect('view.collections.collections_page');
     // Set success message drupal8.
     \Drupal::messenger()->addStatus($this->t('Collection: <b>@title</b> has been created.', ['@title' => $form_state->getValue('title')]));
   }

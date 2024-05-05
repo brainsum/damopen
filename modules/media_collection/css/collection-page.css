@@ -382,3 +382,66 @@ Shared collection
         margin-right: 0;
     }
 }
+
+.collection-list {
+    display: block;
+    width: 300px;
+    max-height: 0px;
+    overflow: hidden;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 0px 11px 0px black;
+    border-radius: 5px;
+}
+
+.collection-list.active {
+    max-height: 1000px;
+    padding: 10px;
+}
+
+.collection-list .collection-link-wrapper {
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.collection-list .collection-divider {
+    border-top: 1px solid #e2e2e2;
+    padding: 0px !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+}
+
+.collection-list .add-to-collection-link {
+    display: block;
+    width: fit-content;
+}
+
+.collection-list .add-to-collection-link.in-collection {
+    pointer-events: none;
+    background: #bdbdbd !important;
+}
+
+
+.view-collections .card-body{
+    display: none;    
+}
+
+.view-collections .thumbnail .col-md-4 {
+    width: 100%;
+}
+
+.view-collections .thumbnail {
+    min-height: 210px;
+}
+
+.view-collections .thumbnail .card {
+    height: 100%;
+}
+
+.view-collections .title,
+.view-collections .data {
+    padding: 0 15px;
+}
