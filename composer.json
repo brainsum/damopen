@@ -57,7 +57,8 @@
         "drupal/video_embed_field": "^2.5.0",
         "npm-asset/dropzone": "^5.7.6",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
-        "npm-asset/select2": "^4.0.13"
+        "npm-asset/select2": "^4.0.13",
+        "drupal/field_count_formatter": "^3.0"
     },
     "suggest": {
         "drupal/maillog": "Allows logging outgoing emails.",

@@ -82,6 +82,7 @@ dependencies:
   - taxonomy_access_fix:taxonomy_access_fix
   - term_merge:term_merge
   - userprotect:userprotect
+  - field_count_formatter:field_count_formatter
   - facets:facets
   - twig_tweak:twig_tweak
 
