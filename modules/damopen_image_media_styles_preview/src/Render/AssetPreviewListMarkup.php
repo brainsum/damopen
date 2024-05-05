@@ -481,7 +481,48 @@ final class AssetPreviewListMarkup {
           $collectionLink['#attributes']['class'][] = 'style-in-collection';
         }
 
-        // @todo: Add "Remove from collection" link?
+        // Add collecetion popup.
+        $query = \Drupal::entityQuery('media_collection')
+          ->condition('uid', \Drupal::currentUser()->id())
+          ->sort('field_title', 'ASC')
+          ->accessCheck(TRUE);
+
+        $ids = $query->execute();
+        $media_collections = \Drupal::entityTypeManager()->getStorage('media_collection')->loadMultiple($ids);
+        // dpm($media_collections);
+        $param = \Drupal::routeMatch()->getParameters();
+        if (!$param->has('media')) {
+          return [];
+        }
+        $mid = $param->get('media')->id();
+        $collection_item = \Drupal::entityTypeManager()->getStorage('media_collection_item')->loadByProperties(['media' => $mid]);
+        $collection_item_ids = [];
+        if ($collection_item) {
+          foreach ($collection_item as $key => $value) {
+            $collection_item_ids[] = $value->id();
+          }
+        }
+        $collections = [];
+        foreach ($media_collections as $collection) {
+          $data = [
+            'title' => $collection->get('field_title')->value,
+            'id' => $collection->id(),
+            'mid' => $mid,
+          ];
+          $items = $collection->get('items')->getValue();
+          if (is_array($items)) {
+            $collection_items = [];
+            foreach ($items as $key => $value) {
+              $collection_items[] = $value['target_id'];
+            }
+            if (array_intersect($collection_item_ids, $collection_items)) {
+              $data['in_collection'] = TRUE;
+            }
+          }
+          $collections[] = $data;
+        }
+        $controller[$group][$rowNumber]['media_collection']['mid'] = $mid;
+        $controller[$group][$rowNumber]['media_collection']['add_to_collection_list'] = $collections;
         $controller[$group][$rowNumber]['media_collection']['add_to_collection_link'] = $collectionLink;
       }
 

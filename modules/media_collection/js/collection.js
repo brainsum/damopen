@@ -45,37 +45,41 @@
         });
 
         $(document).on("click", ".button--add-to-collection", function () {
-          $(this).removeClass("button--add-to-collection").addClass("disabled");
-          var that = this;
-          var styleUuid = '';
-          var topControls = $(".top-controls .active:last span");
+          $('.collection-list').toggleClass('active');
+          // $(this).removeClass("button--add-to-collection").addClass("disabled");
+          // var that = this;
+          // var styleUuid = '';
+          // var topControls = $(".top-controls .active:last span");
 
-          if (topControls.attr("data-style-uuid") === undefined) {
-            styleUuid = settings.media_collection.default_image_style_uuid
-          }
-          else {
-            styleUuid = topControls.attr("data-style-uuid")
-          }
-          var mediaType = $(this).attr("data-media-type");
-          var mediaUuid = $(this).attr("data-media-uuid");
+          // if (topControls.attr("data-style-uuid") === undefined) {
+          //   styleUuid = settings.media_collection.default_image_style_uuid
+          // }
+          // else {
+          //   styleUuid = topControls.attr("data-style-uuid")
+          // }
+          // var mediaType = $(this).attr("data-media-type");
+          // var mediaUuid = $(this).attr("data-media-uuid");
 
-          addToCollection(mediaUuid, mediaType, styleUuid, token).done(function (res) {
-            settings.media_collection.items_in_collection.push({
-              collectionItemId: res.data.id,
-              mediaId: mediaUuid,
-              mediaType: mediaType,
-              styleId: styleUuid
-            });
+          // addToCollection(mediaUuid, mediaType, styleUuid, token).done(function (res) {
+          //   settings.media_collection.items_in_collection.push({
+          //     collectionItemId: res.data.id,
+          //     mediaId: mediaUuid,
+          //     mediaType: mediaType,
+          //     styleId: styleUuid
+          //   });
 
-            changeToAdded($(that));
-            $(".image-controls .active").addClass("in-collection");
-            var identifier = $(".image-controls .active").attr('identifier');
-            if (!checkbox.is(':checked')) {
-              $(".image-controls .active").addClass('no-badge');
-            }
-            $(that).attr("data-collection-item-uuid", res.data.id);
-            changeCollectionHeader(parseInt($(".collection-item-number").text()) + 1);
-          });
+          //   changeToAdded($(that));
+          //   $(".image-controls .active").addClass("in-collection");
+          //   var identifier = $(".image-controls .active").attr('identifier');
+          //   if (!checkbox.is(':checked')) {
+          //     $(".image-controls .active").addClass('no-badge');
+          //   }
+          //   $(that).attr("data-collection-item-uuid", res.data.id);
+          //   changeCollectionHeader(parseInt($(".collection-item-number").text()) + 1);
+          // });
+        });
+        $(document).on("click", "a.add-to-collection-link", function (e) {
+          $(e.target).closest('.collection-link-wrapper').find('a').addClass('in-collection');
         });
 
         $(document).on("click", ".button--remove-style-from-collection", function () {

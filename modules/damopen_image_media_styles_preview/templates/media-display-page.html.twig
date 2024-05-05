@@ -20,7 +20,18 @@
             {% if link.media_collection.add_to_collection_link %}
               {% if link.identifier %}
                 <div class="link {% if loop.parent.loop.first and index == 1 %}active{% endif %}" identifier="{{ link.identifier }}">
-                  <a href="/collections/list" class="use-ajax" data-dialog-type="modal"> {{ link.media_collection.add_to_collection_link }} </a>
+                  {{ link.media_collection.add_to_collection_link }}
+                  <div class="collection-list">
+                    {% for collection in link.media_collection.add_to_collection_list %}
+                      <div class="collection-link-wrapper">
+                        <a class="use-ajax add-to-collection-link {% if collection.in_collection %} in-collection {% endif %}" href="/collections/{{ collection.id }}/add/{{ collection.mid }}/other_hi_res_no_badge">{{ collection.title }}</a>
+                      </div>
+                    {% endfor %}
+                    <span class="collection-divider"></span>
+                    <div class="collection-link-wrapper create-collection">
+                      <a href="/collections/add?destination=/media/{{ link.media_collection.mid }}" class="use-ajax add-to-collection-link" data-dialog-type="modal">Create a new collection</a>
+                    </div>
+                  </div>
                 </div>
               {% endif %}
             {% endif %}
