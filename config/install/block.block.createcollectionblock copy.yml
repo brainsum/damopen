@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - damo_extended_collection
+    - system
+  theme:
+    - damo_theme
+_core:
+  default_config_hash: _914YnI3aNDHQr-PSR-kEQcYjWx9aPbC973BX51aPTE
+id: createcollectionblock
+theme: damo_theme
+region: secondary_navigation
+weight: -6
+provider: null
+plugin: create_collection_block
+settings:
+  id: create_collection_block
+  label: 'Create collection block'
+  label_display: visible
+  provider: damo_extended_collection
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections
