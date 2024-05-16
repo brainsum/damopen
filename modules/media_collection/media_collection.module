@@ -43,9 +43,9 @@ function media_collection_theme() {
     'media_collection' => [
       'render element' => 'content',
     ],
-    'media_collection_item' => [
-      'render element' => 'content',
-    ],
+    // 'media_collection_item' => [
+    //   'render element' => 'content',
+    // ],
   ];
 }
 
@@ -115,13 +115,13 @@ function media_collection_preprocess_media(array &$variables) {
   ];
 
   if ($inCollection === TRUE) {
-    $variables['media_collection']['add_to_collection']['#attributes']['class'][] = 'in-collection';
+    // $variables['media_collection']['add_to_collection']['#attributes']['class'][] = 'in-collection';
     $variables['media_collection']['add_to_collection']['0']['#attributes']['src'] = '/modules/custom/media_collection/assets/added-to-collection.png';
     $variables['media_collection']['add_to_collection']['#attributes']['data-collection-item-uuid'] = $currentItem->uuid();
-    $variables['media_collection']['add_to_collection']['#cache'] = [
-      'tags' => $currentItem->getCacheTags(),
-      'contexts' => $currentItem->getCacheContexts(),
-    ];
+    // $variables['media_collection']['add_to_collection']['#cache'] = [
+    //   'tags' => $currentItem->getCacheTags(),
+    //   'contexts' => $currentItem->getCacheContexts(),
+    // ];
   }
   else {
     $variables['media_collection']['add_to_collection']['0']['#attributes']['src'] = '/modules/custom/media_collection/assets/add-to-collection.png';
@@ -226,8 +226,8 @@ function media_collection_preprocess_media_collection(array &$variables) {
   $collection = $variables['content']['#media_collection'];
 
   $collectionCache = [
-    'tags' => $collection->getCacheTags(),
-    'contexts' => $collection->getCacheContexts(),
+    // 'tags' => $collection->getCacheTags(),
+    // 'contexts' => $collection->getCacheContexts(),
   ];
 
   $collectionUser = $collection->getOwner();
@@ -246,19 +246,40 @@ function media_collection_preprocess_media_collection(array &$variables) {
         ->getOptions()['path'],
     ],
   ];
-
+  $variables['#cache'] = [
+    'max-age' => 0,
+  ];
   $variables['additional_collection_data']['render']['header'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'img',
-    '#attributes' => [
-      'src' => $variables['additional_collection_data']['data']['icons']['regular']['uri'],
-      'alt' => t('Collection icon'),
-      'class' => [
-        'collection_icon',
+    'title' => [
+      '#type' => 'html_tag',
+      '#tag' => 'img',
+      '#attributes' => [
+        'src' => $variables['additional_collection_data']['data']['icons']['regular']['uri'],
+        'alt' => t('Collection icon'),
+        'class' => [
+          'collection_icon',
+        ],
+      ],
+      '#prefix' => '<h1>',
+      '#suffix' => t('Collection') . '</h1>',
+    ],
+    'remove' => [
+      '#type' => 'html_tag',
+      '#tag' => 'a',
+      '#value' => t('Remove collection'),
+      '#attributes' => [
+        'href' => Url::fromRoute('damo_extended_collection.delete_collection', [
+          'id' => $collection->id(),
+        ])->toString(),
+        'class' => [
+          'collection_btn',
+          'empty_the_collection_btn',
+        ],
       ],
     ],
-    '#prefix' => '<h1>',
-    '#suffix' => t('Collection') . '</h1>',
+    'cache' => [
+      'max-age' => 0,
+    ],
   ];
 
   /** @var \Drupal\media_collection\Service\FileSizeCalculator $sizeCalculator */
@@ -275,7 +296,8 @@ function media_collection_preprocess_media_collection(array &$variables) {
       '%count' => $variables['additional_collection_data']['data']['item_count'],
       '%size' => $variables['additional_collection_data']['data']['collection_size'],
     ]),
-    '#cache' => $collectionCache,
+    '#cache' => [
+      'max-age' => 0,    ],
   ];
 
   $variables['additional_collection_data']['render']['links'] = [
@@ -285,7 +307,9 @@ function media_collection_preprocess_media_collection(array &$variables) {
         'collection-links-wrapper',
       ],
     ],
-    '#cache' => $collectionCache,
+    '#cache' => [
+      'max-age' => 0,
+    ],
   ];
 
   if ($collection->itemCount() > 0) {
@@ -303,7 +327,9 @@ function media_collection_preprocess_media_collection(array &$variables) {
         ],
         'download' => '',
       ],
-      '#cache' => $collectionCache,
+      '#cache' => [
+        'max-age' => 0,
+      ],
     ];
 
     $clearCollectionRouting = _media_collection_determine_clear_collection_routing($request, $collectionUser);
@@ -317,7 +343,9 @@ function media_collection_preprocess_media_collection(array &$variables) {
           'empty_the_collection_btn',
         ],
       ],
-      '#cache' => $collectionCache,
+      '#cache' => [
+        'max-age' => 0,
+      ],
     ];
   }
 }
@@ -396,27 +424,27 @@ function _media_collection_determine_asset_download_routing(Request $request, Us
  */
 function media_collection_preprocess_media_collection_item(array &$variables) {
   /** @var \Drupal\media_collection\Entity\MediaCollectionItemInterface $item */
-  $item = $variables['content']['#media_collection_item'];
+  // $item = $variables['content']['#media_collection_item'];
 
-  // For some reason there's no way to get this from the entity itself.
-  $mediaType = Drupal::entityTypeManager()
-    ->getStorage('media_type')
-    ->load($item->media()->bundle());
+  // // For some reason there's no way to get this from the entity itself.
+  // $mediaType = Drupal::entityTypeManager()
+  //   ->getStorage('media_type')
+  //   ->load($item->media()->bundle());
 
-  $variables['additional_item_data']['asset_type'] = $item->style()
-    ? $item->style()->label()
-    : $mediaType->label();
+  // $variables['additional_item_data']['asset_type'] = $item->style()
+  //   ? $item->style()->label()
+  //   : $mediaType->label();
 
-  $collection_id = \Drupal::routeMatch()->getParameters()->get('arg_0', NULL);
-  // Load collection.
-  $collection_id = $collection_id ? $collection_id : 1;
-  $collection = Drupal::entityTypeManager()
-    ->getStorage('media_collection')
-    ->load($collection_id);
-  if ($collection) {
-    $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
-    $variables['attributes']['data-collection-uuid'] = $collection->uuid();
-  }
+  // $collection_id = \Drupal::routeMatch()->getParameters()->get('arg_0', NULL);
+  // // Load collection.
+  // $collection_id = $collection_id ? $collection_id : 1;
+  // $collection = Drupal::entityTypeManager()
+  //   ->getStorage('media_collection')
+  //   ->load($collection_id);
+  // if ($collection) {
+  //   $variables['attributes']['data-collection-item-uuid'] = $item->uuid();
+  //   $variables['attributes']['data-collection-uuid'] = $collection->uuid();
+  // }
 }
 
 /**
@@ -513,11 +541,11 @@ function media_collection_media_view_alter(array &$build, MediaInterface $media,
       && ($collectionItem = $handler->itemWithGivenEntities($collection, $media))
     ) {
       $collectionLink['#attributes']['data-collection-item-uuid'] = $collectionItem->uuid();
-      $collectionLink['#attributes']['class'][] = 'style-in-collection';
-      $collectionLink['#cache'] = [
-        'tags' => Cache::mergeTags($collection->getCacheTags(), $collectionItem->getCacheTags()),
-        'contexts' => Cache::mergeContexts($collection->getCacheContexts(), $collectionItem->getCacheContexts()),
-      ];
+      // $collectionLink['#attributes']['class'][] = 'style-in-collection';
+      // $collectionLink['#cache'] = [
+      //   'tags' => Cache::mergeTags($collection->getCacheTags(), $collectionItem->getCacheTags()),
+      //   'contexts' => Cache::mergeContexts($collection->getCacheContexts(), $collectionItem->getCacheContexts()),
+      // ];
     }
 
     $build['buttons']['add_to_collection'] = $collectionLink;

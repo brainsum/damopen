@@ -171,7 +171,7 @@ class MediaEntityResource extends ResourceBase implements DependentPluginInterfa
     }
 
     $response = new ResourceResponse($media_entity, 200);
-    $response->addCacheableDependency($media_entity);
+    // $response->addCacheableDependency($media_entity);
 
     return $response;
   }

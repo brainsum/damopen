@@ -19,3 +19,11 @@ damo_extended_collection.remove_from_collection:
     _title: 'Remove media from collection'
   requirements: 
     _permission: 'access content' 
+damo_extended_collection.delete_collection:
+  path: '/collection/{id}/delete'
+  defaults:
+    _form: '\Drupal\damo_extended_collection\Form\DeleteCollectionForm'
+    _title: 'Confirm Deletion'
+  requirements:
+    _permission: 'administer site configuration'
+    id: ^\d+$

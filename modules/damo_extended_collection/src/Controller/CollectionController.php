@@ -5,6 +5,7 @@ namespace Drupal\damo_extended_collection\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\media_collection\Controller;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides route responses for the Example module.
@@ -23,19 +24,22 @@ class CollectionController extends ControllerBase {
     $media_collection_item->save();
     $items[] = ['target_id' => $media_collection_item->id()];
     $collection->set('items', $items);
+    // Get current timestamp.
+    $collection->set('field_updated', time());
     $collection->save();
+    $media = \Drupal::entityTypeManager()->getStorage('media')->load($media);
+      // Invalidate media cache tags.
+    $cache_tags = $media->getCacheTags();
+    Cache::invalidateTags($cache_tags);
     return $response;
   }
 
   public function removeMediaFromCollection($collection, $media) {
     $response = new AjaxResponse();
-    devel_dump($collection);
     $collection = \Drupal::entityTypeManager()->getStorage('media_collection')->loadByProperties(['uuid' => $collection]);
     $mediaEntity = \Drupal::entityTypeManager()->getStorage('media_collection_item')->loadByProperties(['uuid' => $media]);
     $mediaEntity = reset($mediaEntity);
     $collection = reset($collection);
-    devel_dump($mediaEntity);
-    devel_dump($collection);
     $media = $mediaEntity->id();
     $items = $collection->get('items')->getValue();
     foreach ($items as $key => $item) {
@@ -44,7 +48,13 @@ class CollectionController extends ControllerBase {
       }
     }
     $collection->set('items', $items);
+    $collection->set('field_updated', time());
     $collection->save();
+    $mediaId = $mediaEntity->media->target_id;
+    $media = \Drupal::entityTypeManager()->getStorage('media')->load($mediaId);
+      // Invalidate media cache tags.
+    $cache_tags = $media->getCacheTags();
+    Cache::invalidateTags($cache_tags);
     return $response;
   }
 

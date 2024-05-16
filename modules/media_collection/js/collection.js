@@ -20,9 +20,9 @@
         }
 
         document.colectionLoaded = true;
-        checkIdentifier(settings);
+        // checkIdentifier(settings);
         $('#watermark').on('change', function () {
-          checkIdentifier(settings);
+          // checkIdentifier(settings);
           var activeControls = $(".image-controls .active");
           activeControls.click();
           var identifier = activeControls.attr("identifier");
@@ -41,7 +41,7 @@
           token = sessionToken
         }).done(function () {
           $(".button--add-to-collection").show();
-          changeToAdded($(".in-collection"))
+          // changeToAdded($(".in-collection"))
         });
 
         $(document).on("click", ".button--add-to-collection", function () {
@@ -121,8 +121,8 @@
 
         $(document).on("click", ".button--remove-in-collection", function () {
           var that = this;
-          var collectionItemUUID = $(this).parents(".media_collection_item").data("collection-item-uuid");
-          var collectionUUID = $(this).parents(".media_collection_item").data("collection-uuid");
+          var collectionItemUUID = $(this).parents(".card").data("collection-item-uuid");
+          var collectionUUID = $(this).parents(".card").data("collection-uuid");
           removeFromCollection(collectionItemUUID, collectionUUID, token).done(function (res) {
             $(that).parents(".field--item").remove();
           })
