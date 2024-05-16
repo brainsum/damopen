@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - damo_theme
+id: damo_theme_pagetitle
+theme: damo_theme
+region: secondary_navigation
+weight: -7
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: visible
+  provider: core
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections
