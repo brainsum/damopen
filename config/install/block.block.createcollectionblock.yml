@@ -6,6 +6,8 @@ dependencies:
     - system
   theme:
     - damo_theme
+_core:
+  default_config_hash: vo814B5_niJrskWPQD9QmSlISN0Kjnv9Ma5aSZR072M
 id: createcollectionblock
 theme: damo_theme
 region: content
@@ -15,7 +17,7 @@ plugin: create_collection_block
 settings:
   id: create_collection_block
   label: 'Create collection block'
-  label_display: visible
+  label_display: '0'
   provider: damo_extended_collection
 visibility:
   request_path:
