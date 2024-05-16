@@ -123,7 +123,7 @@ class CollectionController extends ControllerBase {
     }
 
     $collectionUrl = Url::fromRoute(
-      'media_collection.collection.current_user',
+      'view.collections.collections_page',
       [],
       [
         'absolute' => TRUE,

@@ -170,10 +170,10 @@ final class HeaderMarkupGenerator {
     $build['#attributes']['class'][] = 'collection-header';
     $build['#attributes']['id'] = 'media-collection--collection';
 
-    if ($collection !== NULL) {
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $collection->getCacheTags());
-      $build['#cache']['contexts'] = Cache::mergeTags($build['#cache']['contexts'], $collection->getCacheContexts());
-    }
+    // if ($collection !== NULL) {
+    //   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $collection->getCacheTags());
+    //   $build['#cache']['contexts'] = Cache::mergeTags($build['#cache']['contexts'], $collection->getCacheContexts());
+    // }
 
     return $build;
   }
@@ -208,7 +208,7 @@ final class HeaderMarkupGenerator {
           'display: none',
         ],
       ],
-      '#cache' => $this->cacheDefaults(),
+      // '#cache' => $this->cacheDefaults(),
     ];
   }
 

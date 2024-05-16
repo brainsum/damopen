@@ -4,6 +4,7 @@ namespace Drupal\damo_extended_collection\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements a codimth Simple Form API.
@@ -61,9 +62,19 @@ class AddCollectionForm extends FormBase {
       'field_title' => $form_state->getValue('title'),
       'uid' => \Drupal::currentUser()->id(),
     ]);
+    $media_collection->set('field_updated', time());
     $media_collection->save();
-
-    // $form_state->setRedirect('view.collections.collections_page');
+    $source = \Drupal::request()->get('source');
+    if ($source === 'view') {
+      $form_state->setRedirect('view.collections.collections_page');
+    }
+    else {
+      // Redirect to media view page.
+      $media = \Drupal::entityTypeManager()->getStorage('media')->load($source);
+      // Invalidate media cache tags.
+      $cache_tags = $media->getCacheTags();
+      Cache::invalidateTags($cache_tags);
+    }
     // Set success message drupal8.
     \Drupal::messenger()->addStatus($this->t('Collection: <b>@title</b> has been created.', ['@title' => $form_state->getValue('title')]));
   }

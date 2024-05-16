@@ -21,11 +21,7 @@ function damopen_assets_lister_toolbar() {
   if ($route) {
     return [
       'damopen_assets_lister' => [
-        '#cache' => [
-          'contexts' => [
-            'user',
-          ],
-        ],
+        '#cache' => [ 'max-age' => 0],
         '#type' => 'toolbar_item',
         'tab' => [
           '#type' => 'link',

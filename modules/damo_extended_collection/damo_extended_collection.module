@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Cache\Cache;
+
 /**
  * Implements hook_theme().
  */
@@ -16,4 +18,15 @@ function damo_extended_collection_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function damo_extended_collection_preprocess_page(&$variables) {
+  // Get current media.
+  // $media = \Drupal::routeMatch()->getParameter('media');
+  // Invalidate media cache tags.
+  // $cache_tags = $media->getCacheTags();
+  // Cache::invalidateTags($cache_tags);
 }

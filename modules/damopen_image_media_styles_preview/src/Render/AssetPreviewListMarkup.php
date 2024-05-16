@@ -2,6 +2,7 @@
 
 namespace Drupal\damopen_image_media_styles_preview\Render;
 
+use Drupal\Component\Uuid\Uuid;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\File\FileUrlGeneratorInterface;
@@ -478,7 +479,7 @@ final class AssetPreviewListMarkup {
           $controller[$group][$rowNumber]['media_collection']['in_collection'] = TRUE;
           $collectionLink['#attributes']['data-collection-item-uuid'] = $collectionItem->uuid();
           $collectionLink['#attributes']['data-collection-uuid'] = $this->currentCollection->uuid();
-          $collectionLink['#attributes']['class'][] = 'style-in-collection';
+          // $collectionLink['#attributes']['class'][] = 'style-in-collection';
         }
 
         // Add collecetion popup.
@@ -507,6 +508,7 @@ final class AssetPreviewListMarkup {
           $data = [
             'title' => $collection->get('field_title')->value,
             'id' => $collection->id(),
+            'uuid' => $collection->uuid(),
             'mid' => $mid,
           ];
           $items = $collection->get('items')->getValue();
@@ -516,6 +518,10 @@ final class AssetPreviewListMarkup {
               $collection_items[] = $value['target_id'];
             }
             if (array_intersect($collection_item_ids, $collection_items)) {
+              $common = array_intersect($collection_item_ids, $collection_items);
+              $common = reset($common);
+              $item = \Drupal::entityTypeManager()->getStorage('media_collection_item')->load($common);
+              $data['itemuuid'] = $item->uuid();
               $data['in_collection'] = TRUE;
             }
           }

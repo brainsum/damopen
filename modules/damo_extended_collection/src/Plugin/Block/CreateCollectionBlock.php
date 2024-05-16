@@ -19,8 +19,8 @@ class CreateCollectionBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    // Get url by route name.
-    $url = \Drupal::urlGenerator()->generateFromRoute('damo_extended_collection.add');
+    // Get url by route name with query parameters.
+    $url = \Drupal::urlGenerator()->generateFromRoute('damo_extended_collection.add', ['source' => 'view']);
     return [
       '#theme' => 'create_collection',
       '#url' => $url,
