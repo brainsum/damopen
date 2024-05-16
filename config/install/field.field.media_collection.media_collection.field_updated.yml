@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media_collection.field_updated
+  module:
+    - media_collection
+id: media_collection.media_collection.field_updated
+field_name: field_updated
+entity_type: media_collection
+bundle: media_collection
+label: Updated
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

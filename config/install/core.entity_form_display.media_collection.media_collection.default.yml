@@ -1,8 +1,13 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.field.media_collection.media_collection.field_title
+    - field.field.media_collection.media_collection.field_updated
   module:
     - media_collection
+_core:
+  default_config_hash: i8x0sn67WKAH5V4rDzRBzfKQvDb4asMNk9KB8J3dEqw
 id: media_collection.media_collection.default
 targetEntityType: media_collection
 bundle: media_collection
@@ -10,34 +15,35 @@ mode: default
 content:
   items:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 2
+    weight: 0
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 1
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
 hidden:
   assets_archive: true
-  langcode: true
+  field_title: true
+  field_updated: true
   share_date: true
   share_emails: true
   share_url: true

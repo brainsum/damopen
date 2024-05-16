@@ -428,8 +428,34 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
-      sorts: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'There are no collections created yet.'
+            format: full_html
+          tokenize: false
+      sorts:
+        field_updated_value:
+          id: field_updated_value
+          table: media_collection__field_updated
+          field: field_updated_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: standard
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters: {  }
       style:

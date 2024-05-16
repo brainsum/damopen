@@ -1,24 +1,31 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.field.media_collection.media_collection.field_title
+    - field.field.media_collection.media_collection.field_updated
   module:
     - media_collection
+_core:
+  default_config_hash: BQSBwYEPZ4OuRKt1xUIm0Yi7PJWguofO7ZpmTBV5cp0
 id: media_collection.media_collection.default
 targetEntityType: media_collection
 bundle: media_collection
 mode: default
 content:
   items:
-    label: hidden
     type: media_collection_items
-    weight: 0
-    region: content
+    label: hidden
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   assets_archive: true
+  field_title: true
+  field_updated: true
   langcode: true
   search_api_excerpt: true
   share_date: true
