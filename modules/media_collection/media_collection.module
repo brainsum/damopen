@@ -277,9 +277,6 @@ function media_collection_preprocess_media_collection(array &$variables) {
         ],
       ],
     ],
-    'cache' => [
-      'max-age' => 0,
-    ],
   ];
 
   /** @var \Drupal\media_collection\Service\FileSizeCalculator $sizeCalculator */
@@ -296,19 +293,14 @@ function media_collection_preprocess_media_collection(array &$variables) {
       '%count' => $variables['additional_collection_data']['data']['item_count'],
       '%size' => $variables['additional_collection_data']['data']['collection_size'],
     ]),
-    '#cache' => [
-      'max-age' => 0,    ],
   ];
-
+  $variables['content']['#cache'] = ['max-age' => 0];
   $variables['additional_collection_data']['render']['links'] = [
     '#type' => 'container',
     '#attributes' => [
       'class' => [
         'collection-links-wrapper',
       ],
-    ],
-    '#cache' => [
-      'max-age' => 0,
     ],
   ];
 
@@ -327,9 +319,6 @@ function media_collection_preprocess_media_collection(array &$variables) {
         ],
         'download' => '',
       ],
-      '#cache' => [
-        'max-age' => 0,
-      ],
     ];
 
     $clearCollectionRouting = _media_collection_determine_clear_collection_routing($request, $collectionUser);
@@ -342,9 +331,6 @@ function media_collection_preprocess_media_collection(array &$variables) {
           'collection_btn',
           'empty_the_collection_btn',
         ],
-      ],
-      '#cache' => [
-        'max-age' => 0,
       ],
     ];
   }
