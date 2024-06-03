@@ -53,7 +53,10 @@ class CollectionShareModalForm extends FormBase {
     CollectionSharer $collectionSharer,
     EmailValidatorInterface $emailValidator
   ) {
-    $this->sharedCollection = $collectionSharer->createSharedCollectionForUser($this->currentUser()->id());
+    // Get query parameter.
+    $param = \Drupal::request()->query->all();
+    $param = $param['query']['collection'];
+    $this->sharedCollection = $collectionSharer->createSharedCollectionForUser($param);
     $this->emailValidator = $emailValidator;
   }
 

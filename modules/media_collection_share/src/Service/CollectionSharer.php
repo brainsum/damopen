@@ -99,9 +99,8 @@ final class CollectionSharer {
    * @throws \RuntimeException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createSharedCollectionForUser(int $userId): SharedMediaCollectionInterface {    
-    $collection = $this->collectionHandler->loadCollectionForUser($userId);
-
+  public function createSharedCollectionForUser(int $collectionID): SharedMediaCollectionInterface {
+    $collection = \Drupal::entityTypeManager()->getStorage('media_collection')->load($collectionID);
     if ($collection === NULL) {
       throw new RuntimeException('Could not load a collection for the given user.');
     }
@@ -246,7 +245,6 @@ final class CollectionSharer {
     foreach ($source->items() as $item) {
       $newItems[] = $this->cloneItem($item, $target);
     }
-
     return $newItems;
   }
 

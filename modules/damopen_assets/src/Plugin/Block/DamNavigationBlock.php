@@ -327,7 +327,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
 
       if ($this->headerMarkupGenerator !== NULL) {
-        $build['extension_wrapper']['media_collection__empty'] = $this->headerMarkupGenerator->emptyMediaCollectionLink();
+        // $build['extension_wrapper']['media_collection__empty'] = $this->headerMarkupGenerator->emptyMediaCollectionLink();
         $build['extension_wrapper']['media_collection__with_items'] = $this->headerMarkupGenerator->withItemsMediaCollectionLink();
       }
 
