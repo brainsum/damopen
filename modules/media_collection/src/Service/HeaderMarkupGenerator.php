@@ -134,18 +134,6 @@ final class HeaderMarkupGenerator {
     $collectionContent = [
       [
         '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#value' => $collection === NULL ? 0 : $collection->itemCount(),
-        '#attributes' => [
-          'class' => [
-            'collection-item-number',
-          ],
-        ],
-        '#prefix' => '<span class="collection-item-number-wrapper">',
-        '#suffix' => '</span>',
-      ],
-      [
-        '#type' => 'html_tag',
         '#tag' => 'img',
         '#attributes' => [
           'src' => $this->generateFileUri("{$this->modulePath}/assets/collection-icon-blue.png"),
@@ -157,7 +145,7 @@ final class HeaderMarkupGenerator {
       [
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => $this->translation->translate('Items in collections'),
+        '#value' => $this->translation->translate('Collections'),
         '#attributes' => [
           'class' => [
             'collection-text',
@@ -203,9 +191,6 @@ final class HeaderMarkupGenerator {
         'id' => 'media-collection--collection',
         'class' => [
           'dam-media-collection-link',
-        ],
-        'style' => [
-          'display: none',
         ],
       ],
       // '#cache' => $this->cacheDefaults(),

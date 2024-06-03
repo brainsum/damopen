@@ -69,7 +69,9 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
   }
 
   $currentUser = Drupal::currentUser();
-  $shareFormUrl = Url::fromRoute('media_collection_share.collection.share_form');
+  $routeMatch = Drupal::routeMatch();
+  $coll = $routeMatch->getParameter('arg_0');
+  $shareFormUrl = Url::fromRoute('media_collection_share.collection.share_form', ['query' => ['collection' => $coll]]);
   // $route_match = \Drupal::routeMatch()->getParameter('arg_0', NULL);
   if ($collection->itemCount() > 0 && $shareFormUrl->access($currentUser)) {
     $variables['additional_collection_data']['render']['links']['share'] = [

@@ -167,7 +167,19 @@ body {
 }
 
 .ui-dialog-titlebar-close {
+    background-image: url("../assets/close.png");
     background-repeat: no-repeat !important;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-size: 14px;
+    background-position: center;
+    transition: background-image, border-color 0.2s;
+    cursor: pointer;
+}
+
+.ui-dialog-titlebar-close:hover {
+    background-image: url("../assets/close-hover.png");
+    border-color: #2b2b2b;
 }
 
 .ui-widget-overlay {

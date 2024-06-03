@@ -172,15 +172,15 @@
               $(".collection-header").removeClass("zoom-width")
             }, 2100)
           }
-          if (count > 0) {
-            collectionCount.text(count);
-            $(".collection-header-empty").hide();
-            $(".collection-header").show()
-          }
-          else {
-            $(".collection-header").hide();
-            $(".collection-header-empty").show()
-          }
+          // if (count > 0) {
+          //   collectionCount.text(count);
+          //   $(".collection-header-empty").hide();
+          //   $(".collection-header").show()
+          // }
+          // else {
+          //   $(".collection-header").hide();
+          //   $(".collection-header-empty").show()
+          // }
         }
 
         function addToCollection(mediaUuid, mediaType, styleUuid, token) {
