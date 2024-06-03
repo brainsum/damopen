@@ -1,7 +1,7 @@
 quality: 80
 binaries: imagemagick
 path_to_binaries: /usr/bin/
-prepend: ''
+prepend: '-depth 8 -colorspace sRGB '
 log_warnings: true
 debug: false
 use_identify: true
@@ -31,7 +31,6 @@ image_formats:
     enabled: false
   WEBP:
     mime_type: image/webp
-    enabled: false
   TIFF:
     mime_type: image/tiff
     enabled: false
