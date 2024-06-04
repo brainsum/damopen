@@ -8,7 +8,6 @@ dependencies:
     - search_api
     - user
 _core:
-  default_config_hash: TxMnU2RzbIYutLB_rRiob9HDF_WY7KXkHkKHgSDM2fc
 id: asset_search
 label: 'Asset search'
 module: views
@@ -256,6 +255,8 @@ display:
             - files_filename
             - image_filename
             - images_filename
+            - media_bundle
+            - media_category_name
             - media_keywords_name
             - media_name
             - template_filename

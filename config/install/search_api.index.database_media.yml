@@ -13,8 +13,8 @@ dependencies:
     - search_api.server.local_database_server
   module:
     - media
-    - file
     - taxonomy
+    - file
     - search_api
 id: database_media
 name: database_media
@@ -55,7 +55,6 @@ field_settings:
         - field.storage.media.field_file
       module:
         - file
-        - file
   files_filename:
     label: 'Files Filename'
     datasource_id: 'entity:media'
@@ -65,7 +64,6 @@ field_settings:
       config:
         - field.storage.media.field_files
       module:
-        - file
         - file
   image_filename:
     label: 'Image Filename'
@@ -77,7 +75,6 @@ field_settings:
         - field.storage.media.field_image
       module:
         - file
-        - file
   images_filename:
     label: 'Images Filename'
     datasource_id: 'entity:media'
@@ -87,7 +84,6 @@ field_settings:
       config:
         - field.storage.media.field_images
       module:
-        - file
         - file
   media_bundle:
     label: 'Media type'
@@ -105,6 +101,17 @@ field_settings:
     dependencies:
       config:
         - field.storage.media.field_category
+  media_category_name:
+    label: 'Category » Taxonomy term » Name'
+    datasource_id: 'entity:media'
+    property_path: 'field_category:entity:name'
+    type: text
+    boost: 21.0
+    dependencies:
+      config:
+        - field.storage.media.field_category
+      module:
+        - taxonomy
   media_keywords:
     label: Keywords
     datasource_id: 'entity:media'
@@ -122,7 +129,6 @@ field_settings:
       config:
         - field.storage.media.field_keywords
       module:
-        - taxonomy
         - taxonomy
   media_name:
     label: 'Media name'
@@ -150,7 +156,6 @@ field_settings:
         - field.storage.media.field_template_file
       module:
         - file
-        - file
   video_filename:
     label: 'Video Filename'
     datasource_id: 'entity:media'
@@ -160,7 +165,6 @@ field_settings:
       config:
         - field.storage.media.field_video_file
       module:
-        - file
         - file
 datasource_settings:
   'entity:media':
@@ -173,23 +177,13 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  hierarchy:
-    fields:
-      media_category: taxonomy_term-parent
-      media_keywords: taxonomy_term-parent
-    weights:
-      preprocess_index: -45
-  highlight:
-    highlight: always
-    highlight_partial: false
-    excerpt: true
-    excerpt_length: 256
-    exclude_fields: {  }
-    prefix: '<strong>'
-    suffix: '</strong>'
-    weights:
-      postprocess_query: 0
+  custom_value: {  }
+  entity_status: {  }
+  entity_type: {  }
   html_filter:
+    weights:
+      preprocess_index: -6
+      preprocess_query: -6
     all_fields: false
     fields:
       - file_filename
@@ -205,59 +199,135 @@ processor_settings:
     alt: true
     tags:
       b: 2
-      em: 1
       h1: 5
       h2: 3
       h3: 2
       strong: 2
-      u: 1
+  ignorecase:
     weights:
       preprocess_index: -15
       preprocess_query: -15
-  ignore_character:
-    all_fields: false
+    all_fields: true
     fields:
       - file_filename
       - files_filename
       - image_filename
       - images_filename
       - media_bundle
+      - media_category_name
       - media_keywords_name
       - media_name
       - template_filename
       - video_filename
-    ignorable: '[''¿¡!?,.:;]'
-    ignorable_classes:
-      - Pc
-      - Pd
-      - Pe
-      - Pf
-      - Pi
-      - Po
-      - Ps
+  language_with_fallback: {  }
+  rendered_item: {  }
+  stopwords:
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
+    all_fields: true
+    fields:
+      - file_filename
+      - files_filename
+      - image_filename
+      - images_filename
+      - media_bundle
+      - media_category_name
+      - media_keywords_name
+      - media_name
+      - template_filename
+      - video_filename
+    stopwords:
+      - a
+      - an
+      - and
+      - are
+      - as
+      - at
+      - be
+      - but
+      - by
+      - for
+      - if
+      - in
+      - into
+      - is
+      - it
+      - 'no'
+      - not
+      - of
+      - 'on'
+      - or
+      - s
+      - such
+      - t
+      - that
+      - the
+      - their
+      - then
+      - there
+      - these
+      - they
+      - this
+      - to
+      - was
+      - will
+      - with
+  tokenizer:
+    weights:
+      preprocess_index: 0
+      preprocess_query: 0
+    all_fields: true
+    fields:
+      - file_filename
+      - files_filename
+      - image_filename
+      - images_filename
+      - media_bundle
+      - media_category_name
+      - media_keywords_name
+      - media_name
+      - template_filename
+      - video_filename
+    spaces: ''
+    ignored: ._-
+    overlap_cjk: 1
+    minimum_word_size: '3'
+  transliteration:
     weights:
       preprocess_index: -10
       preprocess_query: -10
-  language_with_fallback: {  }
-  rendered_item: {  }
+    all_fields: true
+    fields:
+      - file_filename
+      - files_filename
+      - image_filename
+      - images_filename
+      - media_bundle
+      - media_category_name
+      - media_keywords_name
+      - media_name
+      - template_filename
+      - video_filename
   type_boost:
+    weights:
+      preprocess_index: -20
     boosts:
       'entity:media':
-        datasource_boost: !!float 1
+        datasource_boost: 1.0
         bundle_boosts:
-          guideline: !!float 0
-          icon: !!float 0
-          image: !!float 0
-          logo: !!float 0
-          template: !!float 0
-          video: !!float 0
-          video_file: !!float 0
-    weights:
-      preprocess_index: 0
+          guideline: 0.0
+          icon: 0.0
+          image: 0.0
+          logo: 0.0
+          template: 0.0
+          video: 0.0
+          video_file: 0.0
 tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: true
   cron_limit: 500
+  index_directly: true
+  track_changes_in_references: true
 server: local_database_server
