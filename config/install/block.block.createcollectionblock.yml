@@ -1,3 +1,4 @@
+uuid: 847d989d-c3f7-4534-a3c4-8eb51618c861
 langcode: en
 status: true
 dependencies:
@@ -7,11 +8,11 @@ dependencies:
   theme:
     - damo_theme
 _core:
-  default_config_hash: vo814B5_niJrskWPQD9QmSlISN0Kjnv9Ma5aSZR072M
+  default_config_hash: _914YnI3aNDHQr-PSR-kEQcYjWx9aPbC973BX51aPTE
 id: createcollectionblock
 theme: damo_theme
 region: content
-weight: 0
+weight: -8
 provider: null
 plugin: create_collection_block
 settings:
