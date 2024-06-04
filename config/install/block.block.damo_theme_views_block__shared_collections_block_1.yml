@@ -1,0 +1,30 @@
+uuid: a16b8a2c-da46-430e-b056-5d08ab771e16
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.shared_collections
+  module:
+    - system
+    - views
+  theme:
+    - damo_theme
+id: damo_theme_views_block__shared_collections_block_1
+theme: damo_theme
+region: content
+weight: -7
+provider: null
+plugin: 'views_block:shared_collections-block_1'
+settings:
+  id: 'views_block:shared_collections-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections
