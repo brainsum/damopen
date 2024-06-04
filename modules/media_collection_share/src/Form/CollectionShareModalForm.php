@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_collection_share\Service\CollectionSharer;
@@ -30,12 +31,20 @@ class CollectionShareModalForm extends FormBase {
   private $emailValidator;
 
   /**
+   * The shared collection storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  private $userStorage;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('media_collection_share.collection_sharer'),
-      $container->get('email.validator')
+      $container->get('email.validator'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -46,18 +55,22 @@ class CollectionShareModalForm extends FormBase {
    *   Collection sharer service.
    * @param \Drupal\Component\Utility\EmailValidatorInterface $emailValidator
    *   Email validator.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function __construct(
     CollectionSharer $collectionSharer,
-    EmailValidatorInterface $emailValidator
+    EmailValidatorInterface $emailValidator,
+    EntityTypeManagerInterface $entityTypeManager
   ) {
     // Get query parameter.
     $param = \Drupal::request()->query->all();
     $param = $param['query']['collection'];
     $this->sharedCollection = $collectionSharer->createSharedCollectionForUser($param);
     $this->emailValidator = $emailValidator;
+    $this->userStorage = $entityTypeManager->getStorage('user');
   }
 
   /**
@@ -111,6 +124,36 @@ class CollectionShareModalForm extends FormBase {
       ],
     ];
 
+    $ids = array_map(function($value) {
+      return $value['target_id'];
+    }, $this->sharedCollection->get('shared_with')->getValue());
+
+    $form['shared_with_wrapper'] = [
+      'shared_with' => [
+        '#type' => 'entity_autocomplete',
+        '#title' => $this->t('Shared with'),
+        '#target_type' => 'user',
+        '#description' => $this->t('Users with whom this collection is shared.'),
+        '#tags' => TRUE,
+        '#default_value' => $this->userStorage->loadMultiple($ids),
+      ],
+      'share' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Share with users'),
+        '#name' => 'share',
+        '#ajax' => [
+          'callback' => '::ajaxSubmitFormShare',
+          'event' => 'click',
+        ],
+        '#limit_validation_errors' => [['shared_with']],
+        '#attributes' => [
+          'class' => [
+            'btn-primary',
+          ],
+        ],
+      ],
+    ];
+
     $form['email_share_wrapper'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -125,10 +168,12 @@ class CollectionShareModalForm extends FormBase {
       'submit' => [
         '#type' => 'submit',
         '#value' => $this->t('Send the e-mail'),
+        '#name' => 'send',
         '#ajax' => [
           'callback' => '::ajaxSubmitForm',
           'event' => 'click',
         ],
+        '#limit_validation_errors' => [['emails']],
         '#attributes' => [
           'class' => [
             'btn-primary',
@@ -148,7 +193,6 @@ class CollectionShareModalForm extends FormBase {
         'shared_emails_list' => $this->sharedEmailsElement(),
       ],
     ];
-
     if (!isset($form['#cache']['tags'])) {
       $form['#cache']['tags'] = [];
     }
@@ -192,7 +236,6 @@ class CollectionShareModalForm extends FormBase {
     $this->messenger()->deleteAll();
 
     $validatedEmails = $this->processSubmittedEmails($this->preprocessSubmittedEmails($form_state->getValue('emails', '')));
-
     if (count($validatedEmails['raw']) > 0) {
 
       if (count($validatedEmails['valid'])) {
@@ -224,6 +267,30 @@ class CollectionShareModalForm extends FormBase {
       $response->addCommand(new ReplaceCommand('#share-modal-form-status-messages-wrapper', $form['status_messages_wrapper']));
     }
 
+    return $response;
+  }
+
+  /**
+   * Implements the submit handler for the modal dialog AJAX call.
+   *
+   * @param array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Array of AJAX commands to execute on submit of the modal form.
+   */
+  public function ajaxSubmitFormShare(array &$form, FormStateInterface $form_state): AjaxResponse {
+    $response = new AjaxResponse();
+
+    $this->sharedCollection->set('shared_with', $form_state->getValue('shared_with'));
+    $this->sharedCollection->save();
+
+    if (count($this->messenger()->all()) > 0) {
+      $form['status_messages_wrapper']['status_messages']['#weight'] = -10;
+      $response->addCommand(new ReplaceCommand('#share-modal-form-status-messages-wrapper', $form['status_messages_wrapper']));
+    }
     return $response;
   }
 

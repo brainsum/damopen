@@ -1,20 +1,16 @@
-uuid: 8daacc8d-a17a-4f36-88bb-c3158442228f
+uuid: 5e074c97-cde1-44c8-819c-d7fc004b9f03
 langcode: en
 status: true
 dependencies:
-  config:
-    - field.storage.media_collection.field_title
   module:
     - field_count_formatter
-    - media_collection
-_core:
-  default_config_hash: 73yDLArCn73bB1EqOBv0M7Fg5VjW3-DrJP8hRb4jv7Q
-id: collections
-label: Collections
+    - media_collection_share
+id: shared_collections
+label: 'Shared collections'
 module: views
 description: ''
 tag: ''
-base_table: media_collection_field_data
+base_table: shared_media_collection_field_data
 base_field: id
 display:
   default:
@@ -23,11 +19,11 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Collections
+      title: 'Shared with me'
       fields:
         id:
           id: id
-          table: media_collection_field_data
+          table: shared_media_collection_field_data
           field: id
           relationship: none
           group_type: group
@@ -80,70 +76,7 @@ display:
           type: number_integer
           settings:
             thousand_separator: ''
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        field_title:
-          id: field_title
-          table: media_collection__field_title
-          field: field_title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
+            prefix_suffix: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -156,12 +89,12 @@ display:
           field_api_classes: false
         items_target_id:
           id: items_target_id
-          table: media_collection__items
+          table: shared_media_collection__items
           field: items_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: media_collection
+          entity_type: shared_media_collection
           entity_field: items
           plugin_id: field
           label: ''
@@ -212,7 +145,7 @@ display:
           group_column: target_id
           group_columns: {  }
           group_rows: true
-          delta_limit: 1
+          delta_limit: 128
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
@@ -221,12 +154,12 @@ display:
           field_api_classes: false
         items_target_id_1:
           id: items_target_id_1
-          table: media_collection__items
+          table: shared_media_collection__items
           field: items_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: media_collection
+          entity_type: shared_media_collection
           entity_field: items
           plugin_id: field
           label: ''
@@ -285,18 +218,18 @@ display:
           field_api_classes: false
         uid:
           id: uid
-          table: media_collection_field_data
+          table: shared_media_collection_field_data
           field: uid
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: media_collection
+          entity_type: shared_media_collection
           entity_field: uid
           plugin_id: field
           label: ''
           exclude: true
           alter:
-            alter_text: true
+            alter_text: false
             text: ''
             make_link: false
             path: ''
@@ -398,23 +331,10 @@ display:
           empty_zero: false
           hide_alter_empty: false
       pager:
-        type: mini
+        type: some
         options:
           offset: 0
-          items_per_page: 10
-          total_pages: null
-          id: 0
-          tags:
-            next: ››
-            previous: ‹‹
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
+          items_per_page: 5
       exposed_form:
         type: basic
         options:
@@ -431,44 +351,17 @@ display:
       cache:
         type: tag
         options: {  }
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text
-          empty: true
-          content:
-            value: 'There are no collections created yet.'
-            format: full_html
-          tokenize: false
-      sorts:
-        field_updated_value:
-          id: field_updated_value
-          table: media_collection__field_updated
-          field: field_updated_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: standard
-          order: DESC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
+      empty: {  }
+      sorts: {  }
       arguments:
-        uid:
-          id: uid
-          table: media_collection_field_data
-          field: uid
+        shared_with_target_id:
+          id: shared_with_target_id
+          table: shared_media_collection__shared_with
+          field: shared_with_target_id
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: media_collection
-          entity_field: uid
+          entity_type: shared_media_collection
           plugin_id: numeric
           default_action: default
           exception:
@@ -497,13 +390,7 @@ display:
           not: false
       filters: {  }
       style:
-        type: grid_responsive
-        options:
-          grouping: {  }
-          columns: 3
-          cell_min_width: 100
-          grid_gutter: 10
-          alignment: horizontal
+        type: default
       row:
         type: fields
       query:
@@ -515,7 +402,6 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
-      group_by: false
       header: {  }
       footer: {  }
       display_extenders: {  }
@@ -525,25 +411,20 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - url.query_args
         - user
-      tags:
-        - 'config:field.storage.media_collection.field_title'
-  collections_page:
-    id: collections_page
-    display_title: Page
-    display_plugin: page
+      tags: {  }
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
     position: 1
     display_options:
       display_extenders: {  }
-      path: collections
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
-        - url.query_args
         - user
-      tags:
-        - 'config:field.storage.media_collection.field_title'
+      tags: {  }
