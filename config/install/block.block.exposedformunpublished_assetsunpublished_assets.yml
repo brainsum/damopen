@@ -8,21 +8,23 @@ dependencies:
     - views
   theme:
     - damo_theme
+_core:
+  default_config_hash: tS_3tGjLyr71Xw6Q0BE0iyRd671QB1VMmwyf4u82JXE
 id: exposedformunpublished_assetsunpublished_assets
 theme: damo_theme
 region: navigation
-weight: -2
+weight: -4
 provider: null
 plugin: 'views_exposed_filter_block:unpublished_assets-unpublished_assets'
 settings:
   id: 'views_exposed_filter_block:unpublished_assets-unpublished_assets'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
 visibility:
   request_path:
     id: request_path
-    pages: /admin/assets/all-unpublished
     negate: false
     context_mapping: {  }
+    pages: /admin/assets/all-unpublished

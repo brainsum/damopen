@@ -8,21 +8,23 @@ dependencies:
     - views
   theme:
     - damo_theme
+_core:
+  default_config_hash: 1mIBn-snZ8n2RGpHcajGZ8vvzKF_vBzoPkvxi4rZS8o
 id: damo_theme_exposed_asset_search_form
 theme: damo_theme
 region: navigation
-weight: -3
+weight: -6
 provider: null
 plugin: 'views_exposed_filter_block:asset_search-asset_search'
 settings:
   id: 'views_exposed_filter_block:asset_search-asset_search'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
 visibility:
   request_path:
     id: request_path
-    pages: "<front>\r\n/assets"
     negate: false
     context_mapping: {  }
+    pages: "<front>\r\n/assets"

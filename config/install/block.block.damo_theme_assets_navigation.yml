@@ -6,20 +6,22 @@ dependencies:
     - system
   theme:
     - damo_theme
+_core:
+  default_config_hash: 0tM_XOH9WDzUOXI9onpUvqrxdzniEYRDBzYhXSZyrVE
 id: damo_theme_assets_navigation
 theme: damo_theme
 region: navigation
-weight: -4
+weight: -5
 provider: null
 plugin: dam_navigation_block
 settings:
   id: dam_navigation_block
   label: 'DAM Navigation'
-  provider: damopen_assets
   label_display: '0'
+  provider: damopen_assets
 visibility:
   request_path:
     id: request_path
-    pages: "<front>\r\n/media/*\r\n/user/*\r\n/admin/content/media\r\n/collection"
     negate: false
     context_mapping: {  }
+    pages: "<front>\r\n/media/*\r\n/user/*\r\n/admin/content/media\r\n/collection"
