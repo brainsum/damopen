@@ -1,10 +1,11 @@
-uuid: 5e074c97-cde1-44c8-819c-d7fc004b9f03
 langcode: en
 status: true
 dependencies:
   module:
     - field_count_formatter
     - media_collection_share
+_core:
+  default_config_hash: RjqQlbUSpoiajBxEBRaZhujLhvH2ip8a8EGikwfoo1s
 id: shared_collections
 label: 'Shared collections'
 module: views
@@ -216,11 +217,11 @@ display:
           click_sort_column: target_id
           type: entity_reference_entity_view
           settings:
-            view_mode: shared
+            view_mode: default
           group_column: target_id
           group_columns: {  }
           group_rows: true
-          delta_limit: 128
+          delta_limit: 1
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
@@ -368,7 +369,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<div class=\"thumbnail\">  {{ items_target_id }} </div>\r\n<a href=\"/collection/shared/{{ created }}/{{ uuid }}\">\r\n<div class=\"title\"> {{ field_title }} </div>\r\n<div class=\"data\">  {{ items_target_id_1 }} items  Created by: {{ uid }} </div>\r\n</a>"
+            text: "<div class=\"thumbnail\">  {{ items_target_id  }} </div>\r\n<a href=\"/collection/shared/{{ created }}/{{ uuid }}\">\r\n<div class=\"title\"> {{ \"Title placeholder\" }} </div>\r\n<div class=\"data\">  {{ items_target_id_1 }} items  Created by: {{ uid }} </div>\r\n</a>"
             make_link: false
             path: ''
             absolute: false
@@ -465,7 +466,13 @@ display:
           not: false
       filters: {  }
       style:
-        type: default
+        type: grid_responsive
+        options:
+          grouping: {  }
+          columns: 3
+          cell_min_width: 100
+          grid_gutter: 10
+          alignment: horizontal
       row:
         type: fields
       query:
@@ -494,7 +501,8 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        ajax_history: {  }
     cache_metadata:
       max-age: -1
       contexts:

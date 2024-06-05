@@ -15,13 +15,21 @@
  * @ingroup themeable
  */
 #}
-<div{{ attributes.addClass('shared_media_collection') }}>
-  {{ additional_collection_data.render.header }}
-  {{ additional_collection_data.render.share_date }}
-  {{ additional_collection_data.render.size_info }}
-  {{ additional_collection_data.render.share_url }}
 
-  {{ additional_collection_data.render.links }}
+<div{{ attributes.addClass('media_collection shared_media_collection') }}>
+  <div class="media_collection--buttons">
+    <a class="back-to-collections" href="/collections">{{"Collections"|t}} »</a>
+    <div class="media_collection--top">
+        <h1 class="collection-title">{{ "Shared collection title placeholder" }}</h1>
+      {{ additional_collection_data.render.header }}
+    </div>
+    {{ additional_collection_data.render.share_date }}
+    {{ additional_collection_data.render.size_info }}
+    {{ additional_collection_data.render.share_url }}
 
-  {{ content }}
+    {{ additional_collection_data.render.links }}
+  </div>
+  <div class="media_collection--content">
+    {{ content }}
+  </div>
 </div>
