@@ -1,4 +1,3 @@
-uuid: a16b8a2c-da46-430e-b056-5d08ab771e16
 langcode: en
 status: true
 dependencies:
@@ -9,6 +8,8 @@ dependencies:
     - views
   theme:
     - damo_theme
+_core:
+  default_config_hash: zKtInq67JRYchVtyYX_s4QzRA4BbFl896JubmYtVVfg
 id: damo_theme_views_block__shared_collections_block_1
 theme: damo_theme
 region: content

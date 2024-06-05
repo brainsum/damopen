@@ -8,10 +8,12 @@ dependencies:
     - system
   theme:
     - damo_theme
+_core:
+  default_config_hash: V07ZiyWJEZOURoh8oHKqTVkM59z0FkAJqajzNqJfTgs
 id: damo_theme_mediatype
 theme: damo_theme
-region: highlighted
-weight: -3
+region: secondary_navigation
+weight: -6
 provider: null
 plugin: 'facet_block:media_type'
 settings:

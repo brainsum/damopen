@@ -3,17 +3,19 @@ status: true
 dependencies:
   theme:
     - damo_theme
+_core:
+  default_config_hash: BDc8wlvPePxOOPGJ3jyzHXJT3q4EwzCuB7mZefm7TZM
 id: damo_theme_local_tasks
 theme: damo_theme
 region: highlighted
-weight: 10
+weight: -8
 provider: null
 plugin: local_tasks_block
 settings:
   id: local_tasks_block
   label: Tabs
-  provider: core
   label_display: '0'
+  provider: core
   primary: true
   secondary: true
 visibility: {  }

@@ -5,15 +5,17 @@ dependencies:
     - system
   theme:
     - damo_theme
+_core:
+  default_config_hash: gdLtzBVfavcdFNCgj8EISOldagughcbcf6_-gXhfFO0
 id: damo_theme_messages
 theme: damo_theme
 region: highlighted
-weight: -50
+weight: -9
 provider: null
 plugin: system_messages_block
 settings:
   id: system_messages_block
   label: 'Status messages'
-  provider: system
   label_display: '0'
+  provider: system
 visibility: {  }

@@ -7,11 +7,11 @@ dependencies:
   theme:
     - damo_theme
 _core:
-  default_config_hash: _914YnI3aNDHQr-PSR-kEQcYjWx9aPbC973BX51aPTE
+  default_config_hash: NE1pyQBYvA7HhAri4BGEo10Ev8cRsragA1B-8_IZxV0
 id: createcollectionblock
 theme: damo_theme
 region: secondary_navigation
-weight: -6
+weight: -4
 provider: null
 plugin: create_collection_block
 settings:

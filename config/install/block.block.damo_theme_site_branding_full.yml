@@ -5,17 +5,19 @@ dependencies:
     - system
   theme:
     - damo_theme
+_core:
+  default_config_hash: hBC0Js9wUDxVRN7HuZemTlhQmz5dsTFIUru4q5P2nHU
 id: damo_theme_site_branding_full
 theme: damo_theme
 region: navigation
-weight: -5
+weight: -7
 provider: null
 plugin: system_branding_block
 settings:
   id: system_branding_block
   label: 'Site branding (full)'
-  provider: system
   label_display: '0'
+  provider: system
   use_site_logo: true
   use_site_name: true
   use_site_slogan: true
