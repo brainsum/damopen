@@ -112,3 +112,20 @@
 .controller .in-collection .button--remove-style-from-collection {
   display: unset;
 }
+
+
+.add-to-collection-link,
+.remove-from-collection-link {
+  display: inline-block !important;
+}
+
+.remove-from-collection-link {
+  padding: 0px !important;
+  width: 25px;
+  height: 25px;
+  background-color: transparent !important;
+  background-image: url(/themes/contrib/damo_theme/images/remove-icon.png) !important;
+  background-size: 25px !important;
+  background-position: 0 0 !important;
+}
+
