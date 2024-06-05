@@ -8,6 +8,7 @@ dependencies:
     - search_api
     - user
 _core:
+  default_config_hash: N-6NbunrbO9vfTL1Yk8GQ8IgMisivQ4fYL1TJnGFojI
 id: asset_search
 label: 'Asset search'
 module: views
@@ -322,6 +323,7 @@ display:
           preserve_facet_query_args: false
       relationships: {  }
       use_ajax: true
+      show_admin_links: true
       header:
         result:
           id: result
@@ -354,7 +356,9 @@ display:
     display_options:
       display_description: 'Main search view for assets.'
       exposed_block: true
-      display_extenders: {  }
+      display_extenders:
+        ajax_history:
+          enable_history: true
       path: assets
       menu:
         type: tab

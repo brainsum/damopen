@@ -85,7 +85,11 @@ dependencies:
   - field_count_formatter:field_count_formatter
   - facets:facets
   - twig_tweak:twig_tweak
+  - image_style_warmer:image_style_warmer
+  - views_ajax_history:views_ajax_history
+  - switch_page_theme:switch_page_theme
 
 # @todo: Rename theme to damopen_theme.
 themes:
   - damo_theme
+  - claro
