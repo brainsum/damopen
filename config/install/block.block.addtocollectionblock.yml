@@ -1,4 +1,3 @@
-uuid: 0821bbc7-7352-4aa8-9532-aca307d852dc
 langcode: en
 status: true
 dependencies:
@@ -11,8 +10,8 @@ _core:
   default_config_hash: DcXAJxBBuUQVt35_bio3XKLeOnokM6qCl1Y1JbFW1c8
 id: addtocollectionblock
 theme: damo_theme
-region: content
-weight: -9
+region: secondary_navigation
+weight: -5
 provider: null
 plugin: add_to_collection_block
 settings:
