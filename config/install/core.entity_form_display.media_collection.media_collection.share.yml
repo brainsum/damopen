@@ -1,36 +1,37 @@
-uuid: 3e3563bc-f27f-47e0-90dd-e2a7d555f230
+uuid: 0de59b04-709f-4b00-afb5-2b2067b9da5b
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.media_collection.share
     - field.field.media_collection.media_collection.field_title
     - field.field.media_collection.media_collection.field_updated
   module:
     - media_collection
 _core:
-  default_config_hash: mbUG2XIlch_aY_MvHcnySI8TNcayKzVj7nxAyzbfrnc
-id: media_collection.media_collection.default
+  default_config_hash: uixVodXSKVLfxHkvGst-e95EsEaO-nIN7USVZWAS-XQ
+id: media_collection.media_collection.share
 targetEntityType: media_collection
 bundle: media_collection
-mode: default
+mode: share
 content:
-  items:
-    type: media_collection_items
-    label: hidden
-    settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
+  shared_with:
+    type: entity_reference_autocomplete_tags
     weight: 0
     region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
 hidden:
   assets_archive: true
   field_title: true
   field_updated: true
+  items: true
   langcode: true
-  search_api_excerpt: true
   share_date: true
   share_emails: true
   share_url: true
-  shared_with: true
   uid: true

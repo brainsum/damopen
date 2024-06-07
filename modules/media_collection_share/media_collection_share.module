@@ -15,6 +15,7 @@ use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
 use Drupal\media_collection\Entity\MediaCollectionItemInterface;
 use Drupal\media_collection_share\Entity\SharedMediaCollectionInterface;
+use Drupal\media_collection_share\Form\MediaCollectionShare;
 use Drupal\media_collection_share\Service\CollectionMailer;
 
 /**
@@ -72,6 +73,8 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
   $routeMatch = Drupal::routeMatch();
   $coll = $routeMatch->getParameter('arg_0');
   $shareFormUrl = Url::fromRoute('media_collection_share.collection.share_form', ['query' => ['collection' => $coll]]);
+  $shareUsersFormUrl = Url::fromRoute('media_collection_share.collection.share_with_users_form', ['media_collection' => $coll]);
+
   // $route_match = \Drupal::routeMatch()->getParameter('arg_0', NULL);
   if ($collection->itemCount() > 0 && $shareFormUrl->access($currentUser)) {
     $variables['additional_collection_data']['render']['links']['share'] = [
@@ -96,6 +99,32 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
           'core/drupal.dialog.ajax',
         ],
       ],
+    ];
+  }
+  if ($collection->itemCount() > 0 && $shareUsersFormUrl->access($currentUser)) {
+    $variables['additional_collection_data']['render']['links']['share_with_users'] = [
+      '#type' => 'link',
+      '#title' => new TranslatableMarkup('Share with users'),
+      '#url' => $shareUsersFormUrl,
+      '#attributes' => [
+        'class' => [
+          'use-ajax',
+          'collection_btn',
+          'collection_share_btn',
+        ],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => json_encode(['width' => '50%']),
+      ],
+      '#cache' => [
+        'tags' => $collection->getCacheTags(),
+        'contexts' => $collection->getCacheContexts(),
+      ],
+      '#attached' => [
+        'library' => [
+          'core/drupal.dialog.ajax',
+        ],
+      ],
+
     ];
   }
 }
@@ -445,4 +474,13 @@ function media_collection_share_media_access(MediaInterface $media, $operation, 
   }
 
   return AccessResult::allowedIfHasPermission($account, 'view shared media collection item entities');
+}
+
+/**
+ * Implements hook_entity_type_alter().
+*/
+function media_collection_share_entity_type_alter(array &$entityTypes) {
+  if (isset($entityTypes['media_collection'])) {
+    $entityTypes['media_collection']->setFormClass('share', MediaCollectionShare::class);
+  }
 }

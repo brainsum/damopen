@@ -24,6 +24,8 @@ class CollectionController extends ControllerBase {
     $media_collection_item->save();
     $items[] = ['target_id' => $media_collection_item->id()];
     $collection->set('items', $items);
+    $media_collection_item->setParent($collection);
+    $media_collection_item->save();
     // Get current timestamp.
     $collection->set('field_updated', time());
     $collection->save();

@@ -234,6 +234,30 @@ abstract class MediaCollectionBase extends ContentEntityBase implements MediaCol
       ->setDisplayConfigurable('view', TRUE)
       ->setRevisionable(TRUE);
 
+    $fields['shared_with'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Shared with'))
+      ->setDescription(new TranslatableMarkup('Users with whom this collection is shared.'))
+      ->setSetting('target_type', 'user')
+      ->setSetting('handler', 'default')
+      ->setCardinality(-1)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'author',
+        'weight' => 0,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 5,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => '60',
+          'autocomplete_type' => 'tags',
+          'placeholder' => '',
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     return $fields;
   }
 
