@@ -8,7 +8,7 @@ dependencies:
     - field_count_formatter
     - media_collection
 _core:
-  default_config_hash: 73yDLArCn73bB1EqOBv0M7Fg5VjW3-DrJP8hRb4jv7Q
+  default_config_hash: QOnI4XDG-zfhhAEXf5elO3iJXMRHXLoKSu5olYx-4wY
 id: collections
 label: Collections
 module: views
@@ -529,6 +529,71 @@ display:
         - user
       tags:
         - 'config:field.storage.media_collection.field_title'
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
+    position: 2
+    display_options:
+      title: 'Shared with me'
+      pager:
+        type: none
+        options:
+          offset: 0
+      empty: {  }
+      arguments:
+        shared_with_target_id:
+          id: shared_with_target_id
+          table: media_collection__shared_with
+          field: shared_with_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media_collection
+          entity_field: shared_with
+          plugin_id: numeric
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: current_user
+          default_argument_options: {  }
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
+      defaults:
+        empty: false
+        title: false
+        pager: false
+        arguments: false
+      display_extenders:
+        ajax_history: {  }
+      block_hide_empty: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - user
+      tags:
+        - 'config:field.storage.media_collection.field_title'
   collections_page:
     id: collections_page
     display_title: Page
@@ -547,3 +612,4 @@ display:
         - user
       tags:
         - 'config:field.storage.media_collection.field_title'
+

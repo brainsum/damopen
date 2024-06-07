@@ -23,7 +23,19 @@ class MediaCollectionItemAccessControlHandler extends EntityAccessControlHandler
 
     switch ($operation) {
       case 'view':
-        return AccessResult::allowedIfHasPermission($account, "view {$ownership} media collection item entities");
+        if ($account->hasPermission("view {$ownership} media collection item entities")) {
+          return AccessResult::allowed();
+        }
+
+        if ($account->hasPermission('view shared media collection item entities')) {
+          // Get parent and check the list of shared users.
+          $parent = $item->parent();
+          $shared_with = $parent->get('shared_with')->getValue();
+
+          return AccessResult::allowedIf(in_array(['target_id' => $account->id()], $shared_with));
+        }
+
+        return AccessResult::neutral();
 
       case 'update':
         return AccessResult::allowedIfHasPermission($account, "edit {$ownership} media collection item entities");

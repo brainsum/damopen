@@ -1,23 +1,22 @@
+uuid: b46e9578-186d-44de-840a-985c97dab141
 langcode: en
 status: true
 dependencies:
   config:
-    - views.view.shared_collections
+    - views.view.collections
   module:
     - system
     - views
   theme:
     - damo_theme
-_core:
-  default_config_hash: zKtInq67JRYchVtyYX_s4QzRA4BbFl896JubmYtVVfg
-id: damo_theme_views_block__shared_collections_block_1
+id: damo_theme_views_block__collections_block_1
 theme: damo_theme
 region: content
-weight: -7
+weight: 0
 provider: null
-plugin: 'views_block:shared_collections-block_1'
+plugin: 'views_block:collections-block_1'
 settings:
-  id: 'views_block:shared_collections-block_1'
+  id: 'views_block:collections-block_1'
   label: ''
   label_display: visible
   provider: views
@@ -29,3 +28,4 @@ visibility:
     id: request_path
     negate: false
     pages: /collections
+

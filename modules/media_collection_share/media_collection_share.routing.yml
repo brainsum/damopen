@@ -15,6 +15,14 @@ media_collection_share.collection.share_form:
     # @note: Same permissions as for accessing your own collection.
     _permission: 'add media collection entities,edit own media collection entities,add media collection item entities,edit own media collection item entities'
 
+media_collection_share.collection.share_with_users_form:
+  path: '/collection/share/{media_collection}'
+  defaults:
+    _title: 'Share your collection with users'
+    _entity_form: 'media_collection.share'
+  requirements:
+    _permission: 'share media collections with users'
+
 media_collection_share.collection.shared.asset_download:
   path: '/collection/download/shared/{date}/{uuid}'
   defaults:

@@ -39,3 +39,41 @@ function media_collection_update_8701() {
     $definition
   );
 }
+
+/**
+ * Install "Shared with" field for media collections.
+ */
+function media_collection_update_10000() {
+  $updateManager = Drupal::entityDefinitionUpdateManager();
+
+  $definition = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(new TranslatableMarkup('Shared with'))
+    ->setDescription(new TranslatableMarkup('Users with whom this collection is shared.'))
+    ->setSetting('target_type', 'user')
+    ->setSetting('handler', 'default')
+    ->setCardinality(-1)
+    ->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'author',
+      'weight' => 0,
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'autocomplete_type' => 'tags',
+        'placeholder' => '',
+      ],
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $updateManager->installFieldStorageDefinition(
+    'shared_with',
+    'media_collection',
+    'media_collection',
+    $definition
+  );
+}
