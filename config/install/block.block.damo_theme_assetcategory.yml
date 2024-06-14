@@ -7,8 +7,6 @@ dependencies:
     - facets
   theme:
     - damo_theme
-_core:
-  default_config_hash: lU2Zz1hua7EhQyv8L_IeDuHLmasepZHeoNpxW4kfIyE
 id: damo_theme_assetcategory
 theme: damo_theme
 region: secondary_navigation
@@ -17,8 +15,8 @@ provider: null
 plugin: 'facet_block:asset_category'
 settings:
   id: 'facet_block:asset_category'
-  label: 'Asset Category'
-  label_display: '0'
+  label: 'Category:'
+  label_display: visible
   provider: facets
   context_mapping: {  }
   block_id: damo_theme_assetcategory
