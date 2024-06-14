@@ -6,8 +6,6 @@ dependencies:
     - system
   theme:
     - damo_theme
-_core:
-  default_config_hash: DcXAJxBBuUQVt35_bio3XKLeOnokM6qCl1Y1JbFW1c8
 id: addtocollectionblock
 theme: damo_theme
 region: secondary_navigation

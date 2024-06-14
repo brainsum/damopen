@@ -1,4 +1,3 @@
-uuid: 8daacc8d-a17a-4f36-88bb-c3158442228f
 langcode: en
 status: true
 dependencies:
@@ -7,8 +6,6 @@ dependencies:
   module:
     - field_count_formatter
     - media_collection
-_core:
-  default_config_hash: QOnI4XDG-zfhhAEXf5elO3iJXMRHXLoKSu5olYx-4wY
 id: collections
 label: Collections
 module: views

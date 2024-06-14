@@ -75,6 +75,7 @@ dependencies:
   - focal_point:focal_point
   - image_effects:image_effects
   - jsonapi_extras:jsonapi_extras
+  - jsonapi_image_styles:jsonapi_image_styles
   - maxlength:maxlength
   - media_entity_imagemagick:media_entity_imagemagick
   - media_upload:media_upload
