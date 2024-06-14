@@ -1,4 +1,3 @@
-uuid: 3e3563bc-f27f-47e0-90dd-e2a7d555f230
 langcode: en
 status: true
 dependencies:
@@ -7,8 +6,6 @@ dependencies:
     - field.field.media_collection.media_collection.field_updated
   module:
     - media_collection
-_core:
-  default_config_hash: mbUG2XIlch_aY_MvHcnySI8TNcayKzVj7nxAyzbfrnc
 id: media_collection.media_collection.default
 targetEntityType: media_collection
 bundle: media_collection

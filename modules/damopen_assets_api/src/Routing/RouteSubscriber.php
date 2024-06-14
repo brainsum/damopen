@@ -20,7 +20,7 @@ class RouteSubscriber extends RouteSubscriberBase {
       if ($route->getOption('_is_jsonapi')) {
         $route->setRequirement('_permission', 'access tml jsonapi resources');
       }
-      if (in_array($name, ['system.private_file_download', 'system.files'])) {
+      if (in_array($name, ['system.private_file_download', 'system.files', 'image.style_private'])) {
         $route->setOption('_auth', ['basic_auth', 'cookie']);
       }
     }
