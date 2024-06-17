@@ -4,8 +4,8 @@
   <section class="edit-menu--toolbar">
     <div class="section__inner">
       <div class="edit-menu--buttonset">
-        <a class="edit-menu--button" href="{{"/media/" ~ content.mid ~ "/edit" }}">{{ 'Edit this asset'|t }}</a>
-        <a class="edit-menu--button" href="{{"/media/" ~ content.mid ~ "/delete" }}">{{ 'Delete this asset'|t }}</a>
+        <a class="edit-menu--button" href="{{"/media/" ~ content.mid ~ "/edit?destination=media/" ~ content.mid }}">{{ 'Edit this asset'|t }}</a>
+        <a class="edit-menu--button" href="{{"/media/" ~ content.mid ~ "/delete?destination=/" }}">{{ 'Delete this asset'|t }}</a>
       </div>
         {% if not content.status %}
           <div class="media-status">
@@ -14,9 +14,9 @@
             </span>
             {{ 'This asset is unpublished'|t }}
           </div>
-          {# <div class="publish-button">
+          <div class="publish-button">
             <a class="use-ajax" data-dialog-type="modal" href="{{"/damo_media/" ~ content.mid ~ "/publish" }}">{{ 'Publish'|t }}</a>
-          </div> #}
+          </div>
         {% endif %}
     </div>
   </section>
