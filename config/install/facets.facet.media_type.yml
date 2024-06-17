@@ -6,6 +6,8 @@ dependencies:
     - views.view.asset_search
   module:
     - search_api
+_core:
+  default_config_hash: Of1CF_V8mce8_jE1ZW4_Y5g7hcg_RmH7-0eQ-KNsmq4
 id: media_type
 name: 'Media type'
 weight: 0
@@ -47,7 +49,7 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: DESC
+      sort: ASC
   count_widget_order:
     processor_id: count_widget_order
     weights:
