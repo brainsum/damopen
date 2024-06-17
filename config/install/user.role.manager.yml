@@ -1,6 +1,26 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - media.type.guideline
+    - media.type.icon
+    - media.type.image
+    - media.type.logo
+    - media.type.template
+    - media.type.video_file
+    - taxonomy.vocabulary.category
+    - taxonomy.vocabulary.keyword
+  module:
+    - damopen_assets_statistics
+    - dropzonejs
+    - media
+    - media_collection
+    - media_collection_share
+    - media_upload
+    - taxonomy
+    - taxonomy_access_fix
+    - term_merge
+    - toolbar
 id: manager
 label: Manager
 weight: 6
