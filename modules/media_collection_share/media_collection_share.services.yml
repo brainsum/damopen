@@ -22,6 +22,12 @@ services:
       - '@keyvalue'
       - '@datetime.time'
 
+  media_collection_share.access_check:
+    class: Drupal\media_collection_share\Access\MediaCollectionAccessCheck
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: access_check, applies_to: _media_collection_owner_access }
+
   media_collection_share.mailer:
     class: Drupal\media_collection_share\Service\CollectionMailer
     arguments:

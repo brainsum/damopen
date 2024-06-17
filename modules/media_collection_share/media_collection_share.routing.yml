@@ -21,7 +21,8 @@ media_collection_share.collection.share_with_users_form:
     _title: 'Share your collection with users'
     _entity_form: 'media_collection.share'
   requirements:
-    _permission: 'share media collections with users'
+    _custom_access: 'media_collection_share.access_check:access'
+    _media_collection_owner_access: '{media_collection}'
 
 media_collection_share.collection.shared.asset_download:
   path: '/collection/download/shared/{date}/{uuid}'
