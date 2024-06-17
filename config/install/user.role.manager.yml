@@ -76,6 +76,7 @@ permissions:
   - 'edit terms in category'
   - 'edit terms in keyword'
   - 'merge taxonomy terms'
+  - 'share media collections with users'
   - 'update any media'
   - 'update media'
   - 'upload media'
