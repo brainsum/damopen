@@ -1,13 +1,14 @@
-{% set assetsClasses %}
-  "assets-menu",
-  "assets-menu--{{ menu.manage_assets.count > 0 ? 'active' : 'inactive' }}"
-{% endset %}
+{% set assetsClasses = [
+  'assets-menu',
+  menu.manage_assets.count ? 'assets-menu--active' : 'assets-menu--inactive',
+  ]
+%}
 {% if logged_in %}
   <div class="admin-navigation">
     <div class="admin-navigation--inner">
       <div class="admin-navigation--left">
       {% if menu.manage_assets %}
-        <a class="{{ assetsClasses }}" href="{{ menu.manage_assets.url }}">{{ menu.manage_assets.title }}
+        <a {{ attributes.addClass(assetsClasses) }} href="{{ menu.manage_assets.url }}">{{ menu.manage_assets.title }}
           {% if menu.manage_assets.count > 0 %}
               <span class="counter">{{ menu.manage_assets.count }}</span>
             </a>
