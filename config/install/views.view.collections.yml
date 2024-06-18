@@ -8,7 +8,7 @@ dependencies:
     - field_count_formatter
     - media_collection
 _core:
-  default_config_hash: QOnI4XDG-zfhhAEXf5elO3iJXMRHXLoKSu5olYx-4wY
+  default_config_hash: KRRk9nI6iZDUM2qPVCtny0J2D42H1dZXiNingtgVmfQ
 id: collections
 label: Collections
 module: views
@@ -360,7 +360,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "<div class=\"thumbnail\">  {{ items_target_id }} </div>\r\n<a href=\"/collection-view/{{ id }}\">\r\n<div class=\"title\"> {{ field_title }} </div>\r\n<div class=\"data\">  {{ items_target_id_1 }} items  Created by: {{ uid }} </div>\r\n</a>"
+            text: "<a href=\"/collection-view/{{ id }}\">\r\n<div class=\"thumbnail\">  {{ items_target_id }} </div>\r\n<div class=\"title\"> {{ field_title }} </div>\r\n<div class=\"data\">  {{ items_target_id_1 }} items  Created by: {{ uid }} </div>\r\n</a>"
             make_link: false
             path: ''
             absolute: false
@@ -501,7 +501,7 @@ display:
         options:
           grouping: {  }
           columns: 3
-          cell_min_width: 325
+          cell_min_width: 100
           grid_gutter: 10
           alignment: horizontal
       row:
@@ -612,4 +612,3 @@ display:
         - user
       tags:
         - 'config:field.storage.media_collection.field_title'
-
