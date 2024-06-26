@@ -19,7 +19,7 @@ class CollectionController extends ControllerBase {
     // Create media_collection_item entity.
     $media_collection_item = \Drupal::entityTypeManager()->getStorage('media_collection_item')->create([
       'media' => $media,
-      'style' => 'other_hi_res_no_badge',
+      'style' => $style,
     ]);
     $media_collection_item->save();
     $items[] = ['target_id' => $media_collection_item->id()];
@@ -33,6 +33,8 @@ class CollectionController extends ControllerBase {
       // Invalidate media cache tags.
     $cache_tags = $media->getCacheTags();
     Cache::invalidateTags($cache_tags);
+    // replace div.
+    $response->addCommand(new \Drupal\Core\Ajax\ReplaceCommand('uuid', $media_collection_item->uuid()));
     return $response;
   }
 
