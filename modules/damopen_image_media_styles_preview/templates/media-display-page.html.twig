@@ -24,10 +24,8 @@
                   <div class="collection-list">
                     {% for collection in link.media_collection.add_to_collection_list %}
                       <div class="collection-link-wrapper">
-                        <a class="use-ajax add-to-collection-link {% if collection.in_collection %} in-collection {% endif %}" title="{{ 'Add to'|t }} {{ collection.title }}" href="/collections/{{ collection.id }}/add/{{ collection.mid }}/other_hi_res_no_badge">{{ collection.title }}</a>
-                        {% if collection.in_collection %}
-                          <a class="use-ajax remove-from-collection-link" title="{{ 'Remove'|t }}" href="/collections/remove/{{ collection.uuid }}/{{ collection.itemuuid }}"></a>
-                        {% endif %}
+                        <a class="add-to-collection-link {% if collection.in_collection %} in-collection {% endif %}" title="{{ 'Add to'|t }} {{ collection.title }}" href="/collections/{{ collection.id }}/add/{{ collection.mid }}" data-item-style="other_hi_res_no_badge">{{ collection.title }}</a>                          
+                          <a class="{% if not collection.in_collection %} visually-hidden {% endif %} remove-from-collection-link" title="{{ 'Remove'|t }}" href="/collections/remove/{{ collection.uuid }}" data-item-uuid={{ collection.itemuuid }}></a>
                       </div>
                     {% endfor %}
                     <span class="collection-divider"></span>
