@@ -2,33 +2,40 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.video.field_category
     - field.field.media.video.field_id
     - field.field.media.video.field_keywords
     - field.field.media.video.field_source
     - field.field.media.video.field_video
     - media.type.video
-  module:
-    - video_embed_field
 id: media.video.default
 targetEntityType: media
 bundle: video
 mode: default
 content:
-  field_keywords:
-    weight: 4
+  field_category:
+    type: entity_reference_label
     label: inline
     settings:
       link: false
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_keywords:
     type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 4
     region: content
   name:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   created: true

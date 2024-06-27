@@ -3,17 +3,20 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embed
+    - field.field.media.video_file.field_category
     - field.field.media.video_file.field_custom_thumbnail
     - field.field.media.video_file.field_keywords
     - field.field.media.video_file.field_video_file
     - media.type.video_file
+  module:
+    - file
 id: media.video_file.embed
 targetEntityType: media
 bundle: video_file
 mode: embed
 content:
   field_video_file:
-    weight: 3
+    type: file_video
     label: hidden
     settings:
       controls: true
@@ -22,10 +25,11 @@ content:
       video_attributes: 'preload="auto"'
       provide_download_link: 0
     third_party_settings: {  }
-    type: file_video
+    weight: 3
     region: content
 hidden:
   created: true
+  field_category: true
   field_custom_thumbnail: true
   field_keywords: true
   langcode: true

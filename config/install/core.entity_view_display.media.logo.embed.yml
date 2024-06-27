@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embed
+    - field.field.media.logo.field_category
     - field.field.media.logo.field_custom_thumbnail
     - field.field.media.logo.field_files
     - field.field.media.logo.field_keywords
@@ -17,14 +18,15 @@ mode: embed
 content:
   field_files:
     type: file_default
-    weight: 3
     label: visually_hidden
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   created: true
+  field_category: true
   field_custom_thumbnail: true
   field_keywords: true
   field_logo_description: true

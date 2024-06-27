@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embed
+    - field.field.media.guideline.field_category
     - field.field.media.guideline.field_custom_thumbnail
     - field.field.media.guideline.field_files
     - field.field.media.guideline.field_images
@@ -20,23 +21,24 @@ mode: embed
 content:
   field_files:
     type: file_default
-    weight: 0
-    region: content
     label: hidden
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_images:
     type: image
-    weight: 1
-    region: content
     label: hidden
     settings:
-      image_style: thumbnail
       image_link: ''
+      image_style: thumbnail
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   created: true
+  field_category: true
   field_custom_thumbnail: true
   field_keywords: true
   field_template_description: true

@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.audio.field_category
     - field.field.media.audio.field_custom_thumbnail
     - field.field.media.audio.field_description
     - field.field.media.audio.field_file
@@ -12,29 +13,37 @@ targetEntityType: media
 bundle: audio
 mode: default
 content:
-  field_description:
-    weight: 2
-    label: inline
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
-    region: content
-  field_keywords:
-    weight: 1
+  field_category:
+    type: entity_reference_label
     label: inline
     settings:
       link: false
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_description:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_keywords:
     type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
     region: content
   name:
     type: string
-    weight: 0
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   created: true
   field_custom_thumbnail: true
