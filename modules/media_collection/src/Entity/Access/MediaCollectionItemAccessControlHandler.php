@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\media_collection\Entity\MediaCollectionInterface;
 
 /**
  * Access controller for the Media collection item entity.
@@ -30,9 +31,17 @@ class MediaCollectionItemAccessControlHandler extends EntityAccessControlHandler
         if ($account->hasPermission('view shared media collection item entities')) {
           // Get parent and check the list of shared users.
           $parent = $item->parent();
-          $shared_with = $parent->get('shared_with')->getValue();
+          if ($parent === NULL) {
+            // Maybe it is shared parent.
+            $parent = $item->get('shared_parent')->entity;
+          }
+          if ($parent instanceof MediaCollectionInterface) {
+            $shared_with = $parent->get('shared_with')->getValue();
+            return AccessResult::allowedIf(in_array(['target_id' => $account->id()], $shared_with));
+          }
 
-          return AccessResult::allowedIf(in_array(['target_id' => $account->id()], $shared_with));
+          // No parent, no sharing.
+          return AccessResult::forbidden();
         }
 
         return AccessResult::neutral();

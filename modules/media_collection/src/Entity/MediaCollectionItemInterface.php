@@ -55,10 +55,10 @@ interface MediaCollectionItemInterface extends ContentEntityInterface, EntityOwn
   /**
    * Returns the parent collection.
    *
-   * @return \Drupal\media_collection\Entity\MediaCollectionInterface
-   *   The parent collection.
+   * @return \Drupal\media_collection\Entity\MediaCollectionInterface|null
+   *   The parent collection or NULL if not set.
    */
-  public function parent(): MediaCollectionInterface;
+  public function parent():? MediaCollectionInterface;
 
   /**
    * Sets the parent collection.
