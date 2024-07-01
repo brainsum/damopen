@@ -17,7 +17,7 @@ content:
     type: entity_reference_label
     label: inline
     settings:
-      link: false
+      link: true
     third_party_settings: {  }
     weight: 1
     region: content
@@ -25,7 +25,7 @@ content:
     type: entity_reference_label
     label: inline
     settings:
-      link: false
+      link: true
     third_party_settings: {  }
     weight: 4
     region: content
