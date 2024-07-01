@@ -84,13 +84,22 @@ class BulkMediaUploadForm extends ContribForm {
 
     if ($type !== NULL && $type->id() === 'image') {
       $form['category'] = [
-        '#type' => 'select',
+        '#type' => 'select2',
         '#title' => $this->t('Category'),
+        '#description' => $this->t('Drag to re-order keywords.'),
+        '#target_type' => 'taxonomy_term',
         '#options' => array_map(static function (TermInterface $term) {
           return $term->label();
         }, $this->termStorage->loadByProperties(['vid' => 'category'])),
+        '#tags' => TRUE,
+        '#selection_handler' => 'default:taxonomy_term',
+        '#selection_settings' => [
+          'target_bundles' => ['category'],
+          'auto_create' => TRUE,
+          'match_operator' => 'CONTAINS',
+          'match_limit' => 10,
+        ],
         '#multiple' => TRUE,
-        '#required' => TRUE,
       ];
 
       $form['asset_name'] = [
