@@ -81,6 +81,9 @@
             },
             "drupal/video_embed_field": {
                 "Add support for Ckeditor 5": "https://www.drupal.org/files/issues/2024-02-01/3311063-50.patch"
+            },
+            "drupal/dropzonejs": {
+                "Remove invalid files": "./patches/dropzone-invalid-file.patch"
             }
         },
         "drupal-scaffold": {
