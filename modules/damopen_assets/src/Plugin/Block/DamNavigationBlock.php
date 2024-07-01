@@ -12,6 +12,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
+use Drupal\damopen_assets\HelperInterface;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -69,6 +70,13 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
   protected $headerMarkupGenerator;
 
   /**
+   * Helper service.
+   *
+   * @var \Drupal\damopen_assets\HelperInterface
+   */
+  protected $damopenAssetsHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(
@@ -89,6 +97,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
       $container->get('current_route_match'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
+      $container->get('damopen_assets.helper'),
       $markupGenerator
     );
   }
@@ -106,7 +115,8 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
     RouteMatchInterface $routeMatch,
     AccountProxyInterface $user,
     EntityTypeManagerInterface $entityTypeManager,
-    $headerMarkupGenerator = NULL
+    HelperInterface $helper,
+    $headerMarkupGenerator = NULL,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
@@ -115,6 +125,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
     $this->user = $user;
     $this->entityTypeManager = $entityTypeManager;
     $this->headerMarkupGenerator = $headerMarkupGenerator;
+    $this->damopenAssetsHelper = $helper;
   }
 
   /**
@@ -163,7 +174,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
         'route_param' => ['icon'],
       ],
     ];
-    _damopen_assets_order_bundles($mapping);
+    $this->damopenAssetsHelper->orderBundles($mapping);
     return $mapping;
   }
 
@@ -268,7 +279,7 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
    *   Active tab type or NULL.
    */
   protected function determineActiveTab(): ?string {
-    $currentType = _damopen_assets_request_to_type($this->request);
+    $currentType = $this->damopenAssetsHelper->requestToType($this->request);
     $currentRoute = $this->routeMatch->getRouteName();
 
     if ($currentRoute === static::FRONTPAGE_ROUTE || $currentRoute === 'entity.media.canonical') {

@@ -8,3 +8,10 @@ services:
     class: Drupal\damopen_assets\Routing\MediaUploadRouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  damopen_assets.helper:
+    class: Drupal\damopen_assets\Helper
+    arguments:
+      - '@current_route_match'
+      - '@request_stack'
+      - '@entity_type.manager'

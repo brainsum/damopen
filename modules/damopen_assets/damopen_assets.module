@@ -7,14 +7,11 @@
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Markup;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\media\MediaForm;
 use Drupal\media\MediaInterface;
 use Drupal\views\ViewExecutable;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -33,84 +30,13 @@ function damopen_assets_form_views_exposed_form_alter(array &$form, FormStateInt
 }
 
 /**
- * Return the media type from the request.
- *
- * @param \Symfony\Component\HttpFoundation\Request $request
- *   The request.
- *
- * @return string|null
- *   The type or NULL.
- */
-function _damopen_assets_request_to_type(Request $request) {
-  if ($media = $request->attributes->get('media', NULL)) {
-    /** @var \Drupal\media\MediaInterface $media */
-    return $media->bundle();
-  }
-
-  // We select the first from bundles.
-  $mediaTypes = $request->query->get('type');
-
-  if ($mediaTypes === NULL) {
-    return 'image';
-  }
-
-  $types = explode(' ', strtolower($mediaTypes));
-  $type = reset($types);
-  return $type ?? NULL;
-}
-
-/**
- * Render array for usage guide.
- *
- * @param string|null $type
- *   The given media type, if available.
- *
- * @return array
- *   The render array.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- */
-function _damopen_assets_usage_guide_markup(?string $type): array {
-  $build = [
-    '#type' => 'markup',
-    '#prefix' => '<div class="dam-media-description-wrapper">',
-    '#suffix' => '</div>',
-  ];
-
-  if ($type === NULL) {
-    return $build;
-  }
-
-  $mediaTypeStorage = Drupal::entityTypeManager()->getStorage('media_type');
-
-  /** @var \Drupal\media\MediaTypeInterface $mediaType */
-  $mediaType = $mediaTypeStorage->load($type);
-
-  if ($mediaType !== NULL) {
-    $build['content'] = [
-      'title' => [
-        '#prefix' => '<span class="dam-media-description-title">',
-        '#suffix' => '</span>',
-        '#markup' => (new TranslatableMarkup('General usage advice'))->render(),
-      ],
-      'description' => [
-        '#prefix' => '<span class="dam-media-description">',
-        '#suffix' => '</span>',
-        '#markup' => Markup::create($mediaType->getDescription()),
-      ],
-    ];
-  }
-
-  return $build;
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function damopen_assets_preprocess_views_view__asset_search(array &$variables) {
+  /** @var \Drupal\damopen_assets\HelperInterface $helper */
+  $helper = \Drupal::service('damopen_assets.helper');
   // We select the first from bundles.
-  $type = _damopen_assets_request_to_type(Drupal::request());
+  $type = $helper->requestToType(Drupal::request());
 
   if (!in_array($type, ['', 'image'], TRUE)) {
     // @todo: This might not be the best approach.
@@ -118,7 +44,7 @@ function damopen_assets_preprocess_views_view__asset_search(array &$variables) {
     unset($variables['exposed']);
   }
 
-  $variables['media_description'] = _damopen_assets_usage_guide_markup($type);
+  $variables['media_description'] = $helper->usageGuideMarkup($type);
 }
 
 /**
@@ -129,8 +55,10 @@ function damopen_assets_preprocess_page(array &$variables) {
   $routeName = $routeMatch->getRouteName();
 
   if ($routeName !== 'entity.media.add_page') {
-    $type = _damopen_assets_request_to_type(Drupal::request());
-    $variables['media_description'] = _damopen_assets_usage_guide_markup($type);
+    /** @var \Drupal\damopen_assets\HelperInterface $hepler */
+    $hepler = \Drupal::service('damopen_assets.helper');
+    $type = $hepler->requestToType(Drupal::request());
+    $variables['media_description'] = $hepler->usageGuideMarkup($type);
   }
 }
 
@@ -154,7 +82,8 @@ function damopen_assets_preprocess_html(array &$variables) {
       break;
   }
 
-  if (_damopen_assets_request_to_type(Drupal::request()) !== 'image') {
+  if (\Drupal::service('damopen_assets.helper')
+      ->requestToType(Drupal::request()) !== 'image') {
     $variables['attributes']['class'][] = 'no-filter';
   }
 }
@@ -273,71 +202,7 @@ function damopen_assets_views_post_render(ViewExecutable $view) {
  * Implements hook_preprocess_HOOK().
  */
 function damopen_assets_preprocess_entity_add_list(array &$variables) {
-  // @todo: Fix "media bulk" page ordering, too?
-  $routeName = Drupal::routeMatch()->getRouteName();
-
-  if ($routeName !== 'entity.media.add_page') {
-    return;
-  }
-
-  if (isset($variables['bundles']['image']['add_link'])) {
-    $imageBulkAddUrl = new Url('media_upload.bulk_media_upload', [
-      'type' => 'image',
-    ]);
-    // The 'add_link' is an instance of \Drupal\Core\Link.
-    $variables['bundles']['image']['add_link']->setUrl($imageBulkAddUrl);
-  }
-
-  foreach ($variables['bundles'] as $bundle_name => $bundles) {
-    unset($variables['bundles'][$bundle_name]['description']);
-  }
-
-  _damopen_assets_order_bundles($variables['bundles']);
-}
-
-/**
- * Order an array of media bundles keyed by their bundle machine names.
- *
- * @param array $bundles
- *   Associative array with media bundles as keys.
- */
-function _damopen_assets_order_bundles(array &$bundles) {
-  $ordering = _damopen_assets_assets_type_ordering();
-
-  uksort($bundles, static function ($first, $second) use ($ordering) {
-    if (!isset($ordering[$first], $ordering[$second])) {
-      return 0;
-    }
-
-    if ($ordering[$first] === $ordering[$second]) {
-      return 0;
-    }
-
-    return $ordering[$first] > $ordering[$second] ? 1 : -1;
-  });
-}
-
-/**
- * Returns ordering of bundles.
- *
- * Intended to be used in menus.
- *
- * @return array
- *   The types with weights.
- *
- * @todo: Add 3rd party settings to media types, order by that instead.
- */
-function _damopen_assets_assets_type_ordering(): array {
-  return [
-    'image' => 0,
-    'video' => 10,
-    'video_file' => 10,
-    'audio' => 20,
-    'template' => 30,
-    'logo' => 40,
-    'guideline' => 50,
-    'icon' => 60,
-  ];
+  \Drupal::service('damopen_assets.helper')->entityAddList($variables);
 }
 
 /**
@@ -391,6 +256,9 @@ function damopen_assets_media_view_alter(array &$build, MediaInterface $media, E
 
   $build['asset_preview'] = [];
 
+  /** @var \Drupal\damopen_assets\HelperInterface $helper */
+  $helper = \Drupal::service('damopen_assets.helper');
+
   if (!in_array($bundle, $specialBundles, TRUE)) {
     // @todo: Get this from the default view, don't hardcode.
     $displayOptions = [
@@ -405,10 +273,10 @@ function damopen_assets_media_view_alter(array &$build, MediaInterface $media, E
       'region' => 'content',
     ];
 
-    if ($preview = _damopen_assets_generate_field_view($media, 'field_custom_thumbnail', $displayOptions)) {
+    if ($preview = $helper->generateFieldView($media, 'field_custom_thumbnail', $displayOptions)) {
       $build['asset_preview'] = $preview;
     }
-    elseif ($preview = _damopen_assets_generate_field_view($media, 'thumbnail', $displayOptions)) {
+    elseif ($preview = $helper->generateFieldView($media, 'thumbnail', $displayOptions)) {
       $build['asset_preview'] = $preview;
     }
   }
@@ -428,7 +296,7 @@ function damopen_assets_media_view_alter(array &$build, MediaInterface $media, E
       'region' => 'content',
     ];
 
-    if ($preview = _damopen_assets_generate_field_view($media, 'field_video', $displayOptions)) {
+    if ($preview = $helper->generateFieldView($media, 'field_video', $displayOptions)) {
       $build['asset_preview'] = $preview;
     }
   }
@@ -451,7 +319,7 @@ function damopen_assets_media_view_alter(array &$build, MediaInterface $media, E
       'region' => 'content',
     ];
 
-    if ($preview = _damopen_assets_generate_field_view($media, 'field_video_file', $displayOptions)) {
+    if ($preview = $helper->generateFieldView($media, 'field_video_file', $displayOptions)) {
       $build['asset_preview'] = $preview;
     }
   }
@@ -471,35 +339,10 @@ function damopen_assets_media_view_alter(array &$build, MediaInterface $media, E
       'region' => 'content',
     ];
 
-    if ($preview = _damopen_assets_generate_field_view($media, 'field_file', $displayOptions)) {
+    if ($preview = $helper->generateFieldView($media, 'field_file', $displayOptions)) {
       $build['asset_preview'] = $preview;
     }
   }
-}
-
-/**
- * Return the view array of a given field.
- *
- * @param \Drupal\media\MediaInterface $media
- *   The media.
- * @param string $name
- *   The field name.
- * @param array $options
- *   Render options.
- *
- * @return array|null
- *   The render array or NULL.
- */
-function _damopen_assets_generate_field_view(MediaInterface $media, string $name, array $options): ?array {
-  if (
-    $media->hasField($name)
-    && ($field = $media->get($name))
-    && !$field->isEmpty()
-  ) {
-    return $field->view($options);
-  }
-
-  return NULL;
 }
 
 /**
@@ -520,14 +363,21 @@ function damopen_assets_menu_links_discovered_alter(array &$links) {
  * Implements hook_form_alter().
  */
 function damopen_assets_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  /** @var \Drupal\media\MediaForm $formObject */
-  $formObject = $form_state->getFormObject();
+  /** @var \Drupal\media\MediaForm $form_object */
+  $form_object = $form_state->getFormObject();
 
   if (
     isset($form['revision_information'])
-    && get_class($formObject) === MediaForm::class
-    && $formObject->getOperation() === 'add'
+    && get_class($form_object) === MediaForm::class
+    && $form_object->getOperation() === 'add'
   ) {
     $form['revision_information']['#open'] = FALSE;
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_menu_local_tasks(&$variables) {
+  \Drupal::service('damopen_assets.helper')->menuLocalTasks($variables);
 }
