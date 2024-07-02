@@ -108,8 +108,13 @@ class CollectionShareModalForm extends FormBase {
         '#attributes' => [
           'readonly' => 'readonly',
         ],
+        '#wrapper_attributes' => [
+          'class' => ['copy-clipboard-wrapper']
+        ],
       ],
     ];
+
+    $form['#attached']['library'][] = 'media_collection_share/clip';
 
     $form['email_share_wrapper'] = [
       '#type' => 'container',

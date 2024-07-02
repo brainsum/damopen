@@ -1,0 +1,20 @@
+.copy-clipboard-wrapper {
+  position: relative;
+}
+
+.copy-clipboard-wrapper:after {
+  content: 'Copied to clipboard.';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.copy-clipboard-wrapper.copied:after {
+  opacity: 1;
+}
