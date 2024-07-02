@@ -1,0 +1,10 @@
+clip:
+  version: 0.0.1
+  js:
+    js/clipboard.js: {}
+  css:
+    theme:
+      css/clipboard.css: {}
+  dependencies:
+    - core/drupal
+    - core/once
