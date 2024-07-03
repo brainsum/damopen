@@ -12,6 +12,7 @@ dependencies:
     - file
     - focal_point
     - path
+    - select2
 id: media.video_file.default
 targetEntityType: media
 bundle: video_file
@@ -34,14 +35,14 @@ content:
       offsets: '50,50'
     third_party_settings: {  }
   field_keywords:
-    type: entity_reference_autocomplete_tags
+    type: select2_entity_reference
     weight: 4
     region: content
     settings:
+      width: 100%
+      autocomplete: true
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_video_file:
     type: file_generic

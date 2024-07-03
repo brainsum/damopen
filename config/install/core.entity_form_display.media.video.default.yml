@@ -10,6 +10,7 @@ dependencies:
     - media.type.video
   module:
     - path
+    - select2
     - video_embed_field
 id: media.video.default
 targetEntityType: media
@@ -23,14 +24,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_keywords:
-    type: entity_reference_autocomplete_tags
+    type: select2_entity_reference
     weight: 4
     region: content
     settings:
+      width: 100%
+      autocomplete: true
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_video:
     type: video_embed_field_textfield

@@ -15,6 +15,7 @@ dependencies:
     - focal_point
     - maxlength
     - path
+    - select2
     - text
 id: media.guideline.default
 targetEntityType: media
@@ -55,14 +56,14 @@ content:
       offsets: '50,50'
     third_party_settings: {  }
   field_keywords:
-    type: entity_reference_autocomplete_tags
+    type: select2_entity_reference
     weight: 4
     region: content
     settings:
+      width: 100%
+      autocomplete: true
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_template_description:
     type: text_textarea
