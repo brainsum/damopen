@@ -80,6 +80,7 @@ dependencies:
   - media_entity_imagemagick:media_entity_imagemagick
   - media_upload:media_upload
   - redirect_after_login:redirect_after_login
+  - r4032login:r4032login
   - taxonomy_access_fix:taxonomy_access_fix
   - term_merge:term_merge
   - userprotect:userprotect
