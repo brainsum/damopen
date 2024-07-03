@@ -1,0 +1,135 @@
+<?php
+
+use Drupal\media\Entity\Media;
+use Drupal\file\Entity\File;
+
+// Implements hook_install().
+function damopen_content_install() {
+  $category = damopen_content_category('Nature');
+  $image_media = Media::create([
+    'bundle' => 'image',
+    'name' => 'Image',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_image' => [
+      'target_id' => damopen_content_get_file('image'),
+    ],
+  ]);
+  $image_media->save();
+  
+  $video_media = Media::create([
+    'bundle' => 'video',
+    'name' => 'Video',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_video' => [
+      'uri' => 'https://www.youtube.com/watch?v=y6NSdGL8czw',
+    ],
+  ]);
+  $video_media->save();
+
+  $remote_video = Media::create([
+    'bundle' => 'video_file',
+    'name' => 'Remote Video',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_video_file' => [
+      'target_id' => damopen_content_get_file('video'),
+    ],
+  ]);
+  $remote_video->save();
+  $audio = Media::create([
+    'bundle' => 'audio',
+    'name' => 'Audio',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_file' => [
+      'target_id' => damopen_content_get_file('audio'),
+    ],
+  ]);
+  $audio->save();
+  $template = Media::create([
+    'bundle' => 'template',
+    'name' => 'Template',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_template_file' => [
+      'target_id' => damopen_content_get_file('template'),
+    ],
+  ]);
+  $template->save();
+  $logo = Media::create([
+    'bundle' => 'logo',
+    'name' => 'Logo',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_files' => [
+      'target_id' => damopen_content_get_file('logo'),
+    ],
+  ]);
+  $logo->save();
+  $guideline = Media::create([
+    'bundle' => 'guideline',
+    'name' => 'Guideline',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_files' => [
+      'target_id' => damopen_content_get_file('guideline'),
+    ],
+    'field_images' => [
+      'target_id' => damopen_content_get_file('image'),
+    ],
+  ]);
+  $guideline->save();
+
+  $icon = Media::create([
+    'bundle' => 'icon',
+    'name' => 'Icon',
+    'field_category' => [
+      'target_id' => $category,
+    ],
+    'field_file' => [
+      'target_id' => damopen_content_get_file('icon'),
+    ],
+  ]);
+}
+
+function damopen_content_category($term_name) {
+  // Load term by name.
+  $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+    ->loadByProperties(['name' => $term_name, 'vid' => 'category']);
+  $term = reset($term);
+  $term_id = $term->id();
+  return $term_id;
+}
+
+function damopen_content_get_file($type) {
+  $types = [
+    'image' => 'test.jpeg',
+    'video' => 'test.mp4',
+    'audio' => 'test.mp3',
+    'template' => 'test.pdf',
+    'logo' => 'test.eps',
+    'guideline' => 'test.pdf',
+    'icon' => 'test.eps',
+  ];
+
+// Get module path drupal 10.
+  $path = \Drupal::service('extension.list.module')->getPath('damopen_content') . '/media/' . $types[$type];
+
+  $file = File::create([
+    'filename' => $types[$type],
+    'uri' => 'public://' . $types[$type],
+  ]);
+  $file->enforceIsNew()->setPermanent();
+  file_put_contents($file->getFileUri(), file_get_contents($path));
+  $file->save();
+  return $file->id();
+}

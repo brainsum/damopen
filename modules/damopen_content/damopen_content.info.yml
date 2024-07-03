@@ -1,0 +1,4 @@
+name: 'DamOpen Content'
+type: module
+description: 'Provides test content.'
+core_version_requirement: ^9 || ^10 || ^11
