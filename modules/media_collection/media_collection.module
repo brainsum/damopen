@@ -249,35 +249,37 @@ function media_collection_preprocess_media_collection(array &$variables) {
   $variables['#cache'] = [
     'max-age' => 0,
   ];
-  $variables['additional_collection_data']['render']['header'] = [
-    'title' => [
-      '#type' => 'html_tag',
-      '#tag' => 'img',
-      '#attributes' => [
-        'src' => $variables['additional_collection_data']['data']['icons']['regular']['uri'],
-        'alt' => t('Collection icon'),
-        'class' => [
-          'collection_icon',
+  if ($collectionUser->id() === \Drupal::currentUser()->id()) {
+    $variables['additional_collection_data']['render']['header'] = [
+      'title' => [
+        '#type' => 'html_tag',
+        '#tag' => 'img',
+        '#attributes' => [
+          'src' => $variables['additional_collection_data']['data']['icons']['regular']['uri'],
+          'alt' => t('Collection icon'),
+          'class' => [
+            'collection_icon',
+          ],
+        ],
+        '#prefix' => '<h1>',
+        '#suffix' => t('Collection') . '</h1>',
+      ],
+      'remove' => [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#value' => t('Remove collection'),
+        '#attributes' => [
+          'href' => Url::fromRoute('damo_extended_collection.delete_collection', [
+            'id' => $collection->id(),
+          ])->toString(),
+          'class' => [
+            'collection_btn',
+            'empty_the_collection_btn',
+          ],
         ],
       ],
-      '#prefix' => '<h1>',
-      '#suffix' => t('Collection') . '</h1>',
-    ],
-    'remove' => [
-      '#type' => 'html_tag',
-      '#tag' => 'a',
-      '#value' => t('Remove collection'),
-      '#attributes' => [
-        'href' => Url::fromRoute('damo_extended_collection.delete_collection', [
-          'id' => $collection->id(),
-        ])->toString(),
-        'class' => [
-          'collection_btn',
-          'empty_the_collection_btn',
-        ],
-      ],
-    ],
-  ];
+    ];
+  }
 
   /** @var \Drupal\media_collection\Service\FileSizeCalculator $sizeCalculator */
   $sizeCalculator = Drupal::service('media_collection.file_size_calculator');
@@ -322,17 +324,20 @@ function media_collection_preprocess_media_collection(array &$variables) {
     ];
 
     $clearCollectionRouting = _media_collection_determine_clear_collection_routing($request, $collectionUser);
-    $variables['additional_collection_data']['render']['links']['empty_collection'] = [
-      '#type' => 'link',
-      '#title' => new TranslatableMarkup('Empty the collection'),
-      '#url' => Url::fromRoute($clearCollectionRouting['route'], $clearCollectionRouting['options']),
-      '#attributes' => [
-        'class' => [
-          'collection_btn',
-          'empty_the_collection_btn',
+    // Check if collection owner is the current user.
+    if ($collectionUser->id() === \Drupal::currentUser()->id()) {
+      $variables['additional_collection_data']['render']['links']['empty_collection'] = [
+        '#type' => 'link',
+        '#title' => new TranslatableMarkup('Empty the collection'),
+        '#url' => Url::fromRoute($clearCollectionRouting['route'], $clearCollectionRouting['options']),
+        '#attributes' => [
+          'class' => [
+            'collection_btn',
+            'empty_the_collection_btn',
+          ],
         ],
-      ],
-    ];
+      ];
+    }
   }
 }
 
