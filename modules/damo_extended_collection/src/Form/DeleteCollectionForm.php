@@ -6,6 +6,7 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Defines a confirmation form to confirm deletion of something by id.
@@ -32,6 +33,10 @@ class DeleteCollectionForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $collection = \Drupal::entityTypeManager()->getStorage('media_collection')->load($this->id);
+    $collectionUser = $collection->getOwner();
+    if ($collectionUser->id() !== \Drupal::currentUser()->id()) {
+      throw new AccessDeniedHttpException();
+    }
     $items = $collection->get('items')->getValue();
 
     foreach ($items as $item) {

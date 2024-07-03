@@ -220,6 +220,11 @@ final class CollectionHandler {
       $collection = $this->loadCollectionForUser($user->id());
     }
     if ($collection === NULL) {
+      $collectionUser = $collection->getOwner();
+      if ($collectionUser->id() !== Drupal::currentUser()->id()) {
+        // Return access denied.
+        throw new AccessDeniedHttpException();
+      }
       /** @var \Drupal\media_collection\Entity\MediaCollectionInterface $collection */
       $collection = $this->collectionStorage->create();
       $collection->setOwner($user);

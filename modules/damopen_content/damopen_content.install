@@ -126,7 +126,7 @@ function damopen_content_get_file($type) {
 
   $file = File::create([
     'filename' => $types[$type],
-    'uri' => 'public://' . $types[$type],
+    'uri' => 'private://' . $types[$type],
   ]);
   $file->enforceIsNew()->setPermanent();
   file_put_contents($file->getFileUri(), file_get_contents($path));
