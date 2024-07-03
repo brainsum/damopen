@@ -13,6 +13,7 @@ dependencies:
     - file
     - focal_point
     - path
+    - select2
 id: media.audio.default
 targetEntityType: media
 bundle: audio
@@ -50,14 +51,14 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
   field_keywords:
-    type: entity_reference_autocomplete_tags
+    type: select2_entity_reference
     weight: 2
     region: content
     settings:
+      width: 100%
+      autocomplete: true
       match_operator: CONTAINS
       match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   name:
     type: string_textfield
