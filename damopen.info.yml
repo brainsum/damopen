@@ -90,6 +90,7 @@ dependencies:
   - image_style_warmer:image_style_warmer
   - views_ajax_history:views_ajax_history
   - switch_page_theme:switch_page_theme
+  - select2_facets:select2_facets
 
 # @todo: Rename theme to damopen_theme.
 themes:
