@@ -63,23 +63,20 @@ class HeaderMenuBlock extends BlockBase {
       ];
     }
 
-    /*
-     * TODO: Review case to view own unpublished assets.
-      if (array_intersect($roles, $view_own_unpublished)) {
-        // Count all unpublished media.
-        $query = \Drupal::entityQuery('media')
-          ->condition('status', 0)
-          ->condition('uid', $current_user->id())
-          ->accessCheck(TRUE);
-        $count = $query->count()->execute();
-        $menu['manage_assets'] = [
-          'title' => new TranslatableMarkup('Assets waiting for approval'),
-          'url' => Url::fromRoute('view.unpublished_assets.user_unpublished_assets')->toString(),
-          'class' => '',
-          'count' => $count,
-        ];
-      }
-    */
+    if (array_intersect($roles, $view_own_unpublished)) {
+      // Count all unpublished media.
+      $query = \Drupal::entityQuery('media')
+        ->condition('status', 0)
+        ->condition('uid', $current_user->id())
+        ->accessCheck(TRUE);
+      $count = $query->count()->execute();
+      $menu['manage_assets'] = [
+        'title' => new TranslatableMarkup('Assets waiting for approval'),
+        'url' => Url::fromRoute('view.unpublished_assets.user_unpublished_assets')->toString(),
+        'class' => '',
+        'count' => $count,
+      ];
+    }
     // Add the user menu.
     $menu['user'] = [
       'view' => [
