@@ -1,6 +1,20 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.restricted_html
+    - taxonomy.vocabulary.keyword
+  module:
+    - damopen_assets
+    - damopen_assets_library
+    - filter
+    - media
+    - media_collection
+    - media_collection_share
+    - node
+    - system
+    - taxonomy_access_fix
+    - userprotect
 id: authenticated
 label: 'Authenticated user'
 weight: 1
@@ -28,3 +42,5 @@ permissions:
   - 'view own unpublished content'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'
+  - 'view term names in keyword'
+  - 'view terms in keyword'

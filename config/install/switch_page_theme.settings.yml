@@ -19,7 +19,7 @@ spt_table:
       en: 0
   -
     status: '1'
-    pages: /admin/assets/all-unpublished
+    pages: "/admin/assets/all-unpublished\r\n/admin/assets/my-unpublished"
     theme_key: ''
     theme: damo_theme
     weight: '-10'

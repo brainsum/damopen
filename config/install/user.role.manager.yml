@@ -20,14 +20,12 @@ dependencies:
     - taxonomy
     - taxonomy_access_fix
     - term_merge
-    - toolbar
 id: manager
 label: Manager
 weight: 6
 is_admin: null
 permissions:
   - 'access media asset usage statistics'
-  - 'access toolbar'
   - 'add media collection (shared) entities'
   - 'add media collection entities'
   - 'add media collection item entities'
@@ -37,6 +35,7 @@ permissions:
   - 'create logo media'
   - 'create media'
   - 'create template media'
+  - 'create terms in keyword'
   - 'create video_file media'
   - 'delete any guideline media'
   - 'delete any icon media'
@@ -76,6 +75,8 @@ permissions:
   - 'edit terms in category'
   - 'edit terms in keyword'
   - 'merge taxonomy terms'
+  - 'select terms in category'
+  - 'select terms in keyword'
   - 'share media collections with users'
   - 'update any media'
   - 'update media'
@@ -92,5 +93,7 @@ permissions:
   - 'view own unpublished media'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'
+  - 'view term names in category'
+  - 'view term revisions in category'
   - 'view terms in category'
   - 'view terms in keyword'
