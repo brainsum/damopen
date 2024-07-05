@@ -62,3 +62,14 @@ services:
     class: Drupal\media_collection\Service\FileSizeCalculator
     arguments:
       - '@cache.default'
+
+  media_collection.view_route_subscriber:
+    class: Drupal\media_collection\Routing\MediaCollectionRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  media_collection.view_access_check:
+    class: Drupal\media_collection\Access\MediaCollectionViewAccess
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: access_check }

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Route;
 /**
  * Provides an access checker for media collections.
  */
-class MediaCollectionAccessCheck implements AccessInterface {
+class MediaCollectionShareAccessCheck implements AccessInterface {
 
   /**
    * The entity type manager.

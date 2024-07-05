@@ -23,7 +23,7 @@ services:
       - '@datetime.time'
 
   media_collection_share.access_check:
-    class: Drupal\media_collection_share\Access\MediaCollectionAccessCheck
+    class: Drupal\media_collection_share\Access\MediaCollectionShareAccessCheck
     arguments: ['@entity_type.manager']
     tags:
       - { name: access_check, applies_to: _media_collection_owner_access }
