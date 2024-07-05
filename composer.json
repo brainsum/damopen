@@ -82,9 +82,6 @@
             "drupal/video_embed_field": {
                 "Add support for Ckeditor 5": "https://www.drupal.org/files/issues/2024-02-01/3311063-50.patch"
             },
-            "drupal/facets": {
-                "Facets with AJAX not working in most of situations": "https://git.drupalcode.org/project/facets/-/merge_requests/162.diff"
-            },
             "drupal/dropzonejs": {
                 "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-03/dropzone-invalid-files.patch"
             }
