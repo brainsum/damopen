@@ -1,0 +1,7 @@
+<?php 
+
+function damopen_upload_theme() {
+  return array(
+    'damopen_upload_form' => []
+  );
+}
