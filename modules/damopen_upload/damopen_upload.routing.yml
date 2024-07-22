@@ -1,0 +1,7 @@
+damopen_upload.upload:
+  path: '/upload-image'
+  defaults:
+    _controller: '\Drupal\damopen_upload\Controller\DamopenUploadController::upload'
+    _title: 'Image upload'
+  requirements:
+    _permission: 'access content'
