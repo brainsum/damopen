@@ -91,6 +91,7 @@ dependencies:
   - views_ajax_history:views_ajax_history
   - switch_page_theme:switch_page_theme
   - select2_facets:select2_facets
+  - file_entity:file_entity
 
 # @todo: Rename theme to damopen_theme.
 themes:
