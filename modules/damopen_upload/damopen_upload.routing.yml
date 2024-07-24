@@ -5,3 +5,11 @@ damopen_upload.upload:
     _title: 'Image upload'
   requirements:
     _permission: 'access content'
+damopen_upload.image_form:
+  path: '/upload-image-form'
+  defaults:
+    _form: '\Drupal\damopen_upload\Form\DamopenUploadForm'
+    _title: 'Upload images'
+  requirements:
+    _permission: 'access content'
+    _access: 'TRUE'
