@@ -56,7 +56,6 @@ class DamopenUploadForm extends FormBase {
         'status' => 0,
       ]);
       $file->set('field_upload_id', $upload_id);
-      dpm($upload_id);
       $file->save();
     }
     // Redirect to the file listing page.
