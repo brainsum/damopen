@@ -1,0 +1,19 @@
+--- a/core/modules/language/src/Entity/ContentLanguageSettings.php
++++ b/core/modules/language/src/Entity/ContentLanguageSettings.php
+@@ -206,10 +206,12 @@
+   public function calculateDependencies() {
+     parent::calculateDependencies();
+
+-    // Create dependency on the bundle.
+-    $entity_type = \Drupal::entityTypeManager()->getDefinition($this->target_entity_type_id);
+-    $bundle_config_dependency = $entity_type->getBundleConfigDependency($this->target_bundle);
+-    $this->addDependency($bundle_config_dependency['type'], $bundle_config_dependency['name']);
++    if($this->target_bundle !== 'undefined') {
++      // Create dependency on the bundle.
++      $entity_type = \Drupal::entityTypeManager()->getDefinition($this->target_entity_type_id);
++      $bundle_config_dependency = $entity_type->getBundleConfigDependency($this->target_bundle);
++      $this->addDependency($bundle_config_dependency['type'], $bundle_config_dependency['name']);
++    }
+
+     return $this;
+   }
