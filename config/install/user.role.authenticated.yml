@@ -7,6 +7,7 @@ dependencies:
   module:
     - damopen_assets
     - damopen_assets_library
+    - file_entity
     - filter
     - media
     - media_collection
@@ -36,6 +37,7 @@ permissions:
   - userprotect.account.edit
   - userprotect.mail.edit
   - userprotect.pass.edit
+  - 'view files'
   - 'view media'
   - 'view own media collection entities'
   - 'view own media collection item entities'

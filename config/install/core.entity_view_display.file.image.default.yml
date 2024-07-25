@@ -7,7 +7,6 @@ dependencies:
     - field.field.file.image.field_upload_id
     - file_entity.type.image
   module:
-    - field_count_formatter
     - file_entity
 id: file.image.default
 targetEntityType: file
@@ -17,18 +16,24 @@ content:
   field_image_alt_text:
     type: string
     label: above
-    settings:
-      link_to_entity: false
+    settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 0
     region: content
   field_image_title_text:
+    type: string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_upload_id:
     type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   filemime:
     type: string
@@ -36,7 +41,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 5
+    weight: 2
     region: content
   filename:
     type: string
@@ -44,21 +49,21 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: -5
     region: content
   filesize:
     type: file_size
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 3
     region: content
   uid:
-    type: count
+    type: uri_link
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 1
     region: content
   uri:
     type: file_image
@@ -71,9 +76,8 @@ content:
       title: field_image_title_text
       alt: field_image_alt_text
     third_party_settings: {  }
-    weight: 1
+    weight: -5
     region: content
 hidden:
-  field_upload_id: true
   langcode: true
   search_api_excerpt: true

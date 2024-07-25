@@ -1,6 +1,15 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - taxonomy.vocabulary.category
+    - taxonomy.vocabulary.keyword
+  module:
+    - file_entity
+    - media_collection
+    - system
+    - taxonomy
+    - taxonomy_access_fix
 id: media_api
 label: 'Media API'
 weight: 4
@@ -9,6 +18,7 @@ permissions:
   - 'access content'
   - 'edit terms in category'
   - 'edit terms in keyword'
+  - 'view files'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'
   - 'view terms in category'

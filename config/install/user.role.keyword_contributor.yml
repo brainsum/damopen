@@ -1,6 +1,16 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - taxonomy.vocabulary.category
+    - taxonomy.vocabulary.keyword
+  module:
+    - file_entity
+    - media
+    - media_collection
+    - taxonomy
+    - taxonomy_access_fix
+    - toolbar
 id: keyword_contributor
 label: 'Keyword contributor'
 weight: 3
@@ -11,6 +21,7 @@ permissions:
   - 'edit terms in keyword'
   - 'update any media'
   - 'update media'
+  - 'view files'
   - 'view media'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'

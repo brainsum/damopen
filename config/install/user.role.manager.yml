@@ -13,6 +13,7 @@ dependencies:
   module:
     - damopen_assets_statistics
     - dropzonejs
+    - file_entity
     - media
     - media_collection
     - media_collection_share
@@ -87,6 +88,7 @@ permissions:
   - 'view any unpublished logo media'
   - 'view any unpublished template media'
   - 'view any unpublished video_file media'
+  - 'view files'
   - 'view media'
   - 'view own media collection entities'
   - 'view own media collection item entities'

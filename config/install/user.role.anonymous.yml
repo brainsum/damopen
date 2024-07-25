@@ -1,10 +1,14 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file_entity
+    - media_collection
 id: anonymous
 label: 'Anonymous user'
 weight: 0
 is_admin: false
 permissions:
+  - 'view files'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'

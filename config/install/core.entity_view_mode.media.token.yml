@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - media
-id: media.entity_browser
-label: 'Entity browser'
+id: media.token
+label: Token
 description: ''
 targetEntityType: media
 cache: true

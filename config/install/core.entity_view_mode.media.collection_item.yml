@@ -5,5 +5,6 @@ dependencies:
     - media
 id: media.collection_item
 label: 'Collection item'
+description: ''
 targetEntityType: media
 cache: true

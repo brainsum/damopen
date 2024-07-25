@@ -1,10 +1,14 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file_entity
+    - media_collection
 id: maintainer
 label: Maintainer
 weight: 8
 is_admin: null
 permissions:
+  - 'view files'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'

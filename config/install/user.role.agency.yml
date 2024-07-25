@@ -12,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.keyword
   module:
     - dropzonejs
+    - file_entity
     - media
     - media_collection
     - media_collection_share
@@ -58,6 +59,7 @@ permissions:
   - 'select terms in keyword'
   - 'update media'
   - 'upload media'
+  - 'view files'
   - 'view media'
   - 'view own media collection entities'
   - 'view own media collection item entities'

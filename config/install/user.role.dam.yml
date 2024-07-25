@@ -1,11 +1,16 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file_entity
+    - media
+    - media_collection
 id: dam
 label: DAM
 weight: 2
 is_admin: null
 permissions:
+  - 'view files'
   - 'view media'
   - 'view shared media collection entities'
   - 'view shared media collection item entities'

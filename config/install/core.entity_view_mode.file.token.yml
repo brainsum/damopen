@@ -2,9 +2,9 @@ langcode: en
 status: true
 dependencies:
   module:
-    - media
-id: media.embed
-label: Embed
+    - file
+id: file.token
+label: Token
 description: ''
-targetEntityType: media
+targetEntityType: file
 cache: true

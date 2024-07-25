@@ -1,6 +1,35 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.restricted_html
+    - taxonomy.vocabulary.category
+    - taxonomy.vocabulary.keyword
+  module:
+    - block
+    - config
+    - crop
+    - damopen_assets_statistics
+    - dropzonejs
+    - embed
+    - entity_browser
+    - exif
+    - file
+    - filter
+    - image
+    - language
+    - media
+    - media_upload
+    - node
+    - path
+    - rest
+    - search_api
+    - system
+    - taxonomy
+    - taxonomy_access_fix
+    - term_merge
+    - toolbar
+    - video_embed_field
 id: administrator
 label: Administrator
 weight: 7

@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - media_collection
-id: media_collection_item.shared
-label: Shared
+id: media_collection.token
+label: Token
 description: ''
-targetEntityType: media_collection_item
+targetEntityType: media_collection
 cache: true
