@@ -20,6 +20,13 @@ class DamopenUploadController extends ControllerBase {
       '#cache' => [
         'max-age' => 0,
       ],
+      '#attached' => [
+        'drupalSettings' => [
+          'user' => [
+            'uploadNeedsApproval' => !$this->currentUser()->hasPermission('manage uploaded assets'),
+          ],
+        ],
+      ]
     ];
   }
 
