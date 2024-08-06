@@ -12,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.keyword
   module:
     - damopen_assets_statistics
+    - damopen_common
     - dropzonejs
     - media
     - media_collection
@@ -78,6 +79,7 @@ permissions:
   - 'edit own video_file media'
   - 'edit terms in category'
   - 'edit terms in keyword'
+  - 'manage uploaded assets'
   - 'merge taxonomy terms'
   - 'select terms in category'
   - 'select terms in keyword'
@@ -101,4 +103,3 @@ permissions:
   - 'view term revisions in category'
   - 'view terms in category'
   - 'view terms in keyword'
-  - 'view user email addresses'
