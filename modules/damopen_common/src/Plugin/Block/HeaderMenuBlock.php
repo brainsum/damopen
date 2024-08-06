@@ -27,21 +27,12 @@ class HeaderMenuBlock extends BlockBase {
     $current_user = \Drupal::currentUser();
     $roles = $current_user->getRoles();
 
-    $manage_users_roles = [
-      'manager',
-      'administrator',
-    ];
-
-    $asseet_manager_roles = [
-      'manager',
-      'administrator',
-    ];
     $view_own_unpublished = [
       'agency'
     ];
     $menu = [];
 
-    if (array_intersect($roles, $manage_users_roles) || $current_user->id() == 1) {
+    if ($current_user->hasPermission('administer users')) {
       $menu['administer_users'] = [
         'title' => new TranslatableMarkup('Manage users'),
         'url' => Url::fromRoute('entity.user.collection')->toString(),
@@ -49,7 +40,7 @@ class HeaderMenuBlock extends BlockBase {
       ];
     }
 
-    if (array_intersect($roles, $asseet_manager_roles) || $current_user->id() == 1) {
+    if ($current_user->hasPermission('manage uploaded assets')) {
       // Count all unpublished media.
       $query = \Drupal::entityQuery('media')
         ->condition('status', 0)
@@ -63,6 +54,7 @@ class HeaderMenuBlock extends BlockBase {
       ];
     }
 
+    // Todo: change this to a permission.
     if (array_intersect($roles, $view_own_unpublished)) {
       // Count all unpublished media.
       $query = \Drupal::entityQuery('media')
