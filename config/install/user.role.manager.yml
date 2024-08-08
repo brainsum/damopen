@@ -17,6 +17,7 @@ dependencies:
     - media_collection
     - media_collection_share
     - media_upload
+    - roleassign
     - taxonomy
     - taxonomy_access_fix
     - term_merge
@@ -31,6 +32,7 @@ permissions:
   - 'add media collection entities'
   - 'add media collection item entities'
   - 'administer users'
+  - 'assign roles'
   - 'create guideline media'
   - 'create icon media'
   - 'create image media'

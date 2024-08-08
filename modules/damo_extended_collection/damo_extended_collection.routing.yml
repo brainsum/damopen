@@ -25,7 +25,7 @@ damo_extended_collection.delete_collection:
     _form: '\Drupal\damo_extended_collection\Form\DeleteCollectionForm'
     _title: 'Confirm Deletion'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'access content'
     id: ^\d+$
 damo_extended_collection.edit_collection:
   path: '/collection/{id}/edit'
@@ -33,5 +33,5 @@ damo_extended_collection.edit_collection:
     _form: '\Drupal\damo_extended_collection\Form\EditCollectionForm'
     _title: 'Edit Collection'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'access content'
     id: ^\d+$
