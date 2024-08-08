@@ -103,13 +103,21 @@
             type:'POST',
             url: $(e.target).attr('href') + '/' + selectedStyle,
             success:function(data){
+              if ($(e.target).closest('div').hasClass('create-collection')) {
+                return;
+              }
               $(e.target).addClass('in-collection');
               $(e.target).closest('.collection-link-wrapper').find('.remove-from-collection-link').removeClass('visually-hidden');
               $(e.target).closest('.collection-link-wrapper').find('.remove-from-collection-link').attr('data-item-uuid', data[0].data);
             },
           });
         });
-
+        $(document).mouseup(function(e) {
+          var container = $('.collection-list');
+          if (!container.is(e.target) && container.has(e.target).length === 0) {
+            container.removeClass('active');
+          }
+        });
         $('a.remove-from-collection-link').on('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
