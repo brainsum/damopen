@@ -83,7 +83,10 @@
                 "Add support for Ckeditor 5": "https://www.drupal.org/files/issues/2024-02-01/3311063-50.patch"
             },
             "drupal/dropzonejs": {
-                "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-03/dropzone-invalid-files.patch"
+                "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-08/facets-3052574-237.patch"
+            },
+            "drupal/entity_embed": {
+                "Entity Embed fails to install after Embed module update": "https://www.drupal.org/files/issues/2024-08-07/entity_embed-embed_constructor-3466609-8.patch"
             }
         },
         "drupal-scaffold": {
