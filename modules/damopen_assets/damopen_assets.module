@@ -95,7 +95,7 @@ function damopen_assets_media_presave(MediaInterface $media) {
   $currentUser = Drupal::currentUser();
   $owner = ($media->getOwner()->id() === $currentUser->id()) ? 'own' : 'any';
   if (!$currentUser->hasPermission("publish $owner media")) {
-    $media->setPublished(FALSE);
+    $media->set('status', FALSE);
   }
 
   // If the user doesn't add an alt text for the image,
