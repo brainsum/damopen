@@ -17,3 +17,10 @@ function damopen_common_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function damopen_common_page_attachments_alter(&$page){
+  $page['#attached']['library'][] = 'core/drupal.ajax';
+}
