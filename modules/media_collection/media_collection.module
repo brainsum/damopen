@@ -236,6 +236,7 @@ function media_collection_preprocess_media_collection(array &$variables) {
   
   /** @var \Drupal\Core\Routing\UrlGeneratorInterface $url_generator */
   $url_generator = \Drupal::service('file_url_generator');
+  $variables['additional_collection_data']['collection_id'] = $collection->id();
   $variables['additional_collection_data']['data']['icons'] = [
     'regular' => [
       'uri' => '/' . $url_generator->generate("$assetsDir/collection-icon.png")
