@@ -62,6 +62,9 @@ dependencies:
   - drupal:text
   - drupal:user
   - drupal:views
+  - drupal:jquery_ui
+  - drupal:jquery_ui_draggable
+  - drupal:jquery_ui_resizable
   # Contrib
   - better_exposed_filters:better_exposed_filters
   - dropzonejs:dropzonejs
