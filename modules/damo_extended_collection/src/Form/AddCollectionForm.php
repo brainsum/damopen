@@ -21,6 +21,7 @@ class AddCollectionForm extends FormBase {
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
+      '#required' => TRUE,
       '#size' => 60,
       '#maxlength' => 128,
     ];
