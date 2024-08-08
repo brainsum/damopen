@@ -26,9 +26,11 @@ weight: 6
 is_admin: null
 permissions:
   - 'access media asset usage statistics'
+  - 'access user profiles'
   - 'add media collection (shared) entities'
   - 'add media collection entities'
   - 'add media collection item entities'
+  - 'administer users'
   - 'create guideline media'
   - 'create icon media'
   - 'create image media'
@@ -97,3 +99,4 @@ permissions:
   - 'view term revisions in category'
   - 'view terms in category'
   - 'view terms in keyword'
+  - 'view user email addresses'
