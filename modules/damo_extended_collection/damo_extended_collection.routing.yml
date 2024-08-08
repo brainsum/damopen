@@ -27,3 +27,11 @@ damo_extended_collection.delete_collection:
   requirements:
     _permission: 'administer site configuration'
     id: ^\d+$
+damo_extended_collection.edit_collection:
+  path: '/collection/{id}/edit'
+  defaults:
+    _form: '\Drupal\damo_extended_collection\Form\EditCollectionForm'
+    _title: 'Edit Collection'
+  requirements:
+    _permission: 'administer site configuration'
+    id: ^\d+$

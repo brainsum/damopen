@@ -19,7 +19,7 @@
   <div class="media_collection--buttons">
     <a class="back-to-collections" href="/collections">{{"Collections"|t}} »</a>
     <div class="media_collection--top">
-      <h1 class="collection-title">{{content['#media_collection'].field_title.value}}</h1>
+      <h1 class="collection-title">{{content['#media_collection'].field_title.value}}</h1> <a class="use-ajax collection-edit" data-dialog-type="modal" href="/collection/{{ additional_collection_data.collection_id }}/edit">{{"Edit"|t}}</a>
       {{ additional_collection_data.render.header }}
     </div>
     {{ additional_collection_data.render.size_info }}
