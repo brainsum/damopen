@@ -83,7 +83,7 @@
                 "Add support for Ckeditor 5": "https://www.drupal.org/files/issues/2024-02-01/3311063-50.patch"
             },
             "drupal/facets": {
-                "Facets with AJAX not working in most of situations": "https://www.drupal.org/files/issues/2024-07-08/facets-3052574-237.patch"
+                "Creating requests causes failures on Drupal 10.3": "https://www.drupal.org/files/issues/2024-08-07/3466281-2--for-2.0.8.patch"
             },
             "drupal/dropzonejs": {
                 "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-03/dropzone-invalid-files.patch"
