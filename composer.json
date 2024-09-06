@@ -28,7 +28,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-zip": "*",
-        "brainsum/damo_theme": "dev-maset-DAMO-214",
+        "brainsum/damo_theme": "dev-master-DAMO-214",
         "brainsum/media_upload": "^4.3",
         "drupal/better_exposed_filters": "^6.0",
         "drupal/core": "^10.2",
