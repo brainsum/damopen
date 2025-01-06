@@ -39,9 +39,7 @@ final class Helper implements HelperInterface {
 
     // @todo: Fix "media bulk" page ordering, too?
     if (isset($variables['bundles']['image']['add_link'])) {
-      $imageBulkAddUrl = new Url('media_upload.bulk_media_upload', [
-        'type' => 'image',
-      ]);
+      $imageBulkAddUrl = new Url('damopen_upload.upload');
       // The 'add_link' is an instance of \Drupal\Core\Link.
       $variables['bundles']['image']['add_link']->setUrl($imageBulkAddUrl);
     }
