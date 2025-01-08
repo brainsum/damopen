@@ -90,7 +90,7 @@
                 "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-03/dropzone-invalid-files.patch"
             },
             "drupal/entity_embed": {
-                "Entity Embed fails to install after Embed module update": "https://www.drupal.org/files/issues/2024-08-07/entity_embed-embed_constructor-3466609-8.patch"
+                "Entity Embed fails to install after Embed module update": "https://www.drupal.org/files/issues/2024-09-11/entity_embed-embed_constructor-3466609-30.patch"
             }
         },
         "drupal-scaffold": {
