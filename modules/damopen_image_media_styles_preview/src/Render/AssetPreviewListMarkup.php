@@ -352,6 +352,9 @@ final class AssetPreviewListMarkup {
     $rows = [];
     $rowNumber = 0;
     $controller = [];
+    /** @var \Drupal\image\ImageStyleInterface $original_ratio_scaled */
+    $original_ratio_scaled = $this->entityTypeManager
+      ->getStorage('image_style')->load('original_ratio_scaled');
     /** @var \Drupal\image\Entity\ImageStyle $style */
     foreach ($styles as $style) {
       $styleLabel = $style->label();
@@ -372,7 +375,8 @@ final class AssetPreviewListMarkup {
       }
 
       // Create URL for the thumbnails and buttons.
-      $styleUrl = $style->buildUrl($imageUri);
+      $styleUrl = (!in_array($style->id(), ['other_hi_res', 'other_hi_res_no_badge']))
+        ? $style->buildUrl($imageUri) : $original_ratio_scaled->buildUrl($imageUri);
 
       // Create thumbnail image element.
       $thumbnail = [

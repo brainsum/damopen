@@ -1,0 +1,15 @@
+uuid: 7d952745-cebb-44ab-a84b-7d5a7c3d6a6c
+langcode: en
+status: true
+dependencies: {  }
+name: original_ratio_scaled
+label: 'Original ratio scaled'
+effects:
+  0d101c87-ccbd-4156-9a12-1f47427e2f6e:
+    uuid: 0d101c87-ccbd-4156-9a12-1f47427e2f6e
+    id: image_scale
+    weight: 1
+    data:
+      width: 1600
+      height: null
+      upscale: false
