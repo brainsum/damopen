@@ -1,7 +1,10 @@
-uuid: 7d952745-cebb-44ab-a84b-7d5a7c3d6a6c
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - image_effects
+_core:
+  default_config_hash: q0X18lrRm7tdCzyrX82ZW56V8wtE8UtBN09zi-4xdhc
 name: original_ratio_scaled
 label: 'Original ratio scaled'
 effects:
@@ -13,3 +16,15 @@ effects:
       width: 1600
       height: null
       upscale: false
+  40d7565b-5af1-4da5-a48f-a9e5b0c43db1:
+    uuid: 40d7565b-5af1-4da5-a48f-a9e5b0c43db1
+    id: image_effects_watermark
+    weight: 2
+    data:
+      watermark_image: profiles/contrib/damopen/modules/damopen_image_media_styles_preview/images/watermark/dam-logo.png
+      watermark_width: 20%
+      watermark_height: ''
+      placement: right-bottom
+      x_offset: ''
+      y_offset: ''
+      opacity: 100

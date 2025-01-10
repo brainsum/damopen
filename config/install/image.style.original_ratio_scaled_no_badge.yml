@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: original_ratio_scaled_no_badge
+label: 'Original ratio scaled (no badge)'
+effects:
+  e53b8e8b-113a-4707-afa6-fd963f5701ab:
+    uuid: e53b8e8b-113a-4707-afa6-fd963f5701ab
+    id: image_scale
+    weight: 1
+    data:
+      width: 1600
+      height: null
+      upscale: false

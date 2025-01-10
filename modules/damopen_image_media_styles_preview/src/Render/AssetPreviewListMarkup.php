@@ -352,9 +352,7 @@ final class AssetPreviewListMarkup {
     $rows = [];
     $rowNumber = 0;
     $controller = [];
-    /** @var \Drupal\image\ImageStyleInterface $original_ratio_scaled */
-    $original_ratio_scaled = $this->entityTypeManager
-      ->getStorage('image_style')->load('original_ratio_scaled');
+
     /** @var \Drupal\image\Entity\ImageStyle $style */
     foreach ($styles as $style) {
       $styleLabel = $style->label();
@@ -375,8 +373,25 @@ final class AssetPreviewListMarkup {
       }
 
       // Create URL for the thumbnails and buttons.
-      $styleUrl = (!in_array($style->id(), ['other_hi_res', 'other_hi_res_no_badge']))
-        ? $style->buildUrl($imageUri) : $original_ratio_scaled->buildUrl($imageUri);
+      switch ($style->id()) {
+        case 'other_hi_res':
+          /** @var \Drupal\image\ImageStyleInterface $original_ratio_scaled */
+          $original_ratio_scaled = $this->entityTypeManager
+            ->getStorage('image_style')->load('original_ratio_scaled');
+          // Scaled style show in preview.
+          $styleUrl = $original_ratio_scaled->buildUrl($imageUri);
+          break;
+        case 'other_hi_res_no_badge':
+          /** @var \Drupal\image\ImageStyleInterface $original_ratio_scaled */
+          $original_ratio_scaled = $this->entityTypeManager
+            ->getStorage('image_style')->load('original_ratio_scaled_no_badge');
+          // Scaled style without badge show in preview.
+          $styleUrl = $original_ratio_scaled->buildUrl($imageUri);
+          break;
+        default:
+          // Get the style URL.
+          $styleUrl = $style->buildUrl($imageUri);
+      }
 
       // Create thumbnail image element.
       $thumbnail = [
