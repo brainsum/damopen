@@ -5,8 +5,11 @@
  * Module file for the Media Asset module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\media\MediaForm;
@@ -380,4 +383,13 @@ function damopen_assets_form_alter(array &$form, FormStateInterface $form_state,
  */
 function damopen_assets_preprocess_menu_local_tasks(&$variables) {
   \Drupal::service('damopen_assets.helper')->menuLocalTasks($variables);
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access().
+ */
+function damopen_assets_jsonapi_entity_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access media asset to approval'),
+  ]);
 }

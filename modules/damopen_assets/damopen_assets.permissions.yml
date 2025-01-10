@@ -1,3 +1,7 @@
 access media asset navigation block:
   title: 'Access the DAM navigation block'
   description: 'Allows access for the DAM navigation block'
+
+access media asset to approval:
+  title: 'Access assets approval'
+  description: 'Allows access for the assets approval'
