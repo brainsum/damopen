@@ -134,6 +134,10 @@ class AssetDownloadHandler {
     }
 
     $styledUri = $style->buildUri($downloadableFile->getFileUri());
+    $path = $this->fileSystem->realpath($styledUri);
+    if (!file_exists($path)) {
+      $style->createDerivative($downloadableFile->getFileUri(), $styledUri);
+    }
     return $this->fileManager->createArchiveEntity($media->getOwner(), new SplFileInfo($styledUri));
   }
 
