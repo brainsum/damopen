@@ -5,3 +5,11 @@ access media asset navigation block:
 access media asset to approval:
   title: 'Access assets approval'
   description: 'Allows access for the assets approval'
+
+publish own media:
+  title: 'Publish own media'
+  description: 'Allows users to publish their own media'
+
+publish any media:
+    title: 'Publish any media'
+    description: 'Allows users to publish any media'

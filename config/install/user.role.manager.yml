@@ -1,3 +1,4 @@
+uuid: a48325fd-e9bd-4619-a726-2bbec3f61a61
 langcode: en
 status: true
 dependencies:
@@ -11,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.category
     - taxonomy.vocabulary.keyword
   module:
+    - damopen_assets
     - damopen_assets_statistics
     - damopen_common
     - dropzonejs
@@ -22,11 +24,14 @@ dependencies:
     - taxonomy
     - taxonomy_access_fix
     - term_merge
+_core:
+  default_config_hash: Iq7piaREWJj0mWdE4Er6pafo-XDQ49X4SPMn0XjxsfY
 id: manager
 label: Manager
 weight: 6
 is_admin: null
 permissions:
+  - 'access media asset to approval'
   - 'access media asset usage statistics'
   - 'access user profiles'
   - 'add media collection (shared) entities'
@@ -81,6 +86,8 @@ permissions:
   - 'edit terms in keyword'
   - 'manage uploaded assets'
   - 'merge taxonomy terms'
+  - 'publish any media'
+  - 'publish own media'
   - 'select terms in category'
   - 'select terms in keyword'
   - 'share media collections with users'

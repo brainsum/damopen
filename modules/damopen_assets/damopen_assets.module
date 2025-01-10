@@ -97,7 +97,8 @@ function damopen_assets_preprocess_html(array &$variables) {
 function damopen_assets_media_presave(MediaInterface $media) {
   $currentUser = Drupal::currentUser();
   $owner = ($media->getOwner()->id() === $currentUser->id()) ? 'own' : 'any';
-  if (!$currentUser->hasPermission("publish $owner media")) {
+  if (!$currentUser->hasPermission("publish own media")
+    && !$currentUser->hasPermission("publish any media")) {
     $media->set('status', FALSE);
   }
 

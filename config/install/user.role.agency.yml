@@ -1,3 +1,4 @@
+uuid: 11f7ed3f-3b88-468e-a59e-017e1fcf0b91
 langcode: en
 status: true
 dependencies:
@@ -11,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.category
     - taxonomy.vocabulary.keyword
   module:
+    - damopen_assets
     - dropzonejs
     - media
     - media_collection
@@ -18,11 +20,14 @@ dependencies:
     - media_upload
     - taxonomy
     - taxonomy_access_fix
+_core:
+  default_config_hash: CZVqxAHwqvb9S1vTAojoq__qVirV8HcvZEuJV_R7T5I
 id: agency
 label: Agency
 weight: 5
 is_admin: null
 permissions:
+  - 'access media asset to approval'
   - 'add media collection (shared) entities'
   - 'add media collection entities'
   - 'add media collection item entities'
