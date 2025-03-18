@@ -3,7 +3,7 @@ type: profile
 description: 'Distribution for quickly starting a new Digital Media Assets Management system with Drupal'
 
 core_version_requirement: ^9.1 || ^10.0
-php: 8.1
+php: 8.3
 
 distribution:
   name: 'Digital Media Assets Management'
