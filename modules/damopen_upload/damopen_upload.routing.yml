@@ -5,6 +5,7 @@ damopen_upload.upload:
     _title: 'Image upload'
   requirements:
     _permission: 'access content'
+
 damopen_upload.image_form:
   path: '/upload-image-form'
   defaults:
@@ -13,3 +14,11 @@ damopen_upload.image_form:
   requirements:
     _permission: 'access content'
     _access: 'TRUE'
+
+damopen_wfa.assets:
+  path: '/waiting-for-approval'
+  defaults:
+    _controller: '\Drupal\damopen_upload\Controller\DamopenWfaController::waitingForApproval'
+    _title: 'Assets Waiting for Approval'
+  requirements:
+    _permission: 'access media asset library'

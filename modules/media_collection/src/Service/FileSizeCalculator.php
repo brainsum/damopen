@@ -129,8 +129,9 @@ final class FileSizeCalculator {
       if ($media->bundle() === 'image') {
         /** @var \Drupal\image\ImageStyleInterface $style */
         $style = $item->get('style')->entity ?? NULL;
-        // @todo: Check for the existence of style. If not there, that's an inconsistent state.
-        $size += $this->calculateImageMediaSize($media, $style);
+        // Calculate size of the styled image.
+        $size += is_a($style, 'Drupal\image\ImageStyleInterface') ?
+          $this->calculateImageMediaSize($media, $style) : 0;
         continue;
       }
 
