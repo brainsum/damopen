@@ -12,10 +12,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
-use Drupal\damopen_assets\HelperInterface;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use function implode;
 use function in_array;
 
@@ -85,47 +83,16 @@ class DamNavigationBlock extends BlockBase implements ContainerFactoryPluginInte
     $plugin_id,
     $plugin_definition
   ) {
-    $markupGenerator = $container->has('media_collection.generator.header_markup')
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->request = $container->get('request_stack')->getCurrentRequest();
+    $instance->routeMatch = $container->get('current_route_match');
+    $instance->user = $container->get('current_user');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->damopenAssetsHelper = $container->get('damopen_assets.helper');
+    $instance->headerMarkupGenerator = $container->has('media_collection.generator.header_markup')
       ? $container->get('media_collection.generator.header_markup')
       : NULL;
-
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('request_stack'),
-      $container->get('current_route_match'),
-      $container->get('current_user'),
-      $container->get('entity_type.manager'),
-      $container->get('damopen_assets.helper'),
-      $markupGenerator
-    );
-  }
-
-  /**
-   * DamNavigationBlock constructor.
-   *
-   * {@inheritdoc}
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    RequestStack $requestStack,
-    RouteMatchInterface $routeMatch,
-    AccountProxyInterface $user,
-    EntityTypeManagerInterface $entityTypeManager,
-    HelperInterface $helper,
-    $headerMarkupGenerator = NULL,
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->request = $requestStack->getCurrentRequest();
-    $this->routeMatch = $routeMatch;
-    $this->user = $user;
-    $this->entityTypeManager = $entityTypeManager;
-    $this->headerMarkupGenerator = $headerMarkupGenerator;
-    $this->damopenAssetsHelper = $helper;
+    return $instance;
   }
 
   /**

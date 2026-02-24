@@ -30,26 +30,10 @@ class DownloadController extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('damopen_assets_download.asset_download_handler'),
-      $container->get('damopen_assets_download.file_response_builder')
-    );
-  }
-
-  /**
-   * DownloadController constructor.
-   *
-   * @param \Drupal\damopen_assets_download\Service\AssetDownloadHandler $downloadHandler
-   *   Download handler.
-   * @param \Drupal\damopen_assets_download\Service\FileResponseBuilder $fileResponseBuilder
-   *   The file response builder.
-   */
-  public function __construct(
-    AssetDownloadHandler $downloadHandler,
-    FileResponseBuilder $fileResponseBuilder
-  ) {
-    $this->downloadHandler = $downloadHandler;
-    $this->fileResponseBuilder = $fileResponseBuilder;
+    $instance = new static();
+    $instance->downloadHandler = $container->get('damopen_assets_download.asset_download_handler');
+    $instance->fileResponseBuilder = $container->get('damopen_assets_download.file_response_builder');
+    return $instance;
   }
 
   /**

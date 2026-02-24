@@ -131,54 +131,18 @@ final class AssetPreviewListMarkup {
    *   The class instance.
    */
   public static function create(ContainerInterface $container): AssetPreviewListMarkup {
-    $collectionHandler = $container->has('media_collection.collection_handler')
+    $instance = new static();
+    $instance->currentUser = $container->get('current_user');
+    $instance->formBuilder = $container->get('form_builder');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->imageFactory = $container->get('image.factory');
+    $instance->collectionHandler = $container->has('media_collection.collection_handler')
       ? $container->get('media_collection.collection_handler')
       : NULL;
-
-    return new static(
-      $container->get('current_user'),
-      $container->get('form_builder'),
-      $container->get('entity_type.manager'),
-      $container->get('image.factory'),
-      $collectionHandler,
-      $container->get('extension.list.module'),
-      $container->get('file_url_generator'),
-      $container->get('renderer')
-    );
-  }
-
-  /**
-   * AssetPreviewListMarkup constructor.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current user.
-   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
-   *   The form builder.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Image\ImageFactory $imageFactory
-   *   The image factory.
-   * @param \Drupal\media_collection\Service\CollectionHandler|null $collectionHandler
-   *   Collection handler if it exists.
-   */
-  public function __construct(
-    AccountInterface $currentUser,
-    FormBuilderInterface $formBuilder,
-    EntityTypeManagerInterface $entityTypeManager,
-    ImageFactory $imageFactory,
-    $collectionHandler,
-    ModuleExtensionList $moduleExtensionList,
-    FileUrlGeneratorInterface $urlGenerator,
-    RendererInterface $renderer
-  ) {
-    $this->currentUser = $currentUser;
-    $this->formBuilder = $formBuilder;
-    $this->entityTypeManager = $entityTypeManager;
-    $this->imageFactory = $imageFactory;
-    $this->collectionHandler = $collectionHandler;
-    $this->moduleExtensionList = $moduleExtensionList;
-    $this->urlGenerator = $urlGenerator;
-    $this->renderer = $renderer;
+    $instance->moduleExtensionList = $container->get('extension.list.module');
+    $instance->urlGenerator = $container->get('file_url_generator');
+    $instance->renderer = $container->get('renderer');
+    return $instance;
   }
 
   /**

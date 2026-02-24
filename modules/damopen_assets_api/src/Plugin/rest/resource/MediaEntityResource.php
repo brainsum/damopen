@@ -53,55 +53,21 @@ class MediaEntityResource extends ResourceBase implements DependentPluginInterfa
   protected $mediaStorage;
 
   /**
-   * Constructs a Drupal\rest\Plugin\rest\resource\EntityResource object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param array $serializer_formats
-   *   The available serialization formats.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   A logger instance.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    array $serializer_formats,
-    LoggerInterface $logger,
-    ConfigFactoryInterface $config_factory
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-
-    $this->entityType = $entity_type_manager->getDefinition('media');
-    $this->configFactory = $config_factory;
-    $this->mediaStorage = $entity_type_manager->getStorage('media');
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    $instance = new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('rest'),
-      $container->get('config.factory')
+      $container->get('logger.factory')->get('rest')
     );
+    $entityTypeManager = $container->get('entity_type.manager');
+    $instance->entityType = $entityTypeManager->getDefinition('media');
+    $instance->configFactory = $container->get('config.factory');
+    $instance->mediaStorage = $entityTypeManager->getStorage('media');
+    return $instance;
   }
 
   /**

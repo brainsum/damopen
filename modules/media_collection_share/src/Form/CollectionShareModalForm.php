@@ -33,31 +33,13 @@ class CollectionShareModalForm extends FormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('media_collection_share.collection_sharer'),
-      $container->get('email.validator')
-    );
-  }
-
-  /**
-   * CollectionShareModalForm constructor.
-   *
-   * @param \Drupal\media_collection_share\Service\CollectionSharer $collectionSharer
-   *   Collection sharer service.
-   * @param \Drupal\Component\Utility\EmailValidatorInterface $emailValidator
-   *   Email validator.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function __construct(
-    CollectionSharer $collectionSharer,
-    EmailValidatorInterface $emailValidator
-  ) {
-    // Get query parameter.
+    $instance = new static();
+    $collectionSharer = $container->get('media_collection_share.collection_sharer');
     $param = \Drupal::request()->query->all();
     $param = $param['query']['collection'];
-    $this->sharedCollection = $collectionSharer->createSharedCollectionForUser($param);
-    $this->emailValidator = $emailValidator;
+    $instance->sharedCollection = $collectionSharer->createSharedCollectionForUser($param);
+    $instance->emailValidator = $container->get('email.validator');
+    return $instance;
   }
 
   /**

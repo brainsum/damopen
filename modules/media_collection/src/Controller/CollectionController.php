@@ -31,21 +31,9 @@ class CollectionController extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('media_collection.collection_handler')
-    );
-  }
-
-  /**
-   * CollectionController constructor.
-   *
-   * @param \Drupal\media_collection\Service\CollectionHandler $handler
-   *   The collection handler service.
-   */
-  public function __construct(
-    CollectionHandler $handler
-  ) {
-    $this->handler = $handler;
+    $instance = new static();
+    $instance->handler = $container->get('media_collection.collection_handler');
+    return $instance;
   }
 
   /**

@@ -39,26 +39,9 @@ class MediaFileDownloadStatisticsBlock extends BlockBase implements ContainerFac
     $plugin_id,
     $plugin_definition
   ) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('database')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    Connection $database
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->database = $database;
+    $instance = new static($configuration, $plugin_id, $plugin_definition);
+    $instance->database = $container->get('database');
+    return $instance;
   }
 
   /**

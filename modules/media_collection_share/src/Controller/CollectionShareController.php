@@ -29,31 +29,12 @@ class CollectionShareController extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('shared_media_collection'),
-      $container->get('entity_type.manager')->getViewBuilder('shared_media_collection'),
-      $container->get('media_collection_share.collection_sharer')
-    );
-  }
-
-  /**
-   * CollectionShare constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityStorageInterface $sharedStorage
-   *   Storage for Shared collections.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $sharedViewBuilder
-   *   View builder for Shared collections.
-   * @param \Drupal\media_collection_share\Service\CollectionSharer $sharer
-   *   Sharer service for collections.
-   */
-  public function __construct(
-    EntityStorageInterface $sharedStorage,
-    EntityViewBuilderInterface $sharedViewBuilder,
-    CollectionSharer $sharer
-  ) {
-    $this->sharedStorage = $sharedStorage;
-    $this->sharedViewBuilder = $sharedViewBuilder;
-    $this->sharer = $sharer;
+    $instance = new static();
+    $entityTypeManager = $container->get('entity_type.manager');
+    $instance->sharedStorage = $entityTypeManager->getStorage('shared_media_collection');
+    $instance->sharedViewBuilder = $entityTypeManager->getViewBuilder('shared_media_collection');
+    $instance->sharer = $container->get('media_collection_share.collection_sharer');
+    return $instance;
   }
 
   /**

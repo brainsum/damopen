@@ -47,35 +47,17 @@ class MediaAssetsSerializer extends Serializer {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    $instance = new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('serializer'),
       $container->getParameter('serializer.formats'),
-      $container->getParameter('serializer.format_providers'),
-      $container->get('entity_type.manager')
+      $container->getParameter('serializer.format_providers')
     );
-  }
-
-  /**
-   * SerializerTML constructor.
-   *
-   * {@inheritdoc}
-   */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    SerializerInterface $serializer,
-    array $serializer_formats,
-    array $serializer_format_providers,
-    EntityTypeManagerInterface $entityTypeManager
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer, $serializer_formats, $serializer_format_providers);
-
-    $this->termStorage = $entityTypeManager->getStorage('taxonomy_term');
-    $this->entityTypeManager = $entityTypeManager;
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->termStorage = $instance->entityTypeManager->getStorage('taxonomy_term');
+    return $instance;
   }
 
   /**
