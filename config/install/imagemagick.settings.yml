@@ -1,16 +1,10 @@
 quality: 80
 binaries: imagemagick
+imagemagick_version: v7
 path_to_binaries: /usr/bin/
 prepend: '-depth 8 -colorspace sRGB '
 log_warnings: true
 debug: false
-use_identify: true
-locale: en_US.UTF-8
-advanced:
-  density: 72
-  colorspace: RGB
-  profile: ''
-  coalesce: false
 image_formats:
   PNG:
     mime_type: image/png
@@ -52,4 +46,11 @@ image_formats:
   ICO:
     mime_type: image/vnd.microsoft.icon
     enabled: false
+advanced:
+  density: 72
+  colorspace: RGB
+  profile: ''
+  coalesce: false
+use_identify: true
+locale: en_US.UTF-8
 prepend_pre_source: false
