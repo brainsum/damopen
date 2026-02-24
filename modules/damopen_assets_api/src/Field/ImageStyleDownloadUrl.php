@@ -9,7 +9,6 @@ use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\TraversableTypedDataInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
 use RuntimeException;
-use function file_url_transform_relative;
 use function strpos;
 
 /**

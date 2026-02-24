@@ -4,6 +4,7 @@ namespace Drupal\media_collection\Service;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
@@ -11,7 +12,6 @@ use Drupal\media\MediaInterface;
 use Drupal\media_collection\Entity\MediaCollectionInterface;
 use SplFileInfo;
 use function file_exists;
-use function format_size;
 
 /**
  * Class FileSizeCalculator.
@@ -48,11 +48,11 @@ final class FileSizeCalculator {
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The formatted size.
    */
-  public function formattedCollectionSize(MediaCollectionInterface $collection): TranslatableMarkup {
+  public function formattedCollectionSize(MediaCollectionInterface $collection): TranslatableMarkup|ByteSizeMarkup {
     $size = $this->collectionSize($collection);
 
     return $size
-      ? format_size($size, $collection->getOwner()->getPreferredLangcode())
+      ? ByteSizeMarkup::create($size, $collection->getOwner()->getPreferredLangcode())
       : new TranslatableMarkup('Not yet available');
   }
 

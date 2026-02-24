@@ -18,6 +18,13 @@ use function in_array;
 class MediaEntityNormalizer extends ContentEntityNormalizer {
 
   /**
+   * The interface or class that this Normalizer supports.
+   *
+   * @var string
+   */
+  protected $supportedInterfaceOrClass;
+
+  /**
    * File storage.
    *
    * @var \Drupal\file\FileStorageInterface

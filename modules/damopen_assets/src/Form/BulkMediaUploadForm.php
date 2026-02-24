@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use function array_map;
 use function explode;
 use function file_get_contents;
-use function file_save_data;
 use function in_array;
 use function preg_match;
 use function strtolower;

@@ -26,7 +26,6 @@ use function file_exists;
 use function file_get_contents;
 use function getimagesize;
 use function is_array;
-use function render;
 use function str_replace;
 use function strpos;
 use function strtolower;

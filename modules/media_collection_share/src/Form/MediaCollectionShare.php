@@ -101,8 +101,9 @@ class MediaCollectionShare extends ContentEntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     $users = $form_state->getValue('shared_with');
     $this->entity->set('shared_with', $users['target_id'] ?? $users);
-    $this->entity->save();
+    $result = $this->entity->save();
     $this->messenger()->addStatus($this->t('List of users updated.'));
+    return $result;
   }
 
   /**
