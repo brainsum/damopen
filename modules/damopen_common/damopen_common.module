@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Access\AccessResult;
+
 /**
  * Implements hook_theme().
  */
@@ -23,4 +25,75 @@ function damopen_common_theme() {
  */
 function damopen_common_page_attachments_alter(&$page){
   $page['#attached']['library'][] = 'core/drupal.ajax';
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access().
+ *
+ * Allow access to unpublished media entities for users with proper permissions.
+ */
+function damopen_common_jsonapi_entity_filter_access(\Drupal\Core\Entity\EntityTypeInterface $entity_type, \Drupal\Core\Session\AccountInterface $account) {
+  // Only handle media entities
+  if ($entity_type->id() !== 'media') {
+    return [];
+  }
+
+  // Check if user has permission to view unpublished media
+  if ($account->hasPermission('view any unpublished image media') ||
+    $account->hasPermission('administer media')) {
+    return [
+      JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed(),
+    ];
+  }
+
+  // Check if user has permission to view own unpublished media
+  if ($account->hasPermission('view own unpublished media')) {
+    return [
+      JSONAPI_FILTER_AMONG_OWN => AccessResult::allowed(),
+    ];
+  }
+
+  return [];
+}
+
+/**
+ * Implements hook_jsonapi_entity_access().
+ *
+ * Grant access to unpublished media entities for authorized users.
+ */
+function damopen_common_jsonapi_entity_access(\Drupal\Core\Entity\EntityInterface $entity, $operation, \Drupal\Core\Session\AccountInterface $account) {
+  // Only handle media entities
+  if ($entity->getEntityTypeId() !== 'media') {
+    return \Drupal\Core\Access\AccessResult::neutral();
+  }
+
+  // Only handle view operations
+  if ($operation !== 'view') {
+    return \Drupal\Core\Access\AccessResult::neutral();
+  }
+
+  // Check if media is unpublished
+  if ($entity->isPublished()) {
+    return \Drupal\Core\Access\AccessResult::neutral();
+  }
+
+  // Check permissions for unpublished media
+  if ($account->hasPermission('view any unpublished image media') ||
+    $account->hasPermission('administer media')) {
+    return \Drupal\Core\Access\AccessResult::allowed()
+      ->cachePerPermissions()
+      ->addCacheableDependency($entity);
+  }
+
+  // Check if user owns the media
+  if ($entity->hasField('uid') &&
+    $entity->get('uid')->target_id == $account->id() &&
+    $account->hasPermission('view own unpublished media')) {
+    return \Drupal\Core\Access\AccessResult::allowed()
+      ->cachePerPermissions()
+      ->cachePerUser()
+      ->addCacheableDependency($entity);
+  }
+
+  return \Drupal\Core\Access\AccessResult::neutral();
 }

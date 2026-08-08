@@ -64,7 +64,7 @@ class HeaderMenuBlock extends BlockBase {
       $count = $query->count()->execute();
       $menu['manage_assets'] = [
         'title' => new TranslatableMarkup('My Assets waiting for approval'),
-        'url' => Url::fromRoute('view.unpublished_assets.user_unpublished_assets')->toString(),
+        'url' => Url::fromRoute('damopen_wfa.assets')->toString(),
         'class' => '',
         'count' => $count,
       ];
