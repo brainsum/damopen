@@ -41,7 +41,16 @@ class BulkMediaUploadForm extends ContribForm {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function create(ContainerInterface $container) {
-    $instance = parent::create($container);
+    // The contributed factory uses new self(), which returns its base form.
+    // Instantiate this subclass so DAMopen's fields and submit handler run.
+    $instance = new static(
+      $container->get('entity_type.manager'),
+      $container->get('entity_field.manager'),
+      $container->get('logger.factory'),
+      $container->get('token'),
+      $container->get('file_system'),
+      $container->get('file.repository'),
+    );
     $instance->termStorage = $container->get('entity_type.manager')
       ->getStorage('taxonomy_term');
 

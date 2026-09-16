@@ -31,14 +31,14 @@
         "brainsum/damo_theme": ">=0.3 <1.0",
         "brainsum/media_upload": "^4.3",
         "drupal/better_exposed_filters": "^7.0",
-        "drupal/core": "^10.6 || ^11.0",
+        "drupal/core": "^11.3",
         "drupal/dropzonejs": "^2.7",
         "drupal/entity_browser": "^2.9",
         "drupal/entity_embed": "^1.5",
         "drupal/exif": "^2.5",
         "drupal/facets": "^2.0",
         "drupal/field_count_formatter": "^3.0",
-        "drupal/field_group": "^3.4",
+        "drupal/field_group": "^4.0",
         "drupal/filehash": "^3.0",
         "drupal/focal_point": "^2.0",
         "drupal/image_effects": "^4.0",
@@ -64,7 +64,8 @@
         "npm-asset/dropzone": "^5.7.6",
         "npm-asset/jquery-ui-touch-punch": "^0.2.3",
         "npm-asset/select2": "^4.0.13",
-        "drupal/roleassign": "^2.0"
+        "drupal/roleassign": "^2.0",
+        "mglaman/composer-drupal-lenient": "^1.0"
     },
     "suggest": {
         "drupal/maillog": "Allows logging outgoing emails.",
@@ -76,7 +77,7 @@
         "patches": {
             "drupal/core": {
                 "Datetime form element cannot validate when using a format without seconds": "https://www.drupal.org/files/issues/2019-07-24/drupal-datetime_form_element_cannot_validate_without_seconds-2723159-53.patch",
-                "Summary attributes bugfix": "https://www.drupal.org/files/issues/2018-12-17/core-undefined-index-summary_attributes-2998194-9.patch",
+                "Summary attributes bugfix": "web/profiles/contrib/damopen/patches/core-details-summary-attributes.patch",
                 "Add permission 'View unpublished {bundle} media'": "https://www.drupal.org/files/issues/2019-11-27/2936652-media-view-any-unpublished-per-bundle-25.patch",
                 "Remove jsonapi's file filter restriction": "https://raw.githubusercontent.com/brainsum/composer-patches/master/drupal-core/8.x/jsonapi-file-filter-restriction-remove.patch"
             },
@@ -85,6 +86,15 @@
             },
             "drupal/dropzonejs": {
                 "Remove invalid files": "https://www.drupal.org/files/issues/2024-07-03/dropzone-invalid-files.patch"
+            },
+            "brainsum/damo_theme": {
+                "Drupal 11 compatibility": "web/profiles/contrib/damopen/patches/damo_theme-drupal11.patch"
+            },
+            "drupal/php_ffmpeg": {
+                "Drupal 11 compatibility": "web/profiles/contrib/damopen/patches/php_ffmpeg-drupal11.patch"
+            },
+            "drupal/switch_page_theme": {
+                "Drupal 11 compatibility": "web/profiles/contrib/damopen/patches/switch_page_theme-drupal11.patch"
             }
         },
         "drupal-scaffold": {
@@ -93,19 +103,36 @@
             }
         },
         "installer-paths": {
-            "web/core": ["type:drupal-core"],
+            "web/core": [
+                "type:drupal-core"
+            ],
             "web/libraries/{$name}": [
                 "type:drupal-library",
                 "type:bower-asset",
                 "type:npm-asset"
             ],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/Commands/contrib/{$name}": ["type:drupal-drush"],
-            "web/modules/custom/{$name}": ["type:drupal-custom-module"],
-            "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
         },
-        "installer-types": ["bower-asset", "npm-asset"]
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ]
     }
 }

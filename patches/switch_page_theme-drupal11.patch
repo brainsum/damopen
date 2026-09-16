@@ -1,0 +1,60 @@
+--- a/switch_page_theme.info.yml
++++ b/switch_page_theme.info.yml
+@@ -2,7 +2,7 @@
+ description: 'Switches active theme on specific pages.'
+ package: User Interface
+ type: module
+-core_version_requirement: ^8 || ^9 || ^10
++core_version_requirement: ^8 || ^9 || ^10 || ^11
+ configure: switch_page_theme.settings
+ dependencies:
+   - drupal:path_alias
+--- a/src/Form/SwitchPageThemeSettingForm.php
++++ b/src/Form/SwitchPageThemeSettingForm.php
+@@ -9,6 +9,7 @@
+ use Drupal\domain\DomainStorageInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Config\TypedConfigManagerInterface;
+ use Drupal\Core\Extension\ThemeHandlerInterface;
+ 
+ /**
+@@ -51,15 +52,17 @@
+    *   The config factory load.
+    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+    *   The module handler.
+-   * @param \Drupal\domain\DomainLoader $domain_loader
+-   *   The domain loader.
++   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typed_config_manager
++   *   The typed config manager.
++   * @param \Drupal\domain\DomainStorageInterface $domain_storage
++   *   The domain storage.
+    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+    *   The language manager service.
+    * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+    *   The theme handler.
+    */
+-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, DomainStorageInterface $domain_storage = NULL, LanguageManagerInterface $language_manager = NULL, ThemeHandlerInterface $theme_handler = NULL) {
+-    parent::__construct($config_factory);
++  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, TypedConfigManagerInterface $typed_config_manager, DomainStorageInterface $domain_storage = NULL, LanguageManagerInterface $language_manager = NULL, ThemeHandlerInterface $theme_handler = NULL) {
++    parent::__construct($config_factory, $typed_config_manager);
+     $this->moduleHandler = $module_handler;
+     if ($domain_storage) {
+       $this->domainStorage = $domain_storage;
+@@ -85,6 +88,7 @@
+     return new static(
+       $container->get('config.factory'),
+       $container->get('module_handler'),
++      $container->get('config.typed'),
+       $domainServices,
+       $languageServices,
+       $container->get('theme_handler')
+@@ -251,7 +255,7 @@
+         '#type' => 'checkboxes',
+         '#title' => $this->t('Roles'),
+         '#title_display' => 'invisible',
+-        '#options' => user_role_names(),
++        '#options' => array_map(static fn ($role) => $role->label(), \Drupal\user\Entity\Role::loadMultiple()),
+         '#default_value' => isset($value['roles']) ? $value['roles'] : [],
+       ];
+ 

@@ -1,0 +1,11 @@
+--- a/lib/Drupal/Core/Form/FormPreprocess.php
++++ b/lib/Drupal/Core/Form/FormPreprocess.php
+@@ -349,7 +349,7 @@
+   public function preprocessDetails(array &$variables): void {
+     $element = $variables['element'];
+     $variables['attributes'] = $element['#attributes'];
+-    $variables['summary_attributes'] = new Attribute($element['#summary_attributes']);
++    $variables['summary_attributes'] = new Attribute($element['#summary_attributes'] ?? []);
+     if (!empty($element['#title'])) {
+       $variables['summary_attributes']['role'] = 'button';
+       if (!empty($element['#attributes']['id'])) {

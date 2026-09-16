@@ -18,13 +18,6 @@ use function in_array;
 class MediaEntityNormalizer extends ContentEntityNormalizer {
 
   /**
-   * The interface or class that this Normalizer supports.
-   *
-   * @var string
-   */
-  protected $supportedInterfaceOrClass;
-
-  /**
    * File storage.
    *
    * @var \Drupal\file\FileStorageInterface
@@ -69,8 +62,13 @@ class MediaEntityNormalizer extends ContentEntityNormalizer {
     $this->fileStorage = $entityTypeManager->getStorage('file');
     $this->imageStyleStorage = $entityTypeManager->getStorage('image_style');
     $this->termStorage = $entityTypeManager->getStorage('taxonomy_term');
+  }
 
-    $this->supportedInterfaceOrClass = MediaInterface::class;
+  /**
+   * {@inheritdoc}
+   */
+  public function getSupportedTypes(?string $format): array {
+    return [MediaInterface::class => TRUE];
   }
 
   /**
@@ -89,7 +87,7 @@ class MediaEntityNormalizer extends ContentEntityNormalizer {
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []): array|string|int|float|bool|\ArrayObject|NULL {
+  public function normalize($object, $format = NULL, array $context = []): array {
     $attributes = [];
     /** @var \Drupal\Core\Field\FieldItemListInterface $field */
     foreach ($object as $name => $field) {

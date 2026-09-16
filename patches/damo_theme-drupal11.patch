@@ -1,0 +1,127 @@
+--- a/damo_theme.info.yml
++++ b/damo_theme.info.yml
+@@ -3,7 +3,7 @@
+ type: theme
+ base theme: bootstrap
+ 
+-core_version_requirement: ^8.7.7 || ^9 || ^10
++core_version_requirement: ^8.7.7 || ^9 || ^10 || ^11
+ 
+ libraries:
+   - damo_theme/fancy-logo
+--- a/src/Plugin/Preprocess/Page.php
++++ b/src/Plugin/Preprocess/Page.php
+@@ -26,11 +26,11 @@
+     // Content attributes.
+     if ($this->theme->getSetting('fluid_container', FALSE)) {
+       $variables->container_class = 'container-fluid';
+-      $variables->navbar_attributes->inner_container = FALSE;
++      $variables->navbar_inner_container = FALSE;
+     }
+     else {
+       $variables->container_class = 'container';
+-      $variables->navbar_attributes->inner_container = TRUE;
++      $variables->navbar_inner_container = TRUE;
+     }
+ 
+     // Add navbar classes.
+@@ -46,7 +46,7 @@
+     // Add variable to determine if the route is admin.
+     $variables->is_admin_route = DamoBase::isAdminRoute();
+ 
+-    $variables->navbar_attributes->inner_container = FALSE;
++    $variables->navbar_inner_container = FALSE;
+     $variables->navbar_attributes->removeClass('navbar-dark');
+ 
+   }
+--- a/templates/system/page.html.twig
++++ b/templates/system/page.html.twig
+@@ -68,7 +68,7 @@
+ 
+     <header{{ navbar_attributes }} id="navbar" role="banner">
+       <div class="header--inner">
+-      {% if navbar_attributes.inner_container %}
++      {% if navbar_inner_container %}
+         <div class="{{ container_class }}">
+       {% endif %}
+ 
+@@ -83,7 +83,7 @@
+         {{ page.navigation_collapsible }}
+       {% endblock %}
+ 
+-      {% if not navbar_attributes.inner_container %}
++      {% if not navbar_inner_container %}
+         </div>
+       {% endif %}
+       </div>
+--- a/templates/system/page--media.html.twig
++++ b/templates/system/page--media.html.twig
+@@ -65,7 +65,7 @@
+     {{ drupal_block('header_menu_block') }}
+     <header{{ navbar_attributes }} id="navbar" role="banner">
+       <div class="header--inner">
+-      {% if navbar_attributes.inner_container %}
++      {% if navbar_inner_container %}
+         <div class="{{ container_class }}">
+       {% endif %}
+ 
+@@ -79,7 +79,7 @@
+         {{ page.navigation_collapsible }}
+       {% endblock %}
+ 
+-      {% if not navbar_attributes.inner_container %}
++      {% if not navbar_inner_container %}
+         </div>
+       {% endif %}
+       </div>
+--- a/templates/system/page--media--add.html.twig
++++ b/templates/system/page--media--add.html.twig
+@@ -65,7 +65,7 @@
+     {{ drupal_block('header_menu_block') }}
+     <header{{ navbar_attributes }} id="navbar" role="banner">
+       <div class="header--inner">
+-      {% if navbar_attributes.inner_container %}
++      {% if navbar_inner_container %}
+         <div class="{{ container_class }}">
+       {% endif %}
+ 
+@@ -79,7 +79,7 @@
+         {{ page.navigation_collapsible }}
+       {% endblock %}
+ 
+-      {% if not navbar_attributes.inner_container %}
++      {% if not navbar_inner_container %}
+         </div>
+       {% endif %}
+       </div>
+--- a/src/Plugin/Preprocess/Media/MediaLibrary.php
++++ b/src/Plugin/Preprocess/Media/MediaLibrary.php
+@@ -38,6 +38,7 @@
+       $link_options, ['attributes' => [
+         'class' => ['glyphicon-pencil'],
+         'title' => $this->t('Edit'),
++        'aria-label' => $this->t('Edit'),
+       ]]
+     );
+ 
+@@ -45,6 +46,7 @@
+       $link_options, ['attributes' => [
+         'class' => ['glyphicon-remove'],
+         'title' => $this->t('Delete'),
++        'aria-label' => $this->t('Delete'),
+       ]]
+     );
+ 
+@@ -57,10 +59,10 @@
+     // Add variables to the template.
+     $variables->view_url = Url::fromRoute('entity.media.canonical', $route_parameters);
+     if ($edit_url->access()) {
+-      $variables->edit_link = Link::fromTextAndUrl(NULL, $edit_url);
++      $variables->edit_link = Link::fromTextAndUrl('', $edit_url);
+     }
+     if ($delete_url->access()) {
+-      $variables->delete_link = Link::fromTextAndUrl(NULL, $delete_url);
++      $variables->delete_link = Link::fromTextAndUrl('', $delete_url);
+     }
+   }
+ 
