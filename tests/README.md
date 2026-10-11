@@ -1,12 +1,17 @@
 # Automated tests
 
-The project has three tests:
+The project has five tests:
 
 - `MediaEntityNormalizerTest` (unit): media-only serialization support and return
   contract under Drupal 11.
 - `LoadTest` (functional): fresh profile installation, image creation, multiple
   library cards with edit/delete links, and byte-for-byte private downloads.
 - `BulkImageUploadTest` (JavaScript/browser): the real multi-image upload flow.
+- `AssetRejectionTest` (kernel): rejecting assets, the uploader's email,
+  clearing a rejection on approval or resubmission, and reviewer-only access.
+- `AssetRejectionWorkflowTest` (JavaScript/browser): declining with a reason in
+  the approval widget, the uploader's view of it, and resubmitting. It needs a
+  `damo_theme` build that includes the rejection dialog.
 
 ## Run the upload test locally
 

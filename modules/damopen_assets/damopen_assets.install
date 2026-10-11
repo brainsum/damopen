@@ -17,3 +17,15 @@ function damopen_assets_update_8001() {
     $moduleInstaller->install(['select2']);
   }
 }
+
+/**
+ * Add the fields that record why a reviewer rejected an asset.
+ */
+function damopen_assets_update_11001() {
+  $updateManager = \Drupal::entityDefinitionUpdateManager();
+  foreach (_damopen_assets_rejection_field_definitions() as $name => $definition) {
+    if (!$updateManager->getFieldStorageDefinition($name, 'media')) {
+      $updateManager->installFieldStorageDefinition($name, 'media', 'damopen_assets', $definition);
+    }
+  }
+}

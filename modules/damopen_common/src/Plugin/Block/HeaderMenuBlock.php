@@ -41,10 +41,14 @@ class HeaderMenuBlock extends BlockBase {
     }
 
     if ($current_user->hasPermission('manage uploaded assets')) {
-      // Count all unpublished media.
+      // Count all unpublished media that still need a review.
       $query = \Drupal::entityQuery('media')
         ->condition('status', 0)
         ->accessCheck(FALSE);
+      $fields = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('media');
+      if (isset($fields['rejected'])) {
+        $query->condition('rejected', 0);
+      }
       $count = $query->count()->execute();
       $menu['manage_assets'] = [
         'title' => new TranslatableMarkup('Assets waiting for approval'),

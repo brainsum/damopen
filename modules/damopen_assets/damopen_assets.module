@@ -8,6 +8,9 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -15,6 +18,56 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\media\MediaForm;
 use Drupal\media\MediaInterface;
 use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function damopen_assets_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() !== 'media') {
+    return [];
+  }
+
+  return _damopen_assets_rejection_field_definitions();
+}
+
+/**
+ * Returns the base fields that record a reviewer's rejection of an asset.
+ *
+ * @return \Drupal\Core\Field\BaseFieldDefinition[]
+ *   The field definitions, keyed by field name.
+ */
+function _damopen_assets_rejection_field_definitions(): array {
+  $fields['rejected'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Rejected'))
+    ->setDescription(t('Whether a reviewer rejected the asset.'))
+    ->setRevisionable(TRUE)
+    ->setDefaultValue(FALSE)
+    ->setInitialValue(FALSE);
+
+  $fields['rejection_reason'] = BaseFieldDefinition::create('string_long')
+    ->setLabel(t('Rejection reason'))
+    ->setDescription(t('Why a reviewer rejected the asset, shown to the uploader.'))
+    ->setRevisionable(TRUE);
+
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function damopen_assets_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
+  if (
+    $operation !== 'edit'
+    || $field_definition->getTargetEntityTypeId() !== 'media'
+    || !in_array($field_definition->getName(), ['rejected', 'rejection_reason'], TRUE)
+  ) {
+    return AccessResult::neutral();
+  }
+
+  // Only reviewers, who may also publish the asset, may reject it.
+  return AccessResult::forbiddenIf(!$account->hasPermission('publish any media'))
+    ->cachePerPermissions();
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -102,6 +155,21 @@ function damopen_assets_media_presave(MediaInterface $media) {
     $media->set('status', FALSE);
   }
 
+  if ($media->hasField('rejected')) {
+    $original = $media->getOriginal();
+    // A new rejection unpublishes the asset; publishing settles a rejection.
+    if ($media->get('rejected')->value && !$original?->get('rejected')->value) {
+      $media->setUnpublished();
+    }
+    elseif ($media->isPublished()) {
+      $media->set('rejected', FALSE);
+    }
+
+    if (!$media->get('rejected')->value) {
+      $media->set('rejection_reason', NULL);
+    }
+  }
+
   // If the user doesn't add an alt text for the image,
   // autofill from asset name.
   if ($media->bundle() === 'image') {
@@ -124,6 +192,62 @@ function damopen_assets_media_presave(MediaInterface $media) {
       $media->set('field_video', $new_url->toString());
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function damopen_assets_media_update(MediaInterface $media) {
+  if (
+    !$media->hasField('rejected')
+    || !$media->get('rejected')->value
+    || $media->getOriginal()?->get('rejected')->value
+  ) {
+    return;
+  }
+
+  // Tell the uploader that the asset was rejected, and why.
+  $owner = $media->getOwner();
+  if ($owner === NULL || $owner->isAnonymous() || !$owner->getEmail()) {
+    return;
+  }
+
+  \Drupal::service('plugin.manager.mail')->mail(
+    'damopen_assets',
+    'asset_rejected',
+    $owner->getEmail(),
+    $owner->getPreferredLangcode(),
+    ['media' => $media, 'account' => $owner],
+  );
+}
+
+/**
+ * Implements hook_mail().
+ */
+function damopen_assets_mail($key, array &$message, array $params) {
+  if ($key !== 'asset_rejected') {
+    return;
+  }
+
+  /** @var \Drupal\media\MediaInterface $media */
+  $media = $params['media'];
+  $options = ['langcode' => $message['langcode']];
+  $variables = [
+    '@name' => $params['account']->getDisplayName(),
+    '@asset' => $media->label(),
+    '@site' => \Drupal::config('system.site')->get('name'),
+    '@url' => $media->toUrl('edit-form', ['absolute' => TRUE])->toString(),
+  ];
+  $reason = trim((string) $media->get('rejection_reason')->value);
+
+  $message['subject'] = t('Your asset "@asset" was not approved', $variables, $options);
+  $message['body'][] = t('@name,', $variables, $options);
+  $message['body'][] = t('A reviewer at @site did not approve your asset "@asset".', $variables, $options);
+  $message['body'][] = $reason !== ''
+    ? t("Reason:\n@reason", ['@reason' => $reason], $options)
+    : t('The reviewer did not give a reason.', [], $options);
+  $message['body'][] = t('You can update the asset and send it for approval again: @url', $variables, $options);
+  $message['body'][] = t('-- @site team', $variables, $options);
 }
 
 /**
@@ -377,6 +501,50 @@ function damopen_assets_form_alter(array &$form, FormStateInterface $form_state,
   ) {
     $form['revision_information']['#open'] = FALSE;
   }
+
+  if (
+    $form_object instanceof MediaForm
+    && $form_object->getOperation() === 'edit'
+    && $form_object->getEntity()->get('rejected')->value
+  ) {
+    $reason = trim((string) $form_object->getEntity()->get('rejection_reason')->value);
+    $form['rejection'] = [
+      '#theme' => 'status_messages',
+      '#message_list' => [
+        'warning' => [
+          $reason !== ''
+            ? t('A reviewer rejected this asset: @reason', ['@reason' => $reason])
+            : t('A reviewer rejected this asset without giving a reason.'),
+          t('Saving sends the asset for approval again.'),
+        ],
+      ],
+      '#status_headings' => ['warning' => t('Warning message')],
+      '#weight' => -100,
+    ];
+    $form['#entity_builders'][] = 'damopen_assets_media_resubmit_entity_builder';
+    $form['actions']['submit']['#value'] = t('Save and resubmit');
+  }
+}
+
+/**
+ * Entity builder that sends a rejected asset back for approval.
+ *
+ * @see damopen_assets_form_alter()
+ */
+function damopen_assets_media_resubmit_entity_builder($entity_type_id, MediaInterface $media, array &$form, FormStateInterface $form_state) {
+  $media->set('rejected', FALSE);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function damopen_assets_preprocess_views_view__unpublished_assets(array &$variables) {
+  // Only the approval queue offers review actions; uploaders see their own
+  // assets and the reasons for any rejections.
+  $variables['#attached']['drupalSettings']['damopenWfa']['canReview'] =
+    $variables['view']->current_display === 'unpublished_assets'
+    && \Drupal::currentUser()->hasPermission('publish any media');
+  $variables['#cache']['contexts'][] = 'user.permissions';
 }
 
 /**
