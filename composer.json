@@ -41,6 +41,8 @@
         "drupal/field_group": "^4.0",
         "drupal/filehash": "^3.0",
         "drupal/focal_point": "^2.0",
+        "drupal/gin": "^5.0",
+        "drupal/gin_login": "^2.1",
         "drupal/image_effects": "^4.0",
         "drupal/image_style_warmer": "^1.2",
         "drupal/inline_entity_form": "^3.0@RC",

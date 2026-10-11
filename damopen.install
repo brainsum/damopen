@@ -71,3 +71,58 @@ function damopen_update_8005() {
     'r4032login',
   ]);
 }
+
+/**
+ * Implements hook_install().
+ */
+function damopen_install() {
+  _damopen_configure_gin();
+}
+
+/**
+ * Brands Gin, the admin theme, and its login page for DAMopen.
+ */
+function _damopen_configure_gin(): void {
+  $profile = \Drupal::service('extension.list.profile')->getPath('damopen');
+  $damo_theme = \Drupal::service('extension.list.theme')->getPath('damo_theme');
+  $config = \Drupal::configFactory();
+  // A darker DAMopen teal keeps white button text readable.
+  $config->getEditable('gin.settings')
+    ->set('preset_accent_color', 'custom')
+    ->set('accent_color', '#1f808b')
+    ->set('classic_toolbar', 'horizontal')
+    // Asset library pages keep their own header.
+    ->set('secondary_toolbar_frontend', FALSE)
+    ->save();
+  $config->getEditable('gin_login.settings')
+    ->set('logo', ['use_default' => FALSE, 'path' => "$profile/images/logo-dark.png"])
+    ->set('brand_image', ['use_default' => FALSE, 'path' => "$damo_theme/images/dam--header-image.jpg"])
+    ->save();
+}
+
+/**
+ * Use Gin for the admin pages, media forms and login page.
+ */
+function damopen_update_11001() {
+  \Drupal::service('theme_installer')->install(['gin']);
+  \Drupal::service('module_installer')->install(['gin_toolbar', 'gin_login']);
+  \Drupal::configFactory()->getEditable('system.theme')->set('admin', 'gin')->save();
+  // Admin paths used Claro; the approval pages keep damo_theme.
+  $config = \Drupal::configFactory()->getEditable('switch_page_theme.settings');
+  $rules = $config->get('spt_table') ?? [];
+  foreach ($rules as &$rule) {
+    if (($rule['theme'] ?? '') === 'claro') {
+      $rule['theme'] = 'gin';
+    }
+  }
+  $config->set('spt_table', $rules)->save();
+  _damopen_configure_gin();
+  // Show the few categories as checkboxes instead of a multi-select list.
+  $storage = \Drupal::entityTypeManager()->getStorage('entity_form_display');
+  foreach ($storage->loadByProperties(['targetEntityType' => 'media']) as $display) {
+    $component = $display->getComponent('field_category');
+    if (($component['type'] ?? '') === 'options_select') {
+      $display->setComponent('field_category', ['type' => 'options_buttons'] + $component)->save();
+    }
+  }
+}
