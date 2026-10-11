@@ -3,7 +3,7 @@ spt_table:
     status: '1'
     pages: '/admin/*'
     theme_key: ''
-    theme: claro
+    theme: gin
     weight: '-10'
     roles:
       anonymous: '0'

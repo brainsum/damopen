@@ -21,6 +21,8 @@ install:
   - drupal:toolbar
   - drupal:update
   # Contrib.
+  - gin_login:gin_login
+  - gin_toolbar:gin_toolbar
   - search_api:search_api
   - search_api:search_api_db
   # Optional as it's pending removal.
@@ -101,3 +103,4 @@ dependencies:
 themes:
   - damo_theme
   - claro
+  - gin

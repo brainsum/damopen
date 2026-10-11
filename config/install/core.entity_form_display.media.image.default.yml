@@ -23,7 +23,7 @@ bundle: image
 mode: default
 content:
   field_category:
-    type: options_select
+    type: options_buttons
     weight: 3
     region: content
     settings: {  }
