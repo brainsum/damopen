@@ -18,6 +18,13 @@ Tests cover media serialization, asset rendering and downloads, and multi-image
 uploads in a real browser. See the [test guide](tests/README.md) for setup and
 commands.
 
+## Themes
+
+The asset library, upload and approval pages use **Damo theme**. Media add,
+edit and delete forms, the administration pages and the login page use
+**Gin** with Gin Login, branded with the DAMopen logo and teal accent.
+Existing sites switch with update `damopen_update_11001`.
+
 ## User roles
 
 * **Media API** user is for the API users, e.g. for an interconnected Drupal system where the https://www.drupal.org/project/filefield_sources_jsonapi module is installed.
