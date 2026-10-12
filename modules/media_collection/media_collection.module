@@ -10,6 +10,7 @@ use Drupal\Core\Entity\ContentEntityDeleteForm;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -298,6 +299,12 @@ function media_collection_preprocess_media_collection(array &$variables) {
     ]),
   ];
   $variables['content']['#cache'] = ['max-age' => 0];
+  // Printing the entity build from its own template trips core's recursive
+  // rendering protection and outputs nothing, so expose only its fields.
+  $variables['fields'] = ['#cache' => $variables['content']['#cache']];
+  foreach (Element::children($variables['content']) as $key) {
+    $variables['fields'][$key] = $variables['content'][$key];
+  }
   $variables['additional_collection_data']['render']['links'] = [
     '#type' => 'container',
     '#attributes' => [

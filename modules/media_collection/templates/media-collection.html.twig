@@ -7,7 +7,8 @@
  *
  *
  * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
+ * - content: The media collection render array.
+ * - fields: The rendered fields of the collection.
  * - attributes: HTML attributes for the container element.
  *
  * @see template_preprocess_media_collection()
@@ -26,6 +27,6 @@
     {{ additional_collection_data.render.links }}
   </div>
   <div class="media_collection--content">
-    {{ content }}
+    {{ fields }}
   </div>
 </div>

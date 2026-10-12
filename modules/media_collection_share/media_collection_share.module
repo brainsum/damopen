@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -135,6 +136,13 @@ function media_collection_share_preprocess_media_collection(array &$variables) {
 function media_collection_share_preprocess_shared_media_collection(array &$variables) {
   /** @var \Drupal\media_collection_share\Entity\SharedMediaCollectionInterface $sharedCollection */
   $sharedCollection = $variables['content']['#shared_media_collection'];
+
+  // Printing the entity build from its own template trips core's recursive
+  // rendering protection and outputs nothing, so expose only its fields.
+  $variables['fields'] = [];
+  foreach (Element::children($variables['content']) as $key) {
+    $variables['fields'][$key] = $variables['content'][$key];
+  }
 
   $collectionUser = $sharedCollection->getOwner();
   $assetsDir = \Drupal::service('extension.list.module')
