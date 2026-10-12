@@ -254,8 +254,12 @@ display:
           fields:
             - file_filename
             - files_filename
+            - image_alt
             - image_filename
             - images_filename
+            - iptc_by_line
+            - iptc_caption
+            - iptc_object_name
             - media_bundle
             - media_category_name
             - media_keywords_name
