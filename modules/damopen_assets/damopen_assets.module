@@ -170,17 +170,6 @@ function damopen_assets_media_presave(MediaInterface $media) {
     }
   }
 
-  // If the user doesn't add an alt text for the image,
-  // autofill from asset name.
-  if ($media->bundle() === 'image') {
-    /** @var \Drupal\image\Plugin\Field\FieldType\ImageItem $item */
-    foreach ($media->get('field_image') as $index => $item) {
-      if (empty(trim($item->get('alt')->getString()))) {
-        $item->set('alt', $media->getName());
-      }
-    }
-  }
-
   // For youtube videos, we only need the video ID.
   if ($media->bundle() === 'video') {
     $video_url = UrlHelper::parse($media->get('field_video')->getString());
