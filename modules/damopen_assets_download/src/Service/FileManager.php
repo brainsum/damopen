@@ -4,6 +4,7 @@ namespace Drupal\damopen_assets_download\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StreamWrapper\LocalStream;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
@@ -87,7 +88,10 @@ final class FileManager {
    *   The stream path, or the original path if no stream could be found for it.
    */
   private function absolutePathToStream(string $pathName): string {
-    foreach (array_keys($this->streamWrapperManager->getWrappers()) as $type) {
+    // Only writable local streams can hold archives. Read-only extension
+    // streams (module://, theme://) cannot be instantiated without a path.
+    $filter = StreamWrapperInterface::LOCAL | StreamWrapperInterface::WRITE;
+    foreach (array_keys($this->streamWrapperManager->getWrappers($filter)) as $type) {
       $stream = $this->streamWrapperManager->getViaScheme($type);
 
       if (!$stream instanceof LocalStream) {
