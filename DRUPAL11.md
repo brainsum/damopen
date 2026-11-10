@@ -69,6 +69,17 @@ The theme patch removes dynamic properties on Drupal's `Attribute` object;
 the theme-switching patch injects typed configuration and replaces the removed
 `user_role_names()` function.
 
+Drupal 11.4 ships jQuery 4, and Damo theme's bundled Bootstrap 4.0.0-alpha.5
+JavaScript refuses to start with it, so Bootstrap's tooltip, popover, dropdown
+and collapse plugins are unavailable on Damo theme pages. The theme patch makes
+`js/tooltip.js` skip tooltips when the plugin is missing, instead of throwing on
+pages with tooltip markup (such as media edit forms for users without the admin
+theme). Restoring those plugins needs a jQuery 4-compatible Bootstrap build.
+
+The Gin patch guards `toolbar.js` against a missing toolbar menu trigger. Gin
+renders its toolbar bar on Damo theme pages without that trigger, and Gin
+5.0.15 and 5.0.16 then throw on every such page.
+
 ## Development checkout
 
 The local project uses a Composer path repository pointing at `packages/damopen`,
@@ -76,7 +87,11 @@ with `symlink: true`, `reference: config`, and version `4.0.x-dev`. Make profile
 changes in that Git checkout on branch `4.0.x`. Run
 `composer update brainsum/damopen` after changing its Composer metadata.
 After changing a patch's contents, reinstall its target package with
-`composer reinstall <package>` so the new patch is applied.
+`composer reinstall <package>` so the new patch is applied. If that reports
+"Package is not installed" (seen with patched themes), it has already removed
+the package: run `composer install` immediately to restore it with patches.
+Reinstalling `brainsum/damo_theme` locally discards files copied into the
+installed theme, such as the rebuilt upload widget.
 
 ## Tests
 

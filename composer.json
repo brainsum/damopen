@@ -97,6 +97,9 @@
             },
             "drupal/switch_page_theme": {
                 "Drupal 11 compatibility": "web/profiles/contrib/damopen/patches/switch_page_theme-drupal11.patch"
+            },
+            "drupal/gin": {
+                "Toolbar without a menu trigger": "web/profiles/contrib/damopen/patches/gin-toolbar-missing-trigger.patch"
             }
         },
         "drupal-scaffold": {

@@ -1,0 +1,68 @@
+--- a/js/toolbar.js
++++ b/js/toolbar.js
+@@ -24,11 +24,11 @@
+         // Set sidebarState.
+         if (localStorage.getItem('Drupal.gin.toolbarExpanded') === 'true') {
+           document.body.setAttribute('data-toolbar-menu', 'open');
+-          toolbarTrigger.classList.add('is-active');
++          toolbarTrigger?.classList.add('is-active');
+         }
+         else {
+           document.body.setAttribute('data-toolbar-menu', '');
+-          toolbarTrigger.classList.remove('is-active');
++          toolbarTrigger?.classList.remove('is-active');
+         }
+ 
+         // this.initKeyboardShortcut();
+@@ -70,9 +70,9 @@
+       const toolbarTrigger = document.querySelector('.toolbar-menu__trigger');
+ 
+       // Toggle active class.
+-      toolbarTrigger.classList.toggle('is-active');
++      toolbarTrigger?.classList.toggle('is-active');
+ 
+-      if (toolbarTrigger.classList.contains('is-active')) {
++      if (toolbarTrigger?.classList.contains('is-active')) {
+         this.showToolbar();
+       }
+       else {
+@@ -102,7 +102,7 @@
+       const elementToRemove = document.querySelector('.gin-toolbar-inline-styles');
+       const active = 'false';
+ 
+-      toolbarTrigger.classList.remove('is-active');
++      toolbarTrigger?.classList.remove('is-active');
+       document.body.setAttribute('data-toolbar-menu', '');
+ 
+       if (elementToRemove) {
+--- a/dist/js/toolbar.js
++++ b/dist/js/toolbar.js
+@@ -10,8 +10,8 @@
+         const toolbarTrigger = document.querySelector(".toolbar-menu__trigger");
+         "classic" != toolbarVariant && localStorage.getItem("Drupal.toolbar.trayVerticalLocked") && localStorage.removeItem("Drupal.toolbar.trayVerticalLocked"), 
+         "true" === localStorage.getItem("Drupal.gin.toolbarExpanded") ? (document.body.setAttribute("data-toolbar-menu", "open"), 
+-        toolbarTrigger.classList.add("is-active")) : (document.body.setAttribute("data-toolbar-menu", ""), 
+-        toolbarTrigger.classList.remove("is-active")), this.initDisplace();
++        toolbarTrigger?.classList.add("is-active")) : (document.body.setAttribute("data-toolbar-menu", ""), 
++        toolbarTrigger?.classList.remove("is-active")), this.initDisplace();
+       })), once("ginToolbarToggle", ".toolbar-menu__trigger", context).forEach((el => el.addEventListener("click", (e => {
+         e.preventDefault(), this.toggleToolbar();
+       }))));
+@@ -29,7 +29,7 @@
+     },
+     toggleToolbar: function() {
+       const toolbarTrigger = document.querySelector(".toolbar-menu__trigger");
+-      toolbarTrigger.classList.toggle("is-active"), toolbarTrigger.classList.contains("is-active") ? this.showToolbar() : this.collapseToolbar();
++      toolbarTrigger?.classList.toggle("is-active"), toolbarTrigger?.classList.contains("is-active") ? this.showToolbar() : this.collapseToolbar();
+     },
+     showToolbar: function() {
+       document.body.setAttribute("data-toolbar-menu", "open"), localStorage.setItem("Drupal.gin.toolbarExpanded", "true"), 
+@@ -37,7 +37,7 @@
+     },
+     collapseToolbar: function() {
+       const toolbarTrigger = document.querySelector(".toolbar-menu__trigger"), elementToRemove = document.querySelector(".gin-toolbar-inline-styles");
+-      toolbarTrigger.classList.remove("is-active"), document.body.setAttribute("data-toolbar-menu", ""), 
++      toolbarTrigger?.classList.remove("is-active"), document.body.setAttribute("data-toolbar-menu", ""), 
+       elementToRemove && elementToRemove.parentNode.removeChild(elementToRemove), localStorage.setItem("Drupal.gin.toolbarExpanded", "false"), 
+       this.dispatchToolbarEvent("false"), this.displaceToolbar();
+     },
