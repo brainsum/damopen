@@ -1,0 +1,9 @@
+damopen_category_upload.library:
+  title: Library
+  route_name: damopen_category_upload.library
+  menu_name: main
+  weight: -5
+damopen_category_upload.links:
+  title: Category upload links
+  route_name: damopen_category_upload.links
+  parent: system.admin_content

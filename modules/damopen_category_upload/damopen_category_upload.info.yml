@@ -1,0 +1,10 @@
+name: DAMopen category uploads
+type: module
+description: Hierarchical library browsing and category-scoped uploads.
+core_version_requirement: ^11.2
+package: Digital Assets Management
+dependencies:
+  - damopen:damopen_assets
+  - damopen:damopen_upload
+  - drupal:taxonomy
+  - drupal:user

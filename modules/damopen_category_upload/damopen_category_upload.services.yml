@@ -1,0 +1,8 @@
+services:
+  damopen_category_upload.policy:
+    class: Drupal\damopen_category_upload\CategoryUploadPolicy
+    arguments: ['@entity_type.manager', '@current_user', '@request_stack']
+  damopen_category_upload.route_subscriber:
+    class: Drupal\damopen_category_upload\Routing\LibraryStructureRouteSubscriber
+    tags:
+      - { name: event_subscriber }

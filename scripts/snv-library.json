@@ -1,0 +1,1454 @@
+{
+  "source": "SNV Canto main Library, verified 2026-11-09; migration discovery document Appendix A",
+  "nodes": [
+    {
+      "id": "NQAK0",
+      "name": "Countries",
+      "type": "folder",
+      "parent": null,
+      "weight": 0
+    },
+    {
+      "id": "OGUN9",
+      "name": "Africa",
+      "type": "folder",
+      "parent": "NQAK0",
+      "weight": 0
+    },
+    {
+      "id": "U3K99",
+      "name": "Benin",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 0
+    },
+    {
+      "id": "PL4CV",
+      "name": "Burkina Faso",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 1
+    },
+    {
+      "id": "LES7S",
+      "name": "Burundi",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 2
+    },
+    {
+      "id": "IT99C",
+      "name": "Ethiopia",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 3
+    },
+    {
+      "id": "QTC3Q",
+      "name": "Ghana",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 4
+    },
+    {
+      "id": "H0G32",
+      "name": "Kenya",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 5
+    },
+    {
+      "id": "L6O8H",
+      "name": "Mali",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 6
+    },
+    {
+      "id": "SI06N",
+      "name": "Mozambique",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 7
+    },
+    {
+      "id": "VBS04",
+      "name": "Niger",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 8
+    },
+    {
+      "id": "GO8C7",
+      "name": "Nigeria",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 9
+    },
+    {
+      "id": "ML7UB",
+      "name": "Rwanda",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 10
+    },
+    {
+      "id": "N2IAV",
+      "name": "Tanzania",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 11
+    },
+    {
+      "id": "JK2EH",
+      "name": "Uganda",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 12
+    },
+    {
+      "id": "UEPCH",
+      "name": "Zambia",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 13
+    },
+    {
+      "id": "R3NQL",
+      "name": "Zimbabwe",
+      "type": "album",
+      "parent": "OGUN9",
+      "weight": 14
+    },
+    {
+      "id": "IDQNI",
+      "name": "Asia",
+      "type": "folder",
+      "parent": "NQAK0",
+      "weight": 1
+    },
+    {
+      "id": "I9OMP",
+      "name": "Bangladesh",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 0
+    },
+    {
+      "id": "TRCIE",
+      "name": "Bhutan",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 1
+    },
+    {
+      "id": "NBLDA",
+      "name": "Cambodia",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 2
+    },
+    {
+      "id": "PCSM0",
+      "name": "Indonesia",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 3
+    },
+    {
+      "id": "KUGHM",
+      "name": "Lao PDR",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 4
+    },
+    {
+      "id": "JG0DO",
+      "name": "Nepal",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 5
+    },
+    {
+      "id": "TVEJ7",
+      "name": "Vietnam",
+      "type": "album",
+      "parent": "IDQNI",
+      "weight": 6
+    },
+    {
+      "id": "NQKGN",
+      "name": "West Africa",
+      "type": "folder",
+      "parent": "NQAK0",
+      "weight": 2
+    },
+    {
+      "id": "IC4KP",
+      "name": "West Africa",
+      "type": "folder",
+      "parent": "NQKGN",
+      "weight": 0
+    },
+    {
+      "id": "KB0ET",
+      "name": "Benin",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 0
+    },
+    {
+      "id": "K2ONI",
+      "name": "Burkina Faso",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 1
+    },
+    {
+      "id": "OH8KC",
+      "name": "Ghana",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 2
+    },
+    {
+      "id": "TVOGA",
+      "name": "Mali",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 3
+    },
+    {
+      "id": "GSKA3",
+      "name": "Niger",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 4
+    },
+    {
+      "id": "I1E9Q",
+      "name": "Nigeria",
+      "type": "album",
+      "parent": "IC4KP",
+      "weight": 5
+    },
+    {
+      "id": "HLSTH",
+      "name": "Documents",
+      "type": "folder",
+      "parent": null,
+      "weight": 1
+    },
+    {
+      "id": "G1U56",
+      "name": "ENUFF end of project material",
+      "type": "folder",
+      "parent": "HLSTH",
+      "weight": 0
+    },
+    {
+      "id": "VJHOR",
+      "name": "Agriculture",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 0
+    },
+    {
+      "id": "T3TMH",
+      "name": "Learning briefs",
+      "type": "album",
+      "parent": "VJHOR",
+      "weight": 0
+    },
+    {
+      "id": "Q51ST",
+      "name": "Egg song",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 1
+    },
+    {
+      "id": "OLHI7",
+      "name": "Mp3 songs",
+      "type": "album",
+      "parent": "Q51ST",
+      "weight": 0
+    },
+    {
+      "id": "MMLO3",
+      "name": "Governance",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 2
+    },
+    {
+      "id": "N71E9",
+      "name": "Learning briefs & infographics",
+      "type": "album",
+      "parent": "MMLO3",
+      "weight": 0
+    },
+    {
+      "id": "H85S5",
+      "name": "Stories",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 3
+    },
+    {
+      "id": "IOL9V",
+      "name": "Stories",
+      "type": "album",
+      "parent": "H85S5",
+      "weight": 0
+    },
+    {
+      "id": "RD9JO",
+      "name": "WASH",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 4
+    },
+    {
+      "id": "KF9D4",
+      "name": "CLTS game cards",
+      "type": "folder",
+      "parent": "RD9JO",
+      "weight": 0
+    },
+    {
+      "id": "J0T0Q",
+      "name": "Connecting with dog",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 0
+    },
+    {
+      "id": "UID4F",
+      "name": "Connecting with fly",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 1
+    },
+    {
+      "id": "Q4101",
+      "name": "Connecting with pig",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 2
+    },
+    {
+      "id": "LNH3J",
+      "name": "Connecting with soil",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 3
+    },
+    {
+      "id": "G917L",
+      "name": "Connecting with water",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 4
+    },
+    {
+      "id": "QC4VC",
+      "name": "How to cut the way",
+      "type": "album",
+      "parent": "KF9D4",
+      "weight": 5
+    },
+    {
+      "id": "LVOQU",
+      "name": "Manual",
+      "type": "folder",
+      "parent": "RD9JO",
+      "weight": 1
+    },
+    {
+      "id": "HH8UG",
+      "name": "Manual",
+      "type": "album",
+      "parent": "LVOQU",
+      "weight": 0
+    },
+    {
+      "id": "S2SQ5",
+      "name": "Poster",
+      "type": "folder",
+      "parent": "RD9JO",
+      "weight": 2
+    },
+    {
+      "id": "RKCLR",
+      "name": "Poster",
+      "type": "album",
+      "parent": "S2SQ5",
+      "weight": 0
+    },
+    {
+      "id": "TJ8FV",
+      "name": "Video",
+      "type": "folder",
+      "parent": "RD9JO",
+      "weight": 3
+    },
+    {
+      "id": "P4SBH",
+      "name": "Video",
+      "type": "album",
+      "parent": "TJ8FV",
+      "weight": 0
+    },
+    {
+      "id": "L4VTD",
+      "name": "EoP capitalisations - reports & videos",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 5
+    },
+    {
+      "id": "HMJOJ",
+      "name": "EoP capitalisations - reports",
+      "type": "album",
+      "parent": "L4VTD",
+      "weight": 0
+    },
+    {
+      "id": "S83SK",
+      "name": "EoP capitalisations - videos",
+      "type": "album",
+      "parent": "L4VTD",
+      "weight": 1
+    },
+    {
+      "id": "SRLVM",
+      "name": "Nutrition",
+      "type": "folder",
+      "parent": "G1U56",
+      "weight": 6
+    },
+    {
+      "id": "UA5DG",
+      "name": "Learning briefs",
+      "type": "album",
+      "parent": "SRLVM",
+      "weight": 0
+    },
+    {
+      "id": "PTP92",
+      "name": "Research and case studies",
+      "type": "album",
+      "parent": "SRLVM",
+      "weight": 1
+    },
+    {
+      "id": "G5KS7",
+      "name": "Procurement and contracting procedures",
+      "type": "album",
+      "parent": "HLSTH",
+      "weight": 1
+    },
+    {
+      "id": "TNAQ7",
+      "name": "SNV's code of conduct and policies",
+      "type": "folder",
+      "parent": "HLSTH",
+      "weight": 2
+    },
+    {
+      "id": "TI0M1",
+      "name": "English",
+      "type": "album",
+      "parent": "TNAQ7",
+      "weight": 0
+    },
+    {
+      "id": "O5KHJ",
+      "name": "French",
+      "type": "album",
+      "parent": "TNAQ7",
+      "weight": 1
+    },
+    {
+      "id": "K5V0T",
+      "name": "Youth",
+      "type": "folder",
+      "parent": "HLSTH",
+      "weight": 3
+    },
+    {
+      "id": "GNF43",
+      "name": "SACH 2025 - Key YEE documents",
+      "type": "album",
+      "parent": "K5V0T",
+      "weight": 0
+    },
+    {
+      "id": "QJ405",
+      "name": "Branding",
+      "type": "folder",
+      "parent": null,
+      "weight": 2
+    },
+    {
+      "id": "KR0EK",
+      "name": "Branding photos - landscapes",
+      "type": "album",
+      "parent": "QJ405",
+      "weight": 0
+    },
+    {
+      "id": "LLCV9",
+      "name": "Branding photos - Animals, food, objects",
+      "type": "album",
+      "parent": "QJ405",
+      "weight": 1
+    },
+    {
+      "id": "Q3SR7",
+      "name": "Branding photos - people",
+      "type": "album",
+      "parent": "QJ405",
+      "weight": 2
+    },
+    {
+      "id": "I4CBF",
+      "name": "Graphics",
+      "type": "album",
+      "parent": "QJ405",
+      "weight": 3
+    },
+    {
+      "id": "L4K3R",
+      "name": "Logos for partners",
+      "type": "album",
+      "parent": "QJ405",
+      "weight": 4
+    },
+    {
+      "id": "NLIPK",
+      "name": "External supplier briefing",
+      "type": "folder",
+      "parent": "QJ405",
+      "weight": 5
+    },
+    {
+      "id": "H2EOE",
+      "name": "Brief for designers",
+      "type": "folder",
+      "parent": "NLIPK",
+      "weight": 0
+    },
+    {
+      "id": "SLURV",
+      "name": "Branding guidelines (+ logos)",
+      "type": "album",
+      "parent": "H2EOE",
+      "weight": 0
+    },
+    {
+      "id": "NP2J7",
+      "name": "Publication IND templates",
+      "type": "album",
+      "parent": "H2EOE",
+      "weight": 1
+    },
+    {
+      "id": "SS11I",
+      "name": "Motion designs",
+      "type": "album",
+      "parent": "H2EOE",
+      "weight": 2
+    },
+    {
+      "id": "MGQSO",
+      "name": "Brief for writers & editors",
+      "type": "folder",
+      "parent": "NLIPK",
+      "weight": 1
+    },
+    {
+      "id": "IAIN9",
+      "name": "Editorial & referencing instructions",
+      "type": "album",
+      "parent": "MGQSO",
+      "weight": 0
+    },
+    {
+      "id": "URUV3",
+      "name": "New logo",
+      "type": "folder",
+      "parent": "QJ405",
+      "weight": 6
+    },
+    {
+      "id": "NCBV9",
+      "name": "Digital logo files",
+      "type": "folder",
+      "parent": "URUV3",
+      "weight": 0
+    },
+    {
+      "id": "IVVQR",
+      "name": "SNV logo",
+      "type": "folder",
+      "parent": "NCBV9",
+      "weight": 0
+    },
+    {
+      "id": "THFUS",
+      "name": "JPG",
+      "type": "album",
+      "parent": "IVVQR",
+      "weight": 0
+    },
+    {
+      "id": "P33Q2",
+      "name": "PNG",
+      "type": "album",
+      "parent": "IVVQR",
+      "weight": 1
+    },
+    {
+      "id": "KKJU4",
+      "name": "SVG",
+      "type": "album",
+      "parent": "IVVQR",
+      "weight": 2
+    },
+    {
+      "id": "J67HQ",
+      "name": "SNV logo + tagline (landscape)",
+      "type": "folder",
+      "parent": "NCBV9",
+      "weight": 1
+    },
+    {
+      "id": "LSRKJ",
+      "name": "JPG",
+      "type": "album",
+      "parent": "J67HQ",
+      "weight": 0
+    },
+    {
+      "id": "UPNLB",
+      "name": "PNG",
+      "type": "album",
+      "parent": "J67HQ",
+      "weight": 1
+    },
+    {
+      "id": "PBBHD",
+      "name": "SVG",
+      "type": "album",
+      "parent": "J67HQ",
+      "weight": 2
+    },
+    {
+      "id": "GEFGL",
+      "name": "SNV logo + tagline (portrait)",
+      "type": "folder",
+      "parent": "NCBV9",
+      "weight": 2
+    },
+    {
+      "id": "QJJ88",
+      "name": "JPG",
+      "type": "album",
+      "parent": "GEFGL",
+      "weight": 0
+    },
+    {
+      "id": "L53BU",
+      "name": "PNG",
+      "type": "album",
+      "parent": "GEFGL",
+      "weight": 1
+    },
+    {
+      "id": "V1VC6",
+      "name": "SVG",
+      "type": "album",
+      "parent": "GEFGL",
+      "weight": 2
+    },
+    {
+      "id": "HMJFG",
+      "name": "Print logo files",
+      "type": "folder",
+      "parent": "URUV3",
+      "weight": 1
+    },
+    {
+      "id": "S87B5",
+      "name": "SNV logo",
+      "type": "folder",
+      "parent": "HMJFG",
+      "weight": 0
+    },
+    {
+      "id": "RRN6N",
+      "name": "EPS",
+      "type": "album",
+      "parent": "S87B5",
+      "weight": 0
+    },
+    {
+      "id": "MDB2P",
+      "name": "SNV logo + tagline (landscape)",
+      "type": "folder",
+      "parent": "HMJFG",
+      "weight": 1
+    },
+    {
+      "id": "HUR6F",
+      "name": "EPS",
+      "type": "album",
+      "parent": "MDB2P",
+      "weight": 0
+    },
+    {
+      "id": "TGF20",
+      "name": "SNV logo + tagline (portrait)",
+      "type": "folder",
+      "parent": "HMJFG",
+      "weight": 2
+    },
+    {
+      "id": "O3V5I",
+      "name": "EPS",
+      "type": "album",
+      "parent": "TGF20",
+      "weight": 0
+    },
+    {
+      "id": "R0FQC",
+      "name": "Consent forms",
+      "type": "folder",
+      "parent": "QJ405",
+      "weight": 7
+    },
+    {
+      "id": "MJVTU",
+      "name": "Consent forms",
+      "type": "album",
+      "parent": "R0FQC",
+      "weight": 0
+    },
+    {
+      "id": "KM9A5",
+      "name": "SNV Fonts",
+      "type": "folder",
+      "parent": "QJ405",
+      "weight": 8
+    },
+    {
+      "id": "J9P5N",
+      "name": "Figtree",
+      "type": "album",
+      "parent": "KM9A5",
+      "weight": 0
+    },
+    {
+      "id": "P6JK1",
+      "name": "Others",
+      "type": "folder",
+      "parent": null,
+      "weight": 3
+    },
+    {
+      "id": "K6C9H",
+      "name": "Annual Report 2025",
+      "type": "folder",
+      "parent": "P6JK1",
+      "weight": 0
+    },
+    {
+      "id": "KEK0S",
+      "name": "Bridge",
+      "type": "album",
+      "parent": "K6C9H",
+      "weight": 0
+    },
+    {
+      "id": "LKRVB",
+      "name": "Endev",
+      "type": "album",
+      "parent": "K6C9H",
+      "weight": 1
+    },
+    {
+      "id": "JPS53",
+      "name": "MOPSS",
+      "type": "album",
+      "parent": "K6C9H",
+      "weight": 2
+    },
+    {
+      "id": "UBG14",
+      "name": "PGLR",
+      "type": "album",
+      "parent": "K6C9H",
+      "weight": 3
+    },
+    {
+      "id": "PT04Q",
+      "name": "Proarides",
+      "type": "album",
+      "parent": "K6C9H",
+      "weight": 4
+    },
+    {
+      "id": "KO3NN",
+      "name": "Executive Team photos",
+      "type": "album",
+      "parent": "P6JK1",
+      "weight": 1
+    },
+    {
+      "id": "KMCF7",
+      "name": "Instructional videos",
+      "type": "album",
+      "parent": "P6JK1",
+      "weight": 2
+    },
+    {
+      "id": "OL76K",
+      "name": "IWA Tanzania Video",
+      "type": "album",
+      "parent": "P6JK1",
+      "weight": 3
+    },
+    {
+      "id": "JIN8M",
+      "name": "Power for Food Partnership Assets",
+      "type": "folder",
+      "parent": "P6JK1",
+      "weight": 4
+    },
+    {
+      "id": "LHJ2Q",
+      "name": "PFF logo",
+      "type": "folder",
+      "parent": "JIN8M",
+      "weight": 0
+    },
+    {
+      "id": "G336S",
+      "name": "1 - PFF icon",
+      "type": "folder",
+      "parent": "LHJ2Q",
+      "weight": 0
+    },
+    {
+      "id": "VLI5H",
+      "name": "2 - PFF logo landscape",
+      "type": "folder",
+      "parent": "LHJ2Q",
+      "weight": 1
+    },
+    {
+      "id": "P61CR",
+      "name": "3 - PFF logo landscape + tagline",
+      "type": "folder",
+      "parent": "LHJ2Q",
+      "weight": 2
+    },
+    {
+      "id": "NOGCD",
+      "name": "4 - PFF logo stacked",
+      "type": "folder",
+      "parent": "LHJ2Q",
+      "weight": 3
+    },
+    {
+      "id": "I93J3",
+      "name": "5 - PFF logo stacked + tagline",
+      "type": "folder",
+      "parent": "LHJ2Q",
+      "weight": 4
+    },
+    {
+      "id": "NQK7K",
+      "name": "SNV at 60 Event Photo Album",
+      "type": "folder",
+      "parent": "P6JK1",
+      "weight": 5
+    },
+    {
+      "id": "TVO6R",
+      "name": "Large photos",
+      "type": "album",
+      "parent": "NQK7K",
+      "weight": 0
+    },
+    {
+      "id": "IC83A",
+      "name": "Social media size",
+      "type": "album",
+      "parent": "NQK7K",
+      "weight": 1
+    },
+    {
+      "id": "SKN21",
+      "name": "Digital",
+      "type": "folder",
+      "parent": "G336S",
+      "weight": 0
+    },
+    {
+      "id": "R66TN",
+      "name": "AI",
+      "type": "folder",
+      "parent": "SKN21",
+      "weight": 0
+    },
+    {
+      "id": "MPQPL",
+      "name": "AI",
+      "type": "album",
+      "parent": "R66TN",
+      "weight": 0
+    },
+    {
+      "id": "HBATB",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "SKN21",
+      "weight": 1
+    },
+    {
+      "id": "SSUPC",
+      "name": "EPS",
+      "type": "album",
+      "parent": "HBATB",
+      "weight": 0
+    },
+    {
+      "id": "OEESI",
+      "name": "JPG",
+      "type": "folder",
+      "parent": "SKN21",
+      "weight": 2
+    },
+    {
+      "id": "N02GK",
+      "name": "JPG",
+      "type": "album",
+      "parent": "OEESI",
+      "weight": 0
+    },
+    {
+      "id": "IJIK6",
+      "name": "PNG",
+      "type": "folder",
+      "parent": "SKN21",
+      "weight": 3
+    },
+    {
+      "id": "T52NR",
+      "name": "PNG",
+      "type": "album",
+      "parent": "IJIK6",
+      "weight": 0
+    },
+    {
+      "id": "OMMJT",
+      "name": "SVG",
+      "type": "folder",
+      "parent": "SKN21",
+      "weight": 4
+    },
+    {
+      "id": "K86N3",
+      "name": "SVG",
+      "type": "album",
+      "parent": "OMMJT",
+      "weight": 0
+    },
+    {
+      "id": "JRQB1",
+      "name": "Print",
+      "type": "folder",
+      "parent": "G336S",
+      "weight": 1
+    },
+    {
+      "id": "UDAEM",
+      "name": "AI",
+      "type": "folder",
+      "parent": "JRQB1",
+      "weight": 0
+    },
+    {
+      "id": "PUUAO",
+      "name": "AI",
+      "type": "album",
+      "parent": "UDAEM",
+      "weight": 0
+    },
+    {
+      "id": "KGEEE",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "JRQB1",
+      "weight": 1
+    },
+    {
+      "id": "G22A0",
+      "name": "EPS",
+      "type": "album",
+      "parent": "KGEEE",
+      "weight": 0
+    },
+    {
+      "id": "Q7617",
+      "name": "Digital",
+      "type": "folder",
+      "parent": "VLI5H",
+      "weight": 0
+    },
+    {
+      "id": "LOM59",
+      "name": "AI",
+      "type": "folder",
+      "parent": "Q7617",
+      "weight": 0
+    },
+    {
+      "id": "GAA0V",
+      "name": "AI",
+      "type": "album",
+      "parent": "LOM59",
+      "weight": 0
+    },
+    {
+      "id": "VTPSS",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "Q7617",
+      "weight": 1
+    },
+    {
+      "id": "RFDO2",
+      "name": "EPS",
+      "type": "album",
+      "parent": "VTPSS",
+      "weight": 0
+    },
+    {
+      "id": "M0TS4",
+      "name": "JPG",
+      "type": "folder",
+      "parent": "Q7617",
+      "weight": 2
+    },
+    {
+      "id": "HIDVQ",
+      "name": "JPG",
+      "type": "album",
+      "parent": "M0TS4",
+      "weight": 0
+    },
+    {
+      "id": "S41RF",
+      "name": "PNG",
+      "type": "folder",
+      "parent": "Q7617",
+      "weight": 3
+    },
+    {
+      "id": "RNHND",
+      "name": "PNG",
+      "type": "album",
+      "parent": "S41RF",
+      "weight": 0
+    },
+    {
+      "id": "N95IJ",
+      "name": "SVG",
+      "type": "folder",
+      "parent": "Q7617",
+      "weight": 4
+    },
+    {
+      "id": "IQLML",
+      "name": "SVG",
+      "type": "album",
+      "parent": "N95IJ",
+      "weight": 0
+    },
+    {
+      "id": "TC9IA",
+      "name": "Print",
+      "type": "folder",
+      "parent": "VLI5H",
+      "weight": 1
+    },
+    {
+      "id": "OVPM8",
+      "name": "AI",
+      "type": "folder",
+      "parent": "TC9IA",
+      "weight": 0
+    },
+    {
+      "id": "NHD9U",
+      "name": "AI",
+      "type": "album",
+      "parent": "OVPM8",
+      "weight": 0
+    },
+    {
+      "id": "J2TDG",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "TC9IA",
+      "weight": 1
+    },
+    {
+      "id": "UKH95",
+      "name": "EPS",
+      "type": "album",
+      "parent": "J2TDG",
+      "weight": 0
+    },
+    {
+      "id": "KPL8P",
+      "name": "Digital",
+      "type": "folder",
+      "parent": "P61CR",
+      "weight": 0
+    },
+    {
+      "id": "JB54F",
+      "name": "AI",
+      "type": "folder",
+      "parent": "KPL8P",
+      "weight": 0
+    },
+    {
+      "id": "VSP00",
+      "name": "AI",
+      "type": "album",
+      "parent": "JB54F",
+      "weight": 0
+    },
+    {
+      "id": "QE93M",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "KPL8P",
+      "weight": 1
+    },
+    {
+      "id": "L1P7K",
+      "name": "EPS",
+      "type": "album",
+      "parent": "QE93M",
+      "weight": 0
+    },
+    {
+      "id": "GJD3A",
+      "name": "JPG",
+      "type": "folder",
+      "parent": "KPL8P",
+      "weight": 2
+    },
+    {
+      "id": "V4SUV",
+      "name": "JPG",
+      "type": "album",
+      "parent": "GJD3A",
+      "weight": 0
+    },
+    {
+      "id": "RMGQH",
+      "name": "PNG",
+      "type": "folder",
+      "parent": "KPL8P",
+      "weight": 3
+    },
+    {
+      "id": "M80U7",
+      "name": "PNG",
+      "type": "album",
+      "parent": "RMGQH",
+      "weight": 0
+    },
+    {
+      "id": "HRKQ5",
+      "name": "SVG",
+      "type": "folder",
+      "parent": "KPL8P",
+      "weight": 4
+    },
+    {
+      "id": "SD4TQ",
+      "name": "SVG",
+      "type": "album",
+      "parent": "HRKQ5",
+      "weight": 0
+    },
+    {
+      "id": "RUOHS",
+      "name": "Print",
+      "type": "folder",
+      "parent": "P61CR",
+      "weight": 1
+    },
+    {
+      "id": "NG8L2",
+      "name": "AI",
+      "type": "folder",
+      "parent": "RUOHS",
+      "weight": 0
+    },
+    {
+      "id": "I3SH0",
+      "name": "AI",
+      "type": "album",
+      "parent": "NG8L2",
+      "weight": 0
+    },
+    {
+      "id": "TLCKL",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "RUOHS",
+      "weight": 1
+    },
+    {
+      "id": "O70GB",
+      "name": "EPS",
+      "type": "album",
+      "parent": "TLCKL",
+      "weight": 0
+    },
+    {
+      "id": "JA0FJ",
+      "name": "Digital",
+      "type": "folder",
+      "parent": "NOGCD",
+      "weight": 0
+    },
+    {
+      "id": "UTKBG",
+      "name": "AI",
+      "type": "folder",
+      "parent": "JA0FJ",
+      "weight": 0
+    },
+    {
+      "id": "PF4F6",
+      "name": "AI",
+      "type": "album",
+      "parent": "UTKBG",
+      "weight": 0
+    },
+    {
+      "id": "K0OB8",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "JA0FJ",
+      "weight": 1
+    },
+    {
+      "id": "JI86U",
+      "name": "EPS",
+      "type": "album",
+      "parent": "K0OB8",
+      "weight": 0
+    },
+    {
+      "id": "U5S2F",
+      "name": "JPG",
+      "type": "folder",
+      "parent": "JA0FJ",
+      "weight": 2
+    },
+    {
+      "id": "QNC61",
+      "name": "JPG",
+      "type": "album",
+      "parent": "U5S2F",
+      "weight": 0
+    },
+    {
+      "id": "L901N",
+      "name": "PNG",
+      "type": "folder",
+      "parent": "JA0FJ",
+      "weight": 3
+    },
+    {
+      "id": "GQG5P",
+      "name": "PNG",
+      "type": "album",
+      "parent": "L901N",
+      "weight": 0
+    },
+    {
+      "id": "VA7PE",
+      "name": "SVG",
+      "type": "folder",
+      "parent": "JA0FJ",
+      "weight": 4
+    },
+    {
+      "id": "QTNTC",
+      "name": "SVG",
+      "type": "album",
+      "parent": "VA7PE",
+      "weight": 0
+    },
+    {
+      "id": "MFBOI",
+      "name": "Print",
+      "type": "folder",
+      "parent": "NOGCD",
+      "weight": 1
+    },
+    {
+      "id": "H0RSK",
+      "name": "AI",
+      "type": "folder",
+      "parent": "MFBOI",
+      "weight": 0
+    },
+    {
+      "id": "SIFO9",
+      "name": "AI",
+      "type": "album",
+      "parent": "H0RSK",
+      "weight": 0
+    },
+    {
+      "id": "R5VJR",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "MFBOI",
+      "weight": 1
+    },
+    {
+      "id": "MNFNT",
+      "name": "EPS",
+      "type": "album",
+      "parent": "R5VJR",
+      "weight": 0
+    },
+    {
+      "id": "TQJN4",
+      "name": "Digital",
+      "type": "folder",
+      "parent": "I93J3",
+      "weight": 0
+    },
+    {
+      "id": "OC7IQ",
+      "name": "AI",
+      "type": "folder",
+      "parent": "TQJN4",
+      "weight": 0
+    },
+    {
+      "id": "NVNEO",
+      "name": "AI",
+      "type": "album",
+      "parent": "OC7IQ",
+      "weight": 0
+    },
+    {
+      "id": "IHBAE",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "TQJN4",
+      "weight": 1
+    },
+    {
+      "id": "U2RDJ",
+      "name": "EPS",
+      "type": "album",
+      "parent": "IHBAE",
+      "weight": 0
+    },
+    {
+      "id": "PKF9L",
+      "name": "JPG",
+      "type": "folder",
+      "parent": "TQJN4",
+      "weight": 2
+    },
+    {
+      "id": "K7VD7",
+      "name": "JPG",
+      "type": "album",
+      "parent": "PKF9L",
+      "weight": 0
+    },
+    {
+      "id": "JPJ19",
+      "name": "PNG",
+      "type": "folder",
+      "parent": "TQJN4",
+      "weight": 3
+    },
+    {
+      "id": "UB34U",
+      "name": "PNG",
+      "type": "album",
+      "parent": "JPJ19",
+      "weight": 0
+    },
+    {
+      "id": "QSN0G",
+      "name": "SVG",
+      "type": "folder",
+      "parent": "TQJN4",
+      "weight": 4
+    },
+    {
+      "id": "LE746",
+      "name": "SVG",
+      "type": "album",
+      "parent": "QSN0G",
+      "weight": 0
+    },
+    {
+      "id": "G1R04",
+      "name": "Print",
+      "type": "folder",
+      "parent": "I93J3",
+      "weight": 1
+    },
+    {
+      "id": "VJARP",
+      "name": "AI",
+      "type": "folder",
+      "parent": "G1R04",
+      "weight": 0
+    },
+    {
+      "id": "Q4QVF",
+      "name": "AI",
+      "type": "album",
+      "parent": "VJARP",
+      "weight": 0
+    },
+    {
+      "id": "MMER1",
+      "name": "EPS",
+      "type": "folder",
+      "parent": "G1R04",
+      "weight": 1
+    },
+    {
+      "id": "H9UUJ",
+      "name": "EPS",
+      "type": "album",
+      "parent": "MMER1",
+      "weight": 0
+    }
+  ]
+}

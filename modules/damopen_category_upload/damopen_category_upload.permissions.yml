@@ -1,0 +1,6 @@
+administer upload categories:
+  title: Administer upload category assignments and library structure
+  restrict access: true
+bypass category upload restrictions:
+  title: Upload to any category
+  restrict access: true

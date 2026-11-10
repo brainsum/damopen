@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Installs fields for category-scoped uploads and source identity.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+
+/**
+ * Implements hook_install().
+ */
+function damopen_category_upload_install(): void {
+  $fields = [
+    [
+      'user', 'user', 'field_upload_category', 'entity_reference', 'Upload category',
+      ['target_type' => 'taxonomy_term'],
+      [
+        'handler' => 'default:taxonomy_term',
+        'handler_settings' => ['target_bundles' => ['category' => 'category']],
+      ],
+    ],
+    ['taxonomy_term', 'category', 'field_canto_id', 'string', 'Canto source ID', ['max_length' => 64], []],
+    ['taxonomy_term', 'category', 'field_canto_type', 'string', 'Canto source type', ['max_length' => 16], []],
+  ];
+  foreach ($fields as [$entity_type, $bundle, $name, $type, $label, $storage_settings, $settings]) {
+    if (!FieldStorageConfig::loadByName($entity_type, $name)) {
+      FieldStorageConfig::create([
+        'entity_type' => $entity_type,
+        'field_name' => $name,
+        'type' => $type,
+        'cardinality' => 1,
+        'settings' => $storage_settings,
+      ])->save();
+    }
+    if (!FieldConfig::loadByName($entity_type, $bundle, $name)) {
+      FieldConfig::create([
+        'entity_type' => $entity_type,
+        'bundle' => $bundle,
+        'field_name' => $name,
+        'label' => $label,
+        'settings' => $settings,
+        'description' => $name === 'field_upload_category'
+          ? 'Uploads are limited to this category and its descendants. Leave empty for no category restriction. Only administrators can change this assignment.' : '',
+      ])->save();
+    }
+  }
+  $display = EntityFormDisplay::load('user.user.default') ?? EntityFormDisplay::create([
+    'targetEntityType' => 'user',
+    'bundle' => 'user',
+    'mode' => 'default',
+    'status' => TRUE,
+  ]);
+  $display->setComponent('field_upload_category', ['type' => 'options_select', 'weight' => 20])->save();
+}

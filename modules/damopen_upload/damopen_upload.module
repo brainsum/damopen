@@ -2,6 +2,6 @@
 
 function damopen_upload_theme() {
   return array(
-    'damopen_upload_form' => []
+    'damopen_upload_form' => ['variables' => []]
   );
 }

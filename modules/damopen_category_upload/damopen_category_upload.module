@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * Category upload integration with Drupal forms and entity writes.
+ */
+
+use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\damopen_category_upload\CategoryUploadPolicy;
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\media\MediaInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\taxonomy\VocabularyInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function damopen_category_upload_entity_type_alter(array &$entity_types): void {
+  $entity_types['media']->addConstraint('CategoryUpload');
+}
+
+/**
+ * Implements hook_media_presave().
+ */
+function damopen_category_upload_media_presave(MediaInterface $media): void {
+  // Entity saves do not always invoke validation (bulk upload is one example).
+  if ($error = \Drupal::service('damopen_category_upload.policy')->violation($media)) {
+    throw new EntityStorageException($error);
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function damopen_category_upload_entity_field_access($operation, FieldDefinitionInterface $definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
+  if ($operation === 'edit' && $definition->getTargetEntityTypeId() === 'user' && $definition->getName() === 'field_upload_category') {
+    return AccessResult::forbiddenIf(!$account->hasPermission('administer upload categories'))->cachePerPermissions();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_taxonomy_term_access().
+ */
+function damopen_category_upload_taxonomy_term_access(TermInterface $term, $operation, AccountInterface $account) {
+  // Reverting a revision can restore an old parent, like editing the term.
+  if ($term->bundle() === 'category' && in_array($operation, ['update', 'delete', 'revert', 'delete revision'], TRUE)) {
+    return AccessResult::forbiddenIf(!$account->hasPermission('administer upload categories'))->cachePerPermissions();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_taxonomy_vocabulary_access().
+ */
+function damopen_category_upload_taxonomy_vocabulary_access(VocabularyInterface $vocabulary, $operation, AccountInterface $account) {
+  // Core grants this to "edit terms in category". It controls the overview's
+  // drag-and-drop reordering, which can also change term parents.
+  if ($vocabulary->id() === 'category' && $operation === 'reset all weights') {
+    return AccessResult::forbiddenIf(!$account->hasPermission('administer upload categories'))->cachePerPermissions();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_taxonomy_term_create_access().
+ */
+function damopen_category_upload_taxonomy_term_create_access(AccountInterface $account, array $context, $bundle) {
+  return $bundle === 'category'
+    ? AccessResult::forbiddenIf(!$account->hasPermission('administer upload categories'))->cachePerPermissions()
+    : AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function damopen_category_upload_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
+  $policy = \Drupal::service('damopen_category_upload.policy');
+  if ($form_id === 'media_upload_bulk_upload_form' && !isset($form['category']) && isset($form['media_type']['#value'])) {
+    $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('media', $form['media_type']['#value']);
+    if (isset($fields['field_category'])) {
+      $form['category'] = [
+        '#type' => 'select',
+        '#title' => t('Category'),
+        '#multiple' => TRUE,
+        '#required' => TRUE,
+        '#weight' => -1,
+      ];
+    }
+  }
+  if ($form_id === 'media_upload_bulk_upload_form' && isset($form['category'])) {
+    $error = $policy->assignmentError();
+    // With an unavailable assignment, show guidance rather than denying the
+    // upload link; there are no categories to choose from either way.
+    $preset = $error ? NULL : $policy->preset();
+    $form['category']['#options'] = $policy->options();
+    $default = $preset ?? $policy->root();
+    $form['category']['#default_value'] = $default ? [$default] : [];
+    $form['category']['#description'] = t('Select a category by its full Library path. The selection applies to every image in this batch.');
+    if ($preset) {
+      $form['category']['#options'] = array_intersect_key($form['category']['#options'], [$preset => TRUE]);
+      $form['category']['#disabled'] = TRUE;
+      $form['category']['#value'] = [$preset];
+      $form['category']['#description'] = t('This upload link applies this category to every image in the batch.');
+    }
+    if ($error) {
+      \Drupal::messenger()->addWarning($error);
+    }
+    $form['#validate'][] = 'damopen_category_upload_bulk_validate';
+    $form['#cache']['max-age'] = 0;
+  }
+  $object = $form_state->getFormObject();
+  if ($object instanceof EntityFormInterface) {
+    $entity = $object->getEntity();
+    if ($entity instanceof MediaInterface && isset($form['field_category']['widget']['#options'])) {
+      damopen_category_upload_media_category_widget($form['field_category']['widget'], $entity, $policy);
+    }
+    if ($entity instanceof UserInterface && isset($form['field_upload_category']['widget'])) {
+      $form['field_upload_category']['widget']['#options'] = ['_none' => t('- No category restriction -')] + $policy->options(FALSE);
+    }
+  }
+}
+
+/**
+ * Limits a media form's category choices without dropping existing values.
+ *
+ * Categories already on the asset stay listed even when the user may not
+ * upload to them. For a restricted user they are locked, so a metadata edit
+ * keeps them; disabled checkboxes submit their default value.
+ */
+function damopen_category_upload_media_category_widget(array &$widget, MediaInterface $media, CategoryUploadPolicy $policy): void {
+  $options = $policy->options();
+  $restricted = $policy->root() !== NULL;
+  $current = $media->isNew() ? [] : array_map('intval', array_column($media->get('field_category')->getValue(), 'target_id'));
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple(array_diff($current, array_keys($options)));
+  foreach ($terms as $id => $term) {
+    $options[$id] = $policy->path($term);
+    if ($restricted && ($widget['#type'] ?? NULL) === 'checkboxes') {
+      $widget[$id]['#disabled'] = TRUE;
+    }
+  }
+  $widget['#options'] = $options;
+  // Checkboxes compare disabled defaults strictly against integer option keys.
+  if (($widget['#type'] ?? NULL) === 'checkboxes' && is_array($widget['#default_value'] ?? NULL)) {
+    $widget['#default_value'] = array_map('intval', $widget['#default_value']);
+  }
+  if ($media->isNew() && ($root = $policy->root()) && $policy->allowed($root)) {
+    $widget['#default_value'] = [$root];
+  }
+}
+
+/**
+ * Rechecks permissions on submit, before permanent files are created.
+ */
+function damopen_category_upload_bulk_validate(array &$form, FormStateInterface $form_state): void {
+  $policy = \Drupal::service('damopen_category_upload.policy');
+  if ($error = $policy->assignmentError()) {
+    $form_state->setErrorByName('category', $error);
+    return;
+  }
+  $ids = array_map('intval', array_values($form_state->getValue('category', [])));
+  foreach ($ids as $id) {
+    if (!$policy->allowed($id)) {
+      $form_state->setErrorByName('category', t('You cannot upload to the selected category.'));
+    }
+  }
+  if (($preset = $policy->preset()) && $ids !== [$preset]) {
+    $form_state->setErrorByName('category', t('Use the category specified by this upload link.'));
+  }
+}

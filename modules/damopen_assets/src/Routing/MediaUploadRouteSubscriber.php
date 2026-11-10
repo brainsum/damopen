@@ -20,6 +20,8 @@ class MediaUploadRouteSubscriber extends RouteSubscriberBase {
     // @todo: This requires the media_upload module.
     if ($route = $collection->get('media_upload.bulk_media_upload')) {
       $route->setDefault('_form', BulkMediaUploadForm::class);
+      $route->setRequirement('_entity_create_access', 'media:{type}');
+      $route->setRequirement('_user_is_logged_in', 'TRUE');
     }
   }
 

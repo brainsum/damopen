@@ -1,0 +1,25 @@
+damopen_category_upload.library:
+  path: '/library'
+  defaults:
+    _controller: '\Drupal\damopen_category_upload\Controller\LibraryController::browse'
+    _title: 'Library'
+  requirements:
+    _permission: 'view media'
+damopen_category_upload.branch:
+  path: '/library/{taxonomy_term}'
+  defaults:
+    _controller: '\Drupal\damopen_category_upload\Controller\LibraryController::browse'
+    _title: 'Library'
+  requirements:
+    _permission: 'view media'
+  options:
+    parameters:
+      taxonomy_term:
+        type: entity:taxonomy_term
+damopen_category_upload.links:
+  path: '/admin/content/category-upload-links'
+  defaults:
+    _controller: '\Drupal\damopen_category_upload\Controller\LibraryController::uploadLinks'
+    _title: 'Category upload links'
+  requirements:
+    _permission: 'upload media'
