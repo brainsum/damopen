@@ -69,12 +69,15 @@ The theme patch removes dynamic properties on Drupal's `Attribute` object;
 the theme-switching patch injects typed configuration and replaces the removed
 `user_role_names()` function.
 
-Drupal 11.4 ships jQuery 4, and Damo theme's bundled Bootstrap 4.0.0-alpha.5
-JavaScript refuses to start with it, so Bootstrap's tooltip, popover, dropdown
-and collapse plugins are unavailable on Damo theme pages. The theme patch makes
-`js/tooltip.js` skip tooltips when the plugin is missing, instead of throwing on
-pages with tooltip markup (such as media edit forms for users without the admin
-theme). Restoring those plugins needs a jQuery 4-compatible Bootstrap build.
+Drupal 11.4 ships jQuery 4. Damo theme's bundled Bootstrap 4.0.0-alpha.5
+JavaScript rejects jQuery 4 at load, which disabled its collapse (mobile menu),
+dropdown, tooltip and popover plugins on Damo theme pages. The theme patch
+(`js/bootstrap.min.js`) lets it run with jQuery 4 and fixes two clicks:
+the collapse toggle passed jQuery 4's null-prototype `.data()` object to a
+regular expression, and menu dropdowns with `data-target="#"` were an invalid
+selector (fixed as in Bootstrap 4.0 stable). `js/tooltip.js` also skips
+tooltips if the plugin is missing. `DamoThemeBootstrapTest` opens the mobile
+menu, a dropdown and a tooltip under jQuery 4 without console errors.
 
 The Gin patch guards `toolbar.js` against a missing toolbar menu trigger. Gin
 renders its toolbar bar on Damo theme pages without that trigger, and Gin
