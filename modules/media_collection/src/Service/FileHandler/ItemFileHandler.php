@@ -108,6 +108,9 @@ final class ItemFileHandler {
    *   The downloadable file or NULL.
    */
   public function generateDownloadableFile(MediaCollectionItemInterface $item): ?FileInterface {
+    if (\Drupal::hasService('damopen_consent.policy') && !\Drupal::service('damopen_consent.policy')->deliverable($item->media()) && !$item->media()->access('view')) {
+      throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('This collection item is not available.');
+    }
     $fileData = $this->itemProcessor->process($item);
     $fileCount = count($fileData);
 

@@ -89,6 +89,9 @@ class AssetDownloadHandler {
    *   The file or NULL.
    */
   public function generateDownloadableFile(MediaInterface $media): ?FileInterface {
+    if (\Drupal::hasService('damopen_consent.policy') && !$media->access('view')) {
+      throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('This asset is not available for download.');
+    }
     $fileData = $this->fileHandler->mediaFilesData($media);
     $fileCount = count($fileData);
 

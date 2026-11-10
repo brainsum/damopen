@@ -41,6 +41,9 @@ class CollectionItemProcessor {
    */
   public function process(MediaCollectionItemInterface $item): array {
     $media = $item->media();
+    if (\Drupal::hasService('damopen_consent.policy') && !\Drupal::service('damopen_consent.policy')->deliverable($media) && !$media->access('view')) {
+      throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('An asset in this collection is not available.');
+    }
 
     if ($media->bundle() === 'image') {
       /** @var \Drupal\image\ImageStyleInterface $style */

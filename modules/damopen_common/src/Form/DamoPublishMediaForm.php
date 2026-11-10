@@ -37,8 +37,13 @@ class DamoPublishMediaForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Publidh the selected media.
+    // Publish only after the independent consent check passes.
     $media = \Drupal::entityTypeManager()->getStorage('media')->load($this->id);
+    if (\Drupal::hasService('damopen_consent.policy') && ($reason = \Drupal::service('damopen_consent.policy')->problem($media))) {
+      $this->messenger()->addError($this->t('Publication blocked: @reason', ['@reason' => $reason]));
+      $form_state->setRedirectUrl($this->getCancelUrl());
+      return;
+    }
     $media->setPublished();
     $media->save();
     // Set redirect to media page.

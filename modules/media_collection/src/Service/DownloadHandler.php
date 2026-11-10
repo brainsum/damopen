@@ -101,6 +101,13 @@ final class DownloadHandler {
    *   The file download response.
    */
   public function downloadLatestArchive(MediaCollectionInterface $collection) {
+    if (\Drupal::hasService('damopen_consent.policy')) {
+      foreach ($collection->items() as $item) {
+        if (!\Drupal::service('damopen_consent.policy')->deliverable($item->media()) && !$item->media()->access('view')) {
+          throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('A collection asset is not available.');
+        }
+      }
+    }
     $archive = $this->collectionFileHandler->generateArchiveEntity($collection);
 
     if ($archive === NULL) {
