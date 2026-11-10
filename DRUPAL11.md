@@ -128,6 +128,31 @@ follow-ups; they are not evidence of tested Drupal 12 compatibility.
   `drupal-composer/drupal-security-advisories` and
   `oomphinc/composer-installers-extender` are marked abandoned.
 
+## Security updates (2026-11-10)
+
+`composer audit` had reported 26 advisories in 8 packages, including Drupal
+core remote code execution (SA-CORE-2026-014, critical) and Drupal AI
+cross-site scripting (critical). Updated: Drupal core 11.4.7 → 11.4.12,
+Drupal AI 1.4.9 → 1.4.11, Bootstrap base theme 3.40.0 → 3.45.0, Gin 5.0.15 →
+5.0.16 and Symfony 7.4 patch releases, plus their required dependencies
+(Search API 1.43.0, Key 1.23.0). AI stays on 1.4.x and AI Search on
+1.3.0-alpha4, because DAMopen extras' image search bridges that alpha's
+behaviour; AI 1.5.2 would have required AI Search alpha6. Run them as:
+
+```sh
+composer update drupal/core-recommended drupal/core-composer-scaffold \
+  drupal/core-dev drupal/core drupal/gin drupal/bootstrap drupal/ai 'symfony/*' \
+  -w --with=drupal/ai:~1.4.11 --with=drupal/ai_search:1.3.0-alpha4
+drush updatedb -y && drush cache:rebuild
+```
+
+All patches applied, including the Gin toolbar patch on 5.0.16. Three database
+updates ran (AI Automators, Bootstrap, Search API). AI Automators now run with
+the access of the user who saved the content; cron and Drush saves run as
+anonymous unless a fallback user is set at
+`/admin/config/ai/ai-automators/settings`. Afterwards `composer audit` reports
+no advisories and three abandoned packages (`doctrine/common` is newly flagged).
+
 References: [Drupal 10 to 11 upgrade guide](https://www.drupal.org/docs/upgrading-drupal/upgrading-drupal/how-to-upgrade-from-drupal-10-to-drupal-11)
 and [scoped Composer leniency](https://www.drupal.org/docs/develop/using-composer/using-the-drupal-lenient-composer-plugin).
 
