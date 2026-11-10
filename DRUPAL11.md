@@ -76,8 +76,17 @@ dropdown, tooltip and popover plugins on Damo theme pages. The theme patch
 the collapse toggle passed jQuery 4's null-prototype `.data()` object to a
 regular expression, and menu dropdowns with `data-target="#"` were an invalid
 selector (fixed as in Bootstrap 4.0 stable). `js/tooltip.js` also skips
-tooltips if the plugin is missing. `DamoThemeBootstrapTest` opens the mobile
-menu, a dropdown and a tooltip under jQuery 4 without console errors.
+tooltips if the plugin is missing.
+
+The Bootstrap base theme's popover integration targets Bootstrap 3
+(`Constructor.DEFAULTS`, `auto` placements), so enabling popovers in the theme
+settings threw `Cannot read properties of undefined (reading 'enabled')`. The
+theme patch adds `js/popover.js`, a Bootstrap 4 replacement (like the existing
+tooltip override) that reads the same theme settings, drops `auto` from the
+placement and supports auto-close. Bootstrap 4 alpha has no HTML sanitizer, so
+`html` and `template` come only from theme settings, never from `data-*`
+attributes. `DamoThemeBootstrapTest` opens the mobile menu, a dropdown, a
+tooltip and a theme-configured popover under jQuery 4 without console errors.
 
 The Gin patch guards `toolbar.js` against a missing toolbar menu trigger. Gin
 renders its toolbar bar on Damo theme pages without that trigger, and Gin
