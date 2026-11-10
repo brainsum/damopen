@@ -58,9 +58,43 @@ final class DamoThemeBootstrapTest extends WebDriverTestBase {
     JS);
     $this->assertSession()->elementExists('css', '#bootstrap-probe [data-toggle="dropdown"]')->click();
     $this->assertJsCondition('document.querySelector("#bootstrap-probe .dropdown").classList.contains("open") || document.querySelector("#bootstrap-probe .dropdown").classList.contains("show")');
+    // The theme's tooltip behaviour attaches with the default settings.
+    $this->assertTrue($session->evaluateScript('jQuery("#bootstrap-probe [data-toggle=tooltip]").data("bs.tooltip") !== undefined'));
     $session->executeScript('jQuery("#bootstrap-probe [data-toggle=tooltip]").tooltip("show")');
     $this->assertNotEmpty($this->assertSession()->waitForElementVisible('css', '.tooltip'));
     $this->assertStringContainsString('Probe tooltip', $this->assertSession()->elementExists('css', '.tooltip')->getText());
+  }
+
+  /**
+   * Applies the theme's tooltip settings and keeps markup options fixed.
+   */
+  public function testTooltipIntegration(): void {
+    // Bootstrap 3 "auto" placement, click trigger and plain-text titles.
+    $this->config('damo_theme.settings')
+      ->set('tooltip_enabled', 1)
+      ->set('tooltip_placement', 'auto bottom')
+      ->set('tooltip_trigger', 'click')
+      ->set('tooltip_html', 0)
+      ->save();
+    $this->drupalLogin($this->drupalCreateUser(['view media']));
+    $this->drupalGet('<front>');
+    $session = $this->getSession();
+    $session->executeScript(<<<'JS'
+      const markup = document.createElement('div');
+      markup.id = 'tooltip-probe';
+      markup.style.cssText = 'position: relative; z-index: 1000; margin: 150px 20px;';
+      markup.innerHTML = '<button type="button" data-toggle="tooltip" title="&lt;b&gt;Bold&lt;/b&gt; tip" data-html="true" data-template="&lt;div class=&quot;tooltip injected&quot;&gt;&lt;/div&gt;">Hint</button>';
+      document.body.prepend(markup);
+      Drupal.attachBehaviors(markup, drupalSettings);
+    JS);
+    $this->assertSession()->elementExists('css', '#tooltip-probe [data-toggle="tooltip"]')->click();
+    $tooltip = $this->assertSession()->waitForElementVisible('css', '.tooltip');
+    $this->assertNotEmpty($tooltip);
+    // The title stays text, and data-template cannot replace the markup.
+    $this->assertStringContainsString('<b>Bold</b> tip', $tooltip->getText());
+    $this->assertSession()->elementNotExists('css', '.tooltip.injected');
+    // "auto bottom" becomes Bootstrap 4's bottom placement.
+    $this->assertTrue($tooltip->hasClass('bs-tether-element-attached-top'), $tooltip->getAttribute('class'));
   }
 
   /**

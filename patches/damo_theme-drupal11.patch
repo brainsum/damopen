@@ -138,28 +138,105 @@
  
 --- a/js/tooltip.js
 +++ b/js/tooltip.js
-@@ -32,6 +32,11 @@
+@@ -1,48 +1,69 @@
+ /**
+  * @file
+- * Bootstrap Tooltips.
++ * Bootstrap 4 tooltips configured from the Bootstrap base theme settings.
++ *
++ * Replaces the base theme's tooltip.js, which targets Bootstrap 3's plugin
++ * interface (Constructor.DEFAULTS and "auto" placements).
+  */
+ 
+-var Drupal = Drupal || {};
++(function ($, Drupal, drupalSettings) {
+ 
+-(function ($, Drupal, Bootstrap) {
+-  "use strict";
++  'use strict';
++
++  var settings = drupalSettings.bootstrap || {};
+ 
+   /**
+-   * Extend the Bootstrap Tooltip plugin constructor class.
++   * Bootstrap 4 alpha has no "auto" placement; keep the preferred side.
     */
+-  Bootstrap.extendPlugin('tooltip', function (settings) {
+-    return {
+-      DEFAULTS: {
+-        animation: !!settings.tooltip_animation,
+-        html: !!settings.tooltip_html,
+-        placement: settings.tooltip_placement,
+-        selector: settings.tooltip_selector,
+-        trigger: settings.tooltip_trigger,
+-        delay: parseInt(settings.tooltip_delay, 10),
+-        container: settings.tooltip_container
+-      }
+-    };
+-  });
++  function placement(value) {
++    return typeof value === 'string' ? value.replace(/^auto\s*/, '') || 'top' : value;
++  }
+ 
+   /**
+-   * Bootstrap Tooltips.
+-   *
+-   * @todo This should really be properly delegated if selector option is set.
++   * Returns tooltip options from the theme settings.
+    */
++  function defaults() {
++    return {
++      animation: !!settings.tooltip_animation,
++      html: !!settings.tooltip_html,
++      placement: placement(settings.tooltip_placement || 'top'),
++      trigger: settings.tooltip_trigger || 'hover focus',
++      delay: parseInt(settings.tooltip_delay, 10) || 0,
++      container: settings.tooltip_container || false
++    };
++  }
++
    Drupal.behaviors.bootstrapTooltips = {
      attach: function (context) {
-+      // Keep the native title if Bootstrap's tooltip plugin is unavailable,
-+      // as it was before Bootstrap was patched for jQuery 4 (Drupal 11).
-+      if (!$.fn.tooltip) {
+-      var elements = $(context).find('[data-toggle="tooltip"]').toArray();
+-      for (var i = 0; i < elements.length; i++) {
+-        var $element = $(elements[i]);
+-        var options = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, $element.data());
+-        $element.tooltip(options);
++      // Keep the native title if Bootstrap's tooltip plugin is unavailable.
++      if (!$.fn.tooltip || !settings.tooltip_enabled) {
 +        return;
-+      }
-       var elements = $(context).find('[data-toggle="tooltip"]').toArray();
-       for (var i = 0; i < elements.length; i++) {
-         var $element = $(elements[i]);
-@@ -40,6 +45,9 @@
        }
++      var selector = settings.tooltip_selector || '[data-toggle="tooltip"]';
++      $(context).find(selector).each(function () {
++        var $element = $(this);
++        if ($element.data('bs.tooltip')) {
++          return;
++        }
++        // Element data may set the title, placement or trigger, but markup
++        // options stay with the theme settings: Bootstrap 4 alpha has no HTML
++        // sanitizer, and it merges data-* attributes beneath the options
++        // passed in, so pass these explicitly.
++        var base = defaults();
++        var options = $.extend({}, base, $element.data(), {
++          html: base.html,
++          template: $.fn.tooltip.Constructor.Default.template
++        });
++        options.placement = placement(options.placement);
++        $element.tooltip(options);
++      });
      },
      detach: function (context) {
+-      // Destroy all tooltips.
+-      $(context).find('[data-toggle="tooltip"]').tooltip('dispose');
 +      if (!$.fn.tooltip) {
 +        return;
 +      }
-       // Destroy all tooltips.
-       $(context).find('[data-toggle="tooltip"]').tooltip('dispose');
++      $(context).find(settings.tooltip_selector || '[data-toggle="tooltip"]').tooltip('dispose');
      }
+   };
+ 
+-})(window.jQuery, window.Drupal, window.Drupal.bootstrap);
++})(jQuery, Drupal, drupalSettings);
 --- a/js/bootstrap.min.js
 +++ b/js/bootstrap.min.js
 @@ -3,5 +3,5 @@
@@ -171,7 +248,7 @@
  DROPDOWN_TOGGLE:".dropdown-toggle",DROPDOWN_ACTIVE_CHILD:"> .dropdown-menu .active"},o=function(){function b(a){c(this,b),this._element=a}return b.prototype.show=function(){var b=this;if(!this._element.parentNode||this._element.parentNode.nodeType!==Node.ELEMENT_NODE||!a(this._element).hasClass(m.ACTIVE)){var c=void 0,d=void 0,e=a(this._element).closest(n.UL)[0],g=f.getSelectorFromElement(this._element);e&&(d=a.makeArray(a(e).find(n.ACTIVE)),d=d[d.length-1]);var h=a.Event(l.HIDE,{relatedTarget:this._element}),i=a.Event(l.SHOW,{relatedTarget:d});if(d&&a(d).trigger(h),a(this._element).trigger(i),!i.isDefaultPrevented()&&!h.isDefaultPrevented()){g&&(c=a(g)[0]),this._activate(this._element,e);var j=function(){var c=a.Event(l.HIDDEN,{relatedTarget:b._element}),e=a.Event(l.SHOWN,{relatedTarget:d});a(d).trigger(c),a(b._element).trigger(e)};c?this._activate(c,c.parentNode,j):j()}}},b.prototype.dispose=function(){a.removeClass(this._element,g),this._element=null},b.prototype._activate=function(b,c,d){var e=a(c).find(n.ACTIVE_CHILD)[0],g=d&&f.supportsTransitionEnd()&&(e&&a(e).hasClass(m.FADE)||Boolean(a(c).find(n.FADE_CHILD)[0])),h=a.proxy(this._transitionComplete,this,b,e,g,d);e&&g?a(e).one(f.TRANSITION_END,h).emulateTransitionEnd(k):h(),e&&a(e).removeClass(m.IN)},b.prototype._transitionComplete=function(b,c,d,e){if(c){a(c).removeClass(m.ACTIVE);var g=a(c).find(n.DROPDOWN_ACTIVE_CHILD)[0];g&&a(g).removeClass(m.ACTIVE),c.setAttribute("aria-expanded",!1)}if(a(b).addClass(m.ACTIVE),b.setAttribute("aria-expanded",!0),d?(f.reflow(b),a(b).addClass(m.IN)):a(b).removeClass(m.FADE),b.parentNode&&a(b.parentNode).hasClass(m.DROPDOWN_MENU)){var h=a(b).closest(n.DROPDOWN)[0];h&&a(h).find(n.DROPDOWN_TOGGLE).addClass(m.ACTIVE),b.setAttribute("aria-expanded",!0)}e&&e()},b._jQueryInterface=function(c){return this.each(function(){var d=a(this),e=d.data(g);if(e||(e=e=new b(this),d.data(g,e)),"string"==typeof c){if(void 0===e[c])throw new Error('No method named "'+c+'"');e[c]()}})},e(b,null,[{key:"VERSION",get:function(){return d}}]),b}();return a(document).on(l.CLICK_DATA_API,n.DATA_TOGGLE,function(b){b.preventDefault(),o._jQueryInterface.call(a(this),"show")}),a.fn[b]=o._jQueryInterface,a.fn[b].Constructor=o,a.fn[b].noConflict=function(){return a.fn[b]=j,o._jQueryInterface},o}(jQuery),function(a){if(void 0===window.Tether)throw new Error("Bootstrap tooltips require Tether (http://tether.io/)");var b="tooltip",g="4.0.0-alpha.5",h="bs.tooltip",i="."+h,j=a.fn[b],k=150,l="bs-tether",m={animation:!0,template:'<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>',trigger:"hover focus",title:"",delay:0,html:!1,selector:!1,placement:"top",offset:"0 0",constraints:[]},n={animation:"boolean",template:"string",title:"(string|element|function)",trigger:"string",delay:"(number|object)",html:"boolean",selector:"(string|boolean)",placement:"(string|function)",offset:"string",constraints:"array"},o={TOP:"bottom center",RIGHT:"middle left",BOTTOM:"top center",LEFT:"middle right"},p={IN:"in",OUT:"out"},q={HIDE:"hide"+i,HIDDEN:"hidden"+i,SHOW:"show"+i,SHOWN:"shown"+i,INSERTED:"inserted"+i,CLICK:"click"+i,FOCUSIN:"focusin"+i,FOCUSOUT:"focusout"+i,MOUSEENTER:"mouseenter"+i,MOUSELEAVE:"mouseleave"+i},r={FADE:"fade",IN:"in"},s={TOOLTIP:".tooltip",TOOLTIP_INNER:".tooltip-inner"},t={element:!1,enabled:!1},u={HOVER:"hover",FOCUS:"focus",CLICK:"click",MANUAL:"manual"},v=function(){function j(a,b){c(this,j),this._isEnabled=!0,this._timeout=0,this._hoverState="",this._activeTrigger={},this._tether=null,this.element=a,this.config=this._getConfig(b),this.tip=null,this._setListeners()}return j.prototype.enable=function(){this._isEnabled=!0},j.prototype.disable=function(){this._isEnabled=!1},j.prototype.toggleEnabled=function(){this._isEnabled=!this._isEnabled},j.prototype.toggle=function(b){if(b){var c=this.constructor.DATA_KEY,d=a(b.currentTarget).data(c);d||(d=new this.constructor(b.currentTarget,this._getDelegateConfig()),a(b.currentTarget).data(c,d)),d._activeTrigger.click=!d._activeTrigger.click,d._isWithActiveTrigger()?d._enter(null,d):d._leave(null,d)}else{if(a(this.getTipElement()).hasClass(r.IN))return void this._leave(null,this);this._enter(null,this)}},j.prototype.dispose=function(){clearTimeout(this._timeout),this.cleanupTether(),a.removeData(this.element,this.constructor.DATA_KEY),a(this.element).off(this.constructor.EVENT_KEY),this.tip&&a(this.tip).remove(),this._isEnabled=null,this._timeout=null,this._hoverState=null,this._activeTrigger=null,this._tether=null,this.element=null,this.config=null,this.tip=null},j.prototype.show=function(){var b=this,c=a.Event(this.constructor.Event.SHOW);if(this.isWithContent()&&this._isEnabled){a(this.element).trigger(c);var d=a.contains(this.element.ownerDocument.documentElement,this.element);if(c.isDefaultPrevented()||!d)return;var e=this.getTipElement(),g=f.getUID(this.constructor.NAME);e.setAttribute("id",g),this.element.setAttribute("aria-describedby",g),this.setContent(),this.config.animation&&a(e).addClass(r.FADE);var h="function"==typeof this.config.placement?this.config.placement.call(this,e,this.element):this.config.placement,i=this._getAttachment(h);a(e).data(this.constructor.DATA_KEY,this).appendTo(document.body),a(this.element).trigger(this.constructor.Event.INSERTED),this._tether=new Tether({attachment:i,element:e,target:this.element,classes:t,classPrefix:l,offset:this.config.offset,constraints:this.config.constraints,addTargetClasses:!1}),f.reflow(e),this._tether.position(),a(e).addClass(r.IN);var k=function(){var c=b._hoverState;b._hoverState=null,a(b.element).trigger(b.constructor.Event.SHOWN),c===p.OUT&&b._leave(null,b)};if(f.supportsTransitionEnd()&&a(this.tip).hasClass(r.FADE))return void a(this.tip).one(f.TRANSITION_END,k).emulateTransitionEnd(j._TRANSITION_DURATION);k()}},j.prototype.hide=function(b){var c=this,d=this.getTipElement(),e=a.Event(this.constructor.Event.HIDE),g=function(){c._hoverState!==p.IN&&d.parentNode&&d.parentNode.removeChild(d),c.element.removeAttribute("aria-describedby"),a(c.element).trigger(c.constructor.Event.HIDDEN),c.cleanupTether(),b&&b()};a(this.element).trigger(e),e.isDefaultPrevented()||(a(d).removeClass(r.IN),f.supportsTransitionEnd()&&a(this.tip).hasClass(r.FADE)?a(d).one(f.TRANSITION_END,g).emulateTransitionEnd(k):g(),this._hoverState="")},j.prototype.isWithContent=function(){return Boolean(this.getTitle())},j.prototype.getTipElement=function(){return this.tip=this.tip||a(this.config.template)[0]},j.prototype.setContent=function(){var b=a(this.getTipElement());this.setElementContent(b.find(s.TOOLTIP_INNER),this.getTitle()),b.removeClass(r.FADE).removeClass(r.IN),this.cleanupTether()},j.prototype.setElementContent=function(b,c){var e=this.config.html;"object"===("undefined"==typeof c?"undefined":d(c))&&(c.nodeType||c.jquery)?e?a(c).parent().is(b)||b.empty().append(c):b.text(a(c).text()):b[e?"html":"text"](c)},j.prototype.getTitle=function(){var a=this.element.getAttribute("data-original-title");return a||(a="function"==typeof this.config.title?this.config.title.call(this.element):this.config.title),a},j.prototype.cleanupTether=function(){this._tether&&this._tether.destroy()},j.prototype._getAttachment=function(a){return o[a.toUpperCase()]},j.prototype._setListeners=function(){var b=this,c=this.config.trigger.split(" ");c.forEach(function(c){if("click"===c)a(b.element).on(b.constructor.Event.CLICK,b.config.selector,a.proxy(b.toggle,b));else if(c!==u.MANUAL){var d=c===u.HOVER?b.constructor.Event.MOUSEENTER:b.constructor.Event.FOCUSIN,e=c===u.HOVER?b.constructor.Event.MOUSELEAVE:b.constructor.Event.FOCUSOUT;a(b.element).on(d,b.config.selector,a.proxy(b._enter,b)).on(e,b.config.selector,a.proxy(b._leave,b))}}),this.config.selector?this.config=a.extend({},this.config,{trigger:"manual",selector:""}):this._fixTitle()},j.prototype._fixTitle=function(){var a=d(this.element.getAttribute("data-original-title"));(this.element.getAttribute("title")||"string"!==a)&&(this.element.setAttribute("data-original-title",this.element.getAttribute("title")||""),this.element.setAttribute("title",""))},j.prototype._enter=function(b,c){var d=this.constructor.DATA_KEY;return c=c||a(b.currentTarget).data(d),c||(c=new this.constructor(b.currentTarget,this._getDelegateConfig()),a(b.currentTarget).data(d,c)),b&&(c._activeTrigger["focusin"===b.type?u.FOCUS:u.HOVER]=!0),a(c.getTipElement()).hasClass(r.IN)||c._hoverState===p.IN?void(c._hoverState=p.IN):(clearTimeout(c._timeout),c._hoverState=p.IN,c.config.delay&&c.config.delay.show?void(c._timeout=setTimeout(function(){c._hoverState===p.IN&&c.show()},c.config.delay.show)):void c.show())},j.prototype._leave=function(b,c){var d=this.constructor.DATA_KEY;if(c=c||a(b.currentTarget).data(d),c||(c=new this.constructor(b.currentTarget,this._getDelegateConfig()),a(b.currentTarget).data(d,c)),b&&(c._activeTrigger["focusout"===b.type?u.FOCUS:u.HOVER]=!1),!c._isWithActiveTrigger())return clearTimeout(c._timeout),c._hoverState=p.OUT,c.config.delay&&c.config.delay.hide?void(c._timeout=setTimeout(function(){c._hoverState===p.OUT&&c.hide()},c.config.delay.hide)):void c.hide()},j.prototype._isWithActiveTrigger=function(){for(var a in this._activeTrigger)if(this._activeTrigger[a])return!0;return!1},j.prototype._getConfig=function(c){return c=a.extend({},this.constructor.Default,a(this.element).data(),c),c.delay&&"number"==typeof c.delay&&(c.delay={show:c.delay,hide:c.delay}),f.typeCheckConfig(b,c,this.constructor.DefaultType),c},j.prototype._getDelegateConfig=function(){var a={};if(this.config)for(var b in this.config)this.constructor.Default[b]!==this.config[b]&&(a[b]=this.config[b]);return a},j._jQueryInterface=function(b){return this.each(function(){var c=a(this).data(h),e="object"===("undefined"==typeof b?"undefined":d(b))?b:null;if((c||!/dispose|hide/.test(b))&&(c||(c=new j(this,e),a(this).data(h,c)),"string"==typeof b)){if(void 0===c[b])throw new Error('No method named "'+b+'"');c[b]()}})},e(j,null,[{key:"VERSION",get:function(){return g}},{key:"Default",get:function(){return m}},{key:"NAME",get:function(){return b}},{key:"DATA_KEY",get:function(){return h}},{key:"Event",get:function(){return q}},{key:"EVENT_KEY",get:function(){return i}},{key:"DefaultType",get:function(){return n}}]),j}();return a.fn[b]=v._jQueryInterface,a.fn[b].Constructor=v,a.fn[b].noConflict=function(){return a.fn[b]=j,v._jQueryInterface},v}(jQuery));(function(f){var h="popover",i="4.0.0-alpha.5",j="bs.popover",k="."+j,l=f.fn[h],m=f.extend({},g.Default,{placement:"right",trigger:"click",content:"",template:'<div class="popover" role="tooltip"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'}),n=f.extend({},g.DefaultType,{content:"(string|element|function)"}),o={FADE:"fade",IN:"in"},p={TITLE:".popover-title",CONTENT:".popover-content"},q={HIDE:"hide"+k,HIDDEN:"hidden"+k,SHOW:"show"+k,SHOWN:"shown"+k,INSERTED:"inserted"+k,CLICK:"click"+k,FOCUSIN:"focusin"+k,FOCUSOUT:"focusout"+k,MOUSEENTER:"mouseenter"+k,MOUSELEAVE:"mouseleave"+k},r=function(g){function l(){return c(this,l),a(this,g.apply(this,arguments))}return b(l,g),l.prototype.isWithContent=function(){return this.getTitle()||this._getContent()},l.prototype.getTipElement=function(){return this.tip=this.tip||f(this.config.template)[0]},l.prototype.setContent=function(){var a=f(this.getTipElement());this.setElementContent(a.find(p.TITLE),this.getTitle()),this.setElementContent(a.find(p.CONTENT),this._getContent()),a.removeClass(o.FADE).removeClass(o.IN),this.cleanupTether()},l.prototype._getContent=function(){return this.element.getAttribute("data-content")||("function"==typeof this.config.content?this.config.content.call(this.element):this.config.content)},l._jQueryInterface=function(a){return this.each(function(){var b=f(this).data(j),c="object"===("undefined"==typeof a?"undefined":d(a))?a:null;if((b||!/destroy|hide/.test(a))&&(b||(b=new l(this,c),f(this).data(j,b)),"string"==typeof a)){if(void 0===b[a])throw new Error('No method named "'+a+'"');b[a]()}})},e(l,null,[{key:"VERSION",get:function(){return i}},{key:"Default",get:function(){return m}},{key:"NAME",get:function(){return h}},{key:"DATA_KEY",get:function(){return j}},{key:"Event",get:function(){return q}},{key:"EVENT_KEY",get:function(){return k}},{key:"DefaultType",get:function(){return n}}]),l}(g);return f.fn[h]=r._jQueryInterface,f.fn[h].Constructor=r,f.fn[h].noConflict=function(){return f.fn[h]=l,r._jQueryInterface},r})(jQuery)}();
 --- /dev/null
 +++ b/js/popover.js
-@@ -0,0 +1,113 @@
+@@ -0,0 +1,119 @@
 +/**
 + * @file
 + * Bootstrap 4 popovers configured from the Bootstrap base theme settings.
@@ -187,15 +264,20 @@
 +  var settings = drupalSettings.bootstrap || {};
 +
 +  /**
++   * Bootstrap 4 alpha has no "auto" placement; keep the preferred side.
++   */
++  function placement(value) {
++    return typeof value === 'string' ? value.replace(/^auto\s*/, '') || 'right' : value;
++  }
++
++  /**
 +   * Returns popover options from the theme settings.
 +   */
 +  function defaults() {
-+    // Bootstrap 4 alpha has no "auto" placement; keep the preferred side.
-+    var placement = String(settings.popover_placement || 'right').replace(/^auto\s*/, '') || 'right';
 +    return {
 +      animation: !!settings.popover_animation,
 +      html: !!settings.popover_html,
-+      placement: placement,
++      placement: placement(settings.popover_placement || 'right'),
 +      trigger: settings.popover_trigger || 'click',
 +      title: settings.popover_title || '',
 +      content: settings.popover_content || '',
@@ -250,6 +332,7 @@
 +          html: base.html,
 +          template: $.fn.popover.Constructor.Default.template
 +        });
++        options.placement = placement(options.placement);
 +
 +        // Content can come from a target element, as in the base theme.
 +        var target = options.target || ($element.is('a[href^="#"]') && $element.attr('href'));
