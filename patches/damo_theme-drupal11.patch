@@ -265,7 +265,7 @@
 +})(jQuery, Drupal, drupalSettings);
 --- /dev/null
 +++ b/css/workspace.css
-@@ -0,0 +1,145 @@
+@@ -0,0 +1,148 @@
 +/* Shared workspace foundations: the same spacing and surfaces as upload/review. */
 +body.dam-workspace { --dam-accent:#278b96; --dam-ink:#263638; --dam-muted:#647579; --dam-line:#dfe8e9; --dam-surface:#fff; --dam-radius:12px; background:#f5f8f8; color:var(--dam-ink); font-size:15px; line-height:1.55; }
 +.dam-workspace main.container,.dam-workspace main.container-fluid { width:100%; max-width:1500px; margin:0 auto; padding:32px 36px 48px; min-height:calc(100vh - 220px); }
@@ -293,6 +293,9 @@
 +.dam-workspace main form .form-item label { display:block; margin-bottom:8px; font-size:14px; font-weight:600; color:var(--dam-ink); }
 +.dam-workspace main form input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="hidden"]),.dam-workspace main form select,.dam-workspace main form textarea { max-width:100%; min-height:42px; border:1px solid #cbd8da; border-radius:7px; padding:9px 12px; color:var(--dam-ink); background-color:#fff; font-size:15px; line-height:1.4; box-shadow:none; }
 +.dam-workspace main form textarea { min-height:104px; }
++/* Select2's inline search box is a textarea too: it is not a form field of its own. */
++.dam-workspace main form .select2-search--inline .select2-search__field { min-height:0; height:24px; margin:5px 0 0 5px; padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; line-height:24px; vertical-align:bottom; }
++.dam-workspace main form .select2-selection--multiple { min-height:42px; border:1px solid #cbd8da; border-radius:7px; }
 +.dam-workspace main form .form-checkbox,.dam-workspace main form .form-radio { width:18px; height:18px; accent-color:var(--dam-accent); margin-right:8px; }
 +.dam-workspace main form .checkbox label,.dam-workspace main form .radio label { display:inline; font-weight:400; }
 +.dam-workspace main form .description,.dam-workspace main form .help-block { color:var(--dam-muted); font-size:13px; line-height:1.5; margin-top:7px; }
