@@ -265,7 +265,7 @@
 +})(jQuery, Drupal, drupalSettings);
 --- /dev/null
 +++ b/css/workspace.css
-@@ -0,0 +1,124 @@
+@@ -0,0 +1,128 @@
 +/* Shared workspace foundations: the same spacing and surfaces as upload/review. */
 +body.dam-workspace { --dam-accent:#278b96; --dam-ink:#263638; --dam-muted:#647579; --dam-line:#dfe8e9; --dam-surface:#fff; --dam-radius:12px; background:#f5f8f8; color:var(--dam-ink); font-size:15px; line-height:1.55; }
 +.dam-workspace main.container,.dam-workspace main.container-fluid { width:100%; max-width:1500px; margin:0 auto; padding:32px 36px 48px; min-height:calc(100vh - 220px); }
@@ -363,6 +363,10 @@
 +.dam-workspace #primary-tabs { float:none; width:fit-content; max-width:100%; }
 +.dam-workspace #primary-tabs .nav-item:after { content:none; }
 +.dam-workspace #primary-tabs .nav-item.active .nav-link { background:#fff; color:var(--dam-ink); }
++/* The base theme turns hovered tabs blue with white text; keep them readable. */
++.dam-workspace main .region-highlighted #block-damo-theme-local-tasks #primary-tabs .nav-item:hover { background:transparent; }
++.dam-workspace main .region-highlighted #block-damo-theme-local-tasks #primary-tabs .nav-item:hover a { background:#fff; color:var(--dam-accent); }
++.dam-workspace main .region-highlighted #block-damo-theme-local-tasks #primary-tabs .nav-item.active:hover a { color:var(--dam-ink); }
 +.dam-workspace #damopen-consent-asset-rights { max-width:1100px; margin:0 auto; }
 +.dam-workspace #damopen-consent-asset-rights #edit-status { padding:20px; border-radius:9px; background:#eef7f7; border-left:4px solid var(--dam-accent); }
 +.dam-workspace #damopen-consent-asset-rights #edit-status label { font-size:20px; }
