@@ -265,7 +265,7 @@
 +})(jQuery, Drupal, drupalSettings);
 --- /dev/null
 +++ b/css/workspace.css
-@@ -0,0 +1,119 @@
+@@ -0,0 +1,124 @@
 +/* Shared workspace foundations: the same spacing and surfaces as upload/review. */
 +body.dam-workspace { --dam-accent:#278b96; --dam-ink:#263638; --dam-muted:#647579; --dam-line:#dfe8e9; --dam-surface:#fff; --dam-radius:12px; background:#f5f8f8; color:var(--dam-ink); font-size:15px; line-height:1.55; }
 +.dam-workspace main.container,.dam-workspace main.container-fluid { width:100%; max-width:1500px; margin:0 auto; padding:32px 36px 48px; min-height:calc(100vh - 220px); }
@@ -383,7 +383,12 @@
 +.dam-workspace #damo-wfa h2.chakra-heading { flex:1 1 100%; margin:0; }
 +.dam-workspace #damo-wfa > div:first-child > div:nth-child(2) { justify-content:flex-start; padding:14px 0; margin-bottom:20px; border-bottom:1px solid var(--dam-line); }
 +.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:22px; width:100%; }
-+.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div > div { width:100%; border-radius:12px; overflow:hidden; }
++/* No overflow:hidden on the card: it would clip the Details popover. */
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div > div { width:100%; border-radius:12px; }
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div > div > img,
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div > div > img ~ div { border-radius:12px; }
++/* Lift the card whose popover is open above the cards that follow it. */
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div:has(.chakra-popover__content:not([style*="visibility: hidden"])) { position:relative; z-index:20; }
 +.dam-workspace:has(#damo-wfa) header form:not(:has(input[type="text"],select)) { display:none; }
 --- a/damo_theme.theme
 +++ b/damo_theme.theme
