@@ -9,9 +9,9 @@ path: media/image
 resourceType: media--image
 resourceFields:
   mid:
-    disabled: true
+    disabled: false
     fieldName: mid
-    publicName: mid
+    publicName: drupal_internal__mid
     enhancer:
       id: ''
   uuid:

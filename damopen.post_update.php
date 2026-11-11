@@ -60,3 +60,18 @@ function damopen_post_update_search_alt_text_and_iptc(): string {
   $index->reindex();
   return 'Asset search now includes ' . implode(', ', $added) . '. The database_media index is scheduled for reindexing.';
 }
+
+/**
+ * Expose the media ID over JSON:API so the approval queue can link to assets.
+ */
+function damopen_post_update_expose_media_id_for_approval_queue(): string {
+  $config = \Drupal::configFactory()->getEditable('jsonapi_extras.jsonapi_resource_config.media--image');
+  if ($config->isNew()) {
+    return 'The media--image JSON:API resource is not overridden; nothing to change.';
+  }
+  $config
+    ->set('resourceFields.mid.disabled', FALSE)
+    ->set('resourceFields.mid.publicName', 'drupal_internal__mid')
+    ->save();
+  return 'The approval queue can now link to the asset edit form.';
+}
