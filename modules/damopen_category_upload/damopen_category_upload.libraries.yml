@@ -1,0 +1,11 @@
+category_browser:
+  css:
+    component:
+      css/category-browser.css: {}
+  js:
+    js/category-browser.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - select2_facets/drupal.select2_facets.select2-widget

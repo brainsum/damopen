@@ -1,0 +1,21 @@
+/* The category list is long: let it use two thirds of the visible area.
+   category-browser.js lowers this further when less room is available. */
+.select2-dropdown.dam-category-dropdown .select2-results > .select2-results__options {
+  max-height: 66.667vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The facet block is re-rendered over AJAX with a suffixed id (e.g. after a
+   search), so the full-width layout must not depend on the block id. */
+.dam-workspace .block-facet-blockasset-category {
+  display: block;
+  flex: 1 1 550px;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.dam-workspace .block-facet-blockasset-category > .block-title {
+  display: none;
+}

@@ -1,58 +1,24 @@
 --- a/damo_theme.info.yml
 +++ b/damo_theme.info.yml
-@@ -3,7 +3,7 @@
- type: theme
- base theme: bootstrap
- 
--core_version_requirement: ^8.7.7 || ^9 || ^10
-+core_version_requirement: ^8.7.7 || ^9 || ^10 || ^11
- 
- libraries:
-   - damo_theme/fancy-logo
-@@ -47,6 +47,10 @@
+@@ -46,10 +46,6 @@
+   bootstrap/tooltip:
      js:
        js/tooltip.js: js/tooltip.js
+-
+-  bootstrap/popover:
+-    js:
+-      js/popover.js: js/popover.js
  
-+  bootstrap/popover:
-+    js:
-+      js/popover.js: js/popover.js
-+
-   bootstrap/drupal.ajax:
+   bootstrap/popover:
      js:
-       js/misc/ajax.js: js/misc/ajax.js
---- a/src/Plugin/Preprocess/Page.php
-+++ b/src/Plugin/Preprocess/Page.php
-@@ -26,11 +26,11 @@
-     // Content attributes.
-     if ($this->theme->getSetting('fluid_container', FALSE)) {
-       $variables->container_class = 'container-fluid';
--      $variables->navbar_attributes->inner_container = FALSE;
-+      $variables->navbar_inner_container = FALSE;
-     }
-     else {
-       $variables->container_class = 'container';
--      $variables->navbar_attributes->inner_container = TRUE;
-+      $variables->navbar_inner_container = TRUE;
-     }
- 
-     // Add navbar classes.
-@@ -46,7 +46,7 @@
-     // Add variable to determine if the route is admin.
-     $variables->is_admin_route = DamoBase::isAdminRoute();
- 
--    $variables->navbar_attributes->inner_container = FALSE;
-+    $variables->navbar_inner_container = FALSE;
-     $variables->navbar_attributes->removeClass('navbar-dark');
- 
-   }
 --- a/templates/system/page.html.twig
 +++ b/templates/system/page.html.twig
 @@ -68,7 +68,7 @@
  
      <header{{ navbar_attributes }} id="navbar" role="banner">
        <div class="header--inner">
--      {% if navbar_attributes.inner_container %}
-+      {% if navbar_inner_container %}
+-      {% if navbar_inner_container %}
++      {% if navbar_attributes.inner_container %}
          <div class="{{ container_class }}">
        {% endif %}
  
@@ -60,82 +26,11 @@
          {{ page.navigation_collapsible }}
        {% endblock %}
  
--      {% if not navbar_attributes.inner_container %}
-+      {% if not navbar_inner_container %}
+-      {% if not navbar_inner_container %}
++      {% if navbar_attributes.inner_container %}
          </div>
        {% endif %}
        </div>
---- a/templates/system/page--media.html.twig
-+++ b/templates/system/page--media.html.twig
-@@ -65,7 +65,7 @@
-     {{ drupal_block('header_menu_block') }}
-     <header{{ navbar_attributes }} id="navbar" role="banner">
-       <div class="header--inner">
--      {% if navbar_attributes.inner_container %}
-+      {% if navbar_inner_container %}
-         <div class="{{ container_class }}">
-       {% endif %}
- 
-@@ -79,7 +79,7 @@
-         {{ page.navigation_collapsible }}
-       {% endblock %}
- 
--      {% if not navbar_attributes.inner_container %}
-+      {% if not navbar_inner_container %}
-         </div>
-       {% endif %}
-       </div>
---- a/templates/system/page--media--add.html.twig
-+++ b/templates/system/page--media--add.html.twig
-@@ -65,7 +65,7 @@
-     {{ drupal_block('header_menu_block') }}
-     <header{{ navbar_attributes }} id="navbar" role="banner">
-       <div class="header--inner">
--      {% if navbar_attributes.inner_container %}
-+      {% if navbar_inner_container %}
-         <div class="{{ container_class }}">
-       {% endif %}
- 
-@@ -79,7 +79,7 @@
-         {{ page.navigation_collapsible }}
-       {% endblock %}
- 
--      {% if not navbar_attributes.inner_container %}
-+      {% if not navbar_inner_container %}
-         </div>
-       {% endif %}
-       </div>
---- a/src/Plugin/Preprocess/Media/MediaLibrary.php
-+++ b/src/Plugin/Preprocess/Media/MediaLibrary.php
-@@ -38,6 +38,7 @@
-       $link_options, ['attributes' => [
-         'class' => ['glyphicon-pencil'],
-         'title' => $this->t('Edit'),
-+        'aria-label' => $this->t('Edit'),
-       ]]
-     );
- 
-@@ -45,6 +46,7 @@
-       $link_options, ['attributes' => [
-         'class' => ['glyphicon-remove'],
-         'title' => $this->t('Delete'),
-+        'aria-label' => $this->t('Delete'),
-       ]]
-     );
- 
-@@ -57,10 +59,10 @@
-     // Add variables to the template.
-     $variables->view_url = Url::fromRoute('entity.media.canonical', $route_parameters);
-     if ($edit_url->access()) {
--      $variables->edit_link = Link::fromTextAndUrl(NULL, $edit_url);
-+      $variables->edit_link = Link::fromTextAndUrl('', $edit_url);
-     }
-     if ($delete_url->access()) {
--      $variables->delete_link = Link::fromTextAndUrl(NULL, $delete_url);
-+      $variables->delete_link = Link::fromTextAndUrl('', $delete_url);
-     }
-   }
- 
 --- a/js/tooltip.js
 +++ b/js/tooltip.js
 @@ -1,48 +1,69 @@
@@ -201,11 +96,10 @@
 -      for (var i = 0; i < elements.length; i++) {
 -        var $element = $(elements[i]);
 -        var options = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, $element.data());
--        $element.tooltip(options);
 +      // Keep the native title if Bootstrap's tooltip plugin is unavailable.
 +      if (!$.fn.tooltip || !settings.tooltip_enabled) {
 +        return;
-       }
++      }
 +      var selector = settings.tooltip_selector || '[data-toggle="tooltip"]';
 +      $(context).find(selector).each(function () {
 +        var $element = $(this);
@@ -222,7 +116,8 @@
 +          template: $.fn.tooltip.Constructor.Default.template
 +        });
 +        options.placement = placement(options.placement);
-+        $element.tooltip(options);
+         $element.tooltip(options);
+-      }
 +      });
      },
      detach: function (context) {
@@ -368,3 +263,210 @@
 +  };
 +
 +})(jQuery, Drupal, drupalSettings);
+--- /dev/null
++++ b/css/workspace.css
+@@ -0,0 +1,119 @@
++/* Shared workspace foundations: the same spacing and surfaces as upload/review. */
++body.dam-workspace { --dam-accent:#278b96; --dam-ink:#263638; --dam-muted:#647579; --dam-line:#dfe8e9; --dam-surface:#fff; --dam-radius:12px; background:#f5f8f8; color:var(--dam-ink); font-size:15px; line-height:1.55; }
++.dam-workspace main.container,.dam-workspace main.container-fluid { width:100%; max-width:1500px; margin:0 auto; padding:32px 36px 48px; min-height:calc(100vh - 220px); }
++.dam-workspace main>.row { margin:0; }
++.dam-workspace main>.row>section { padding:0; min-width:0; }
++.dam-workspace .admin-navigation--inner,.dam-workspace header.navbar .header--inner { max-width:1500px; padding-left:36px; padding-right:36px; }
++.dam-workspace header.navbar .header--inner { min-height:84px; gap:24px; flex-wrap:wrap; }
++.dam-workspace header .dam-logo { height:auto; min-width:180px; }
++.dam-workspace .navbar .navbar-nav { display:flex; gap:8px; align-items:center; margin-left:auto; }
++.dam-workspace header.navbar .container { width:100%; }
++.dam-workspace .page-title,.dam-workspace h1 { font-size:30px; line-height:1.25; margin:0 0 12px; letter-spacing:-.7px; color:var(--dam-ink); }
++.dam-workspace h2 { font-size:22px; line-height:1.35; margin:24px 0 18px; }
++.dam-workspace h3 { font-size:18px; line-height:1.4; }
++.dam-workspace p { margin:0 0 18px; }
++.dam-workspace .region-content { width:100%; }
++.dam-workspace main .block { margin-bottom:24px; }
++.dam-workspace main .block:last-child { margin-bottom:0; }
++.dam-workspace .tabs,.dam-workspace .nav-tabs { display:flex; gap:6px; flex-wrap:wrap; padding:5px; border:1px solid var(--dam-line); border-radius:10px; background:#edf3f3; margin:0 0 24px; }
++.dam-workspace .nav-tabs>li { float:none; margin:0; }
++.dam-workspace .nav-tabs>li>a { padding:10px 16px; border:0; border-radius:7px; color:var(--dam-muted); background:transparent; font-size:14px; }
++.dam-workspace .nav-tabs>li.active>a,.dam-workspace .nav-tabs>li>a.is-active { background:#fff; color:var(--dam-ink); box-shadow:0 1px 4px #14353812; }
++.dam-workspace .nav-tabs>li>a:hover { background:#fff; color:var(--dam-accent); }
++.dam-workspace main form:not(#views-exposed-form-asset-search-asset-search):not([id^="views-exposed-form"]) { padding:28px; background:var(--dam-surface); border:1px solid var(--dam-line); border-radius:var(--dam-radius); }
++.dam-workspace main form .form-item,.dam-workspace main form .form-group { margin:0 0 22px; }
++.dam-workspace main form .form-item label { display:block; margin-bottom:8px; font-size:14px; font-weight:600; color:var(--dam-ink); }
++.dam-workspace main form input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="hidden"]),.dam-workspace main form select,.dam-workspace main form textarea { max-width:100%; min-height:42px; border:1px solid #cbd8da; border-radius:7px; padding:9px 12px; color:var(--dam-ink); background-color:#fff; font-size:15px; line-height:1.4; box-shadow:none; }
++.dam-workspace main form textarea { min-height:104px; }
++.dam-workspace main form .form-checkbox,.dam-workspace main form .form-radio { width:18px; height:18px; accent-color:var(--dam-accent); margin-right:8px; }
++.dam-workspace main form .checkbox label,.dam-workspace main form .radio label { display:inline; font-weight:400; }
++.dam-workspace main form .description,.dam-workspace main form .help-block { color:var(--dam-muted); font-size:13px; line-height:1.5; margin-top:7px; }
++.dam-workspace main details,.dam-workspace main fieldset { border:1px solid var(--dam-line); border-radius:9px; padding:18px 20px; margin:0 0 24px; background:#fff; min-width:0; }
++.dam-workspace main details>summary { cursor:pointer; font-weight:600; padding:4px 0; }
++.dam-workspace main details[open]>summary { margin-bottom:16px; }
++.dam-workspace main .form-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:28px; padding-top:20px; border-top:1px solid var(--dam-line); }
++.dam-workspace main .button,.dam-workspace main .btn { border-radius:8px; padding:10px 18px; font-size:14px; line-height:1.5; letter-spacing:0; text-transform:none; min-height:42px; box-shadow:none; }
++.dam-workspace main .button { display:inline-flex; align-items:center; justify-content:center; background:#fff; color:var(--dam-ink); border:1px solid #cbd8da; }
++.dam-workspace main .button--primary,.dam-workspace main .btn-primary,.dam-workspace main .btn-success { color:#fff; background:var(--dam-accent); border-color:var(--dam-accent); }
++.dam-workspace main a:focus-visible,.dam-workspace main button:focus-visible,.dam-workspace main input:focus-visible,.dam-workspace main select:focus-visible,.dam-workspace main textarea:focus-visible { outline:3px solid #46b6bf; outline-offset:3px; }
++.dam-workspace main table { width:100%; margin:16px 0 24px; border-collapse:separate; border-spacing:0; background:#fff; border:1px solid var(--dam-line); border-radius:9px; }
++.dam-workspace main th,.dam-workspace main td { padding:14px 16px; text-align:left; vertical-align:middle; border-bottom:1px solid var(--dam-line); font-size:14px; }
++.dam-workspace main th { color:#50666a; background:#eff5f5; font-weight:600; }
++.dam-workspace main tr:last-child td { border-bottom:0; }
++.dam-workspace main .table-responsive { overflow:auto; }
++.dam-workspace main .alert,.dam-workspace main .messages { padding:18px 22px; border-radius:9px; margin-bottom:24px; }
++.dam-workspace main .breadcrumb { padding:0; margin:0 0 20px; background:transparent; }
++.dam-workspace .footer,.dam-workspace footer { margin:0; padding:24px 36px; border:0; }
++.dam-workspace .region-footer { max-width:1500px; margin:0 auto; padding:24px 36px; }
++.dam-workspace .dam-consent-form .dam-form-section { padding:22px; background:#fbfdfd; border:1px solid var(--dam-line); border-radius:10px; margin-bottom:24px; }
++.dam-workspace .dam-consent-form .dam-form-section h2 { margin-top:0; }
++@media(min-width:1100px) { .dam-workspace main .dam-form-columns { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; } }
++@media(max-width:800px) { .dam-workspace main.container,.dam-workspace main.container-fluid { padding:24px 20px 36px; } .dam-workspace .admin-navigation--inner,.dam-workspace header.navbar .header--inner { padding-left:20px; padding-right:20px; } .dam-workspace main form:not([id^="views-exposed-form"]) { padding:20px; } }
++@media(max-width:520px) { .dam-workspace .admin-navigation--inner { min-height:44px; height:auto; flex-wrap:wrap; } .dam-workspace .admin-navigation--inner a { padding:10px; } .dam-workspace main th,.dam-workspace main td { padding:10px; } }
++
++.dam-category-browser { padding:22px 24px; border:1px solid var(--dam-line); border-radius:12px; background:#fff; margin:0 0 24px; }
++.dam-category-browser .form-item { margin:0; }
++.dam-category-browser label { display:block; font-size:14px; font-weight:600; margin:0 0 10px; }
++.dam-category-browser .select2-container { width:100% !important; max-width:100%; }
++.dam-category-browser .select2-selection { min-height:46px; border:1px solid #cbd8da; border-radius:7px; padding:6px 10px; }
++.dam-category-context { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-top:18px; color:var(--dam-muted); }
++/* Replace viewport-sized legacy galleries with a container-based responsive grid. */
++.dam-workspace main .view-media-library { width:100% !important; max-width:100%; margin:0; left:auto; }
++.dam-workspace main .view-media-library .view-content { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px; width:100%; padding:0; margin:0; }
++.dam-workspace main .view-media-library .view-content:before,.dam-workspace main .view-media-library .view-content:after { display:none; }
++.dam-workspace main .view-media-library .views-row { width:auto !important; float:none; margin:0; padding:0; min-width:0; height:auto; }
++.dam-workspace .dam-media-card { height:100%; display:flex; flex-direction:column; border:1px solid var(--dam-line); border-radius:12px; overflow:hidden; background:#fff; transition:box-shadow .15s; }
++.dam-workspace .dam-media-card:hover { box-shadow:0 6px 18px #234d5015; }
++.dam-workspace .dam-media-card__preview { display:block; aspect-ratio:1.5; overflow:hidden; background:#e8eeee; }
++.dam-workspace .dam-media-card__preview img { width:100% !important; height:100% !important; max-width:none !important; max-height:none !important; object-fit:cover; display:block; }
++.dam-workspace .dam-media-card__body { padding:18px; position:relative; flex:1; }
++.dam-workspace .dam-media-card__title { font-size:14px; line-height:1.55; margin:0 0 8px; overflow-wrap:anywhere; }
++.dam-workspace .dam-media-card__title a { color:var(--dam-ink); }
++.dam-workspace .dam-media-card__meta { color:var(--dam-muted); font-size:12px; }
++.dam-workspace .dam-media-card__meta .field { margin:0; }
++.dam-workspace .dam-media-card__actions { display:flex; gap:8px; margin-top:14px; }
++.dam-workspace .dam-media-card__actions .btn { padding:7px 10px; min-height:32px; font-size:12px; border:1px solid var(--dam-line); background:#fff; color:var(--dam-muted); }
++.dam-workspace .region-secondary-navigation { padding:0; margin:0 0 24px; background:transparent; }
++.dam-workspace .region-secondary-navigation .region--inner { max-width:none; width:100%; padding:0; display:flex; align-items:center; flex-wrap:wrap; gap:20px; }
++.dam-workspace #block-damo-theme-assetcategory { display:block; width:auto; min-width:0; flex:1 1 550px; margin:0; padding:0; }
++.dam-workspace #block-damo-theme-assetcategory>.block-title { display:none; }
++.dam-workspace .dam-category-browser { margin:0; }
++.dam-workspace .view-media-library .view-header { text-align:left; padding:0 0 16px; margin:0; font-size:13px; color:var(--dam-muted); }
++@media(max-width:1100px) { .dam-workspace main .view-media-library .view-content { grid-template-columns:repeat(3,minmax(0,1fr)); } }
++@media(max-width:800px) { .dam-workspace main .view-media-library .view-content { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; } }
++@media(max-width:520px) { .dam-workspace main .view-media-library .view-content { grid-template-columns:1fr; } }
++
++.dam-workspace .dam-media-card__actions .btn { width:34px !important; flex:0 0 34px; margin:0; }
++.dam-workspace main .view-media-library .views-row { background:transparent; box-shadow:none; border:0; }
++.dam-workspace header .navbar-nav { position:static; top:auto; right:auto; float:none; }
++.dam-workspace .dam-consent-form { max-width:1100px; margin:0 auto; }
++.dam-workspace .dam-form-heading { margin-bottom:24px; }
++.dam-workspace main pre { white-space:pre-wrap; overflow-wrap:anywhere; }
++.dam-workspace .region-navigation-collapsible { position:static; width:auto; background:transparent; flex:0 0 auto; }
++.dam-workspace header .region-navigation { flex:1 1 auto; min-width:0; }
++.dam-workspace #block-damo-theme-local-tasks { padding:0; border:0; background:transparent; margin:0 0 24px; }
++.dam-workspace #primary-tabs { float:none; width:fit-content; max-width:100%; }
++.dam-workspace #primary-tabs .nav-item:after { content:none; }
++.dam-workspace #primary-tabs .nav-item.active .nav-link { background:#fff; color:var(--dam-ink); }
++.dam-workspace #damopen-consent-asset-rights { max-width:1100px; margin:0 auto; }
++.dam-workspace #damopen-consent-asset-rights #edit-status { padding:20px; border-radius:9px; background:#eef7f7; border-left:4px solid var(--dam-accent); }
++.dam-workspace #damopen-consent-asset-rights #edit-status label { font-size:20px; }
++.dam-workspace main caption { caption-side:top; padding:12px 0; font-weight:600; color:var(--dam-ink); }
++.dam-workspace .media-page-wrapper { border:1px solid var(--dam-line); border-radius:12px; overflow:hidden; background:#fff; }
++.dam-workspace .media-page-wrapper .top-controls { padding:24px; }
++.dam-workspace .media-page-wrapper .media-title { font-size:22px; line-height:1.35; word-break:normal; overflow-wrap:anywhere; margin-bottom:18px; }
++.dam-workspace .media-page-wrapper .right-wrapper { background:#fff; }
++.dam-workspace .media-page-wrapper .left-wrapper { background:#e8eeee; }
++@media(max-width:991px) { .dam-workspace header.navbar .header--inner { gap:12px; padding-top:14px; padding-bottom:14px; } .dam-workspace .region-navigation-collapsible { flex-basis:100%; } .dam-workspace .region-navigation-collapsible .navbar-toggler { position:relative; float:none; margin:0; } .dam-workspace .navbar .navbar-nav { align-items:flex-start; } }
++.dam-workspace main .view-media-library .dam-media-card__actions .btn { width:34px !important; min-width:34px !important; flex:0 0 34px !important; }
++.dam-workspace footer.footer { width:100%; max-width:none; padding:0; margin:32px 0 0; background:#333738; }
++.dam-workspace footer.footer .region-footer { width:100%; max-width:1500px; margin:0 auto; padding:24px 36px; }
++.dam-workspace footer.footer .footer__content { width:100%; margin:0; padding:24px 36px; box-sizing:border-box; }
++/* Approval widget: action bar, status tabs, then the card collection. */
++.dam-workspace #damo-wfa { grid-column:1 / -1; min-width:0; }
++.dam-workspace #damo-wfa > div:first-child > div:first-child { height:auto; min-height:80px; flex-wrap:wrap; gap:18px; justify-content:space-between; margin-bottom:22px; }
++.dam-workspace #damo-wfa h2.chakra-heading { flex:1 1 100%; margin:0; }
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(2) { justify-content:flex-start; padding:14px 0; margin-bottom:20px; border-bottom:1px solid var(--dam-line); }
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:22px; width:100%; }
++.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div > div { width:100%; border-radius:12px; overflow:hidden; }
++.dam-workspace:has(#damo-wfa) header form:not(:has(input[type="text"],select)) { display:none; }
+--- a/damo_theme.theme
++++ b/damo_theme.theme
+@@ -15,6 +15,8 @@
+  * Implements hook_preprocess_HOOK().
+  */
+ function damo_theme_preprocess_html(&$variables) {
++  $variables['attributes']['class'][] = 'dam-workspace';
++  $variables['#attached']['library'][] = 'damo_theme/workspace';
+   // Add latest IE render engine metatag.
+   $http_equiv = array(
+     '#type' => 'html_tag',
+--- a/damo_theme.libraries.yml
++++ b/damo_theme.libraries.yml
+@@ -245,3 +245,8 @@
+   dependencies:
+     - core/drupalSettings
+ 
++
++workspace:
++  css:
++    theme:
++      css/workspace.css: { weight: 100 }
+--- a/templates/media/media--media-library.html.twig
++++ b/templates/media/media--media-library.html.twig
+@@ -1,48 +1,15 @@
+-{#
+-/**
+- * @file
+- * Default theme implementation to present a media entity.
+- *
+- * Available variables:
+- * - name: Name of the media.
+- * - content: Media content.
+- *
+- * @see template_preprocess_media()
+- *
+- * @ingroup themeable
+- */
+-#}
++{# Shared asset card: keep titles visible and actions separate from the preview. #}
+ {% if content %}
+-{% set classes = [
+-  'card',
+-  'card-inverse',
+-  'card--media',
+-] %}
+-<div{{ attributes.addClass(classes) }}>
+-  {{ content.thumbnail }}
+-  {% block actions %}
+-    <div class="card-actions">
+-    </div>
+-  {% endblock %}
+-</div>
+-{% block card_content %}
+-  <div class="card-content">
+-  <a href="{{ view_url }}" class="card-img-overlay"></a>
+-    {{ delete_link }}
+-    {{ edit_link }}
+-    <div class="card--inner-text">
+-      <h4 class="card-title">{{ content.name }}</h4>
+-      <div class="media-category card-text">
+-        {{ content.field_category }}
+-        {{ content.field_template_category }}
+-        {{ content.field_field_category }}
+-      </div>
+-      <div class="media-industry card-text">
+-        {{ content.field_keywords }}
+-        {{ content.field_template_keywords }}
+-        {{ content.field_field_keywords }}
+-      </div>
+-    </div>
++<article{{ attributes.addClass('dam-media-card') }}>
++  <a class="dam-media-card__preview" href="{{ view_url }}" aria-label="{{ 'View asset'|t }}: {{ media.label }}">
++    {{ content.thumbnail }}
++  </a>
++  <div class="dam-media-card__body">
++    <h3 class="dam-media-card__title"><a href="{{ view_url }}">{{ content.name }}</a></h3>
++    <div class="dam-media-card__meta">{{ content.field_category }}{{ content.field_template_category }}{{ content.field_field_category }}</div>
++    {% if edit_link or delete_link %}
++      <div class="dam-media-card__actions">{{ edit_link }}{{ delete_link }}</div>
++    {% endif %}
+   </div>
+-{% endblock %}
++</article>
+ {% endif %}

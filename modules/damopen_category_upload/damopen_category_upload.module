@@ -174,3 +174,80 @@ function damopen_category_upload_bulk_validate(array &$form, FormStateInterface 
     $form_state->setErrorByName('category', t('Use the category specified by this upload link.'));
   }
 }
+
+/**
+ * Implements hook_block_view_alter().
+ *
+ * Keep category browsing in the existing asset browser. Include empty branches
+ * and full paths in its existing Select2 facet, preserving all other filters.
+ */
+function damopen_category_upload_block_view_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block): void {
+  if ($block->getPluginId() !== 'facet_block:asset_category' || \Drupal::routeMatch()->getRouteName() !== 'view.asset_search.asset_search') {
+    return;
+  }
+  $build['#pre_render'][] = [\Drupal\damopen_category_upload\CategoryBrowser::class, 'preRender'];
+  $build['#cache']['max-age'] = 0;
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ *
+ * A parent category includes descendant assets in the existing search view.
+ * Publication, consent and other search conditions are left intact.
+ */
+function damopen_category_upload_search_api_query_alter($query): void {
+  $view = $query->getOption('search_api_view');
+  if (!$view || $view->id() !== 'asset_search') {
+    return;
+  }
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $expand = function ($group) use (&$expand, $storage): void {
+    foreach ($group->getConditions() as $condition) {
+      if ($condition instanceof \Drupal\search_api\Query\ConditionGroupInterface) {
+        $expand($condition);
+      }
+      elseif ($condition->getField() === 'media_category' && in_array($condition->getOperator(), ['=', 'IN'], TRUE)) {
+        $ids = [];
+        foreach ((array) $condition->getValue() as $id) {
+          $term = $storage->load($id);
+          if (!$term || $term->bundle() !== 'category' || !$term->isPublished()) {
+            continue;
+          }
+          $ids[] = (int) $id;
+          foreach ($storage->loadTree('category', $id) as $child) {
+            $ids[] = (int) $child->tid;
+          }
+        }
+        $condition->setValue($ids ? array_values(array_unique($ids)) : [0])->setOperator('IN');
+      }
+    }
+  };
+  $expand($query->getConditionGroup());
+}
+
+/**
+ * Implements hook_user_view().
+ */
+function damopen_category_upload_user_view(array &$build, UserInterface $user, $view_mode): void {
+  $viewer = \Drupal::currentUser();
+  if ($viewer->id() !== $user->id() && !$viewer->hasPermission('administer users')) {
+    return;
+  }
+  $term = $user->get('field_upload_category')->entity;
+  $policy = \Drupal::service('damopen_category_upload.policy');
+  $error = $policy->assignmentError($user);
+  $path = $error ?: ($term ? $policy->path($term) : t('No category restriction'));
+  $build['upload_scope'] = [
+    '#type' => 'container',
+    '#attributes' => ['class' => ['dam-category-browser']],
+    '#weight' => -20,
+    'title' => ['#type' => 'html_tag', '#tag' => 'h2', '#value' => t('Upload category')],
+    'path' => ['#type' => 'html_tag', '#tag' => 'p', '#value' => \Drupal\Component\Utility\Html::escape((string) $path)],
+    'description' => ['#type' => 'html_tag', '#tag' => 'p', '#value' => $term ? t('Uploads are limited to this category and its descendants. Administrators can upload anywhere and can change this assignment.') : t('Your existing upload permissions apply across categories.')],
+  ];
+  $build['#cache']['contexts'][] = 'user';
+  $build['#cache']['contexts'][] = 'user.permissions';
+  if ($term) {
+    $build['#cache']['tags'] = array_merge($build['#cache']['tags'] ?? [], $term->getCacheTags());
+  }
+}

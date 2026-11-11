@@ -163,7 +163,10 @@ final class CategoryUploadWorkflowTest extends WebDriverTestBase {
     $reviewer = $this->drupalCreateUser();
     $reviewer->addRole('manager')->set('field_upload_category', $country->id())->save();
     $this->drupalLogin($reviewer);
+    $this->drupalGet('user/' . $reviewer->id());
+    $this->assertSession()->pageTextContains('Countries / Benin');
     $this->drupalGet('media/' . $media->id() . '/edit');
+    $this->assertSession()->elementExists('css', 'body.dam-workspace');
     $locked = $this->assertSession()->fieldExists('field_category[' . $sibling->id() . ']');
     $this->assertTrue($locked->hasAttribute('disabled'));
     $this->assertTrue($locked->isChecked());
@@ -190,17 +193,32 @@ final class CategoryUploadWorkflowTest extends WebDriverTestBase {
     $reviewer->set('field_upload_category', $child->id())->save();
     $child->setUnpublished()->save();
     $switcher->switchBack();
+    $this->drupalGet('user/' . $reviewer->id());
+    $this->assertSession()->pageTextContains('Your assigned upload category is no longer available.');
     $this->drupalGet('upload-image', ['query' => ['category' => $child->id()]]);
     $this->assertSession()->pageTextContains('Your assigned upload category is no longer available.');
     $this->drupalGet('media/bulk-upload/image', ['query' => ['category' => $child->id()]]);
     $this->assertSession()->pageTextContains('Your assigned upload category is no longer available.');
 
+    // Parent filters include published descendant assets, but never drafts.
+    $switcher->switchTo($admin);
+    $reviewed->setPublished()->save();
+    $index = \Drupal\search_api\Entity\Index::load('database_media');
+    $index->indexItems();
+    $switcher->switchBack();
+
     // Read-only staff may browse empty branches, but may not upload.
     $reader = $this->drupalCreateUser(['view media']);
     $this->drupalLogin($reader);
     $this->drupalGet('library/' . $root->id());
-    $this->assertSession()->pageTextContains('Benin');
-    $this->assertSession()->pageTextContains('Nepal');
+    $this->assertSession()->addressEquals('assets?f%5B0%5D=asset_category%3A' . $root->id());
+    $options = $this->getSession()->getPage()->findAll('css', '.dam-category-browser option');
+    $labels = implode(' ', array_map(static fn($option) => strip_tags($option->getHtml()), $options));
+    $this->assertStringContainsString('Benin', $labels);
+    $this->assertStringContainsString('Nepal', $labels);
+    $this->assertSession()->linkNotExists('Upload images here');
+    $this->assertSession()->pageTextContains('Reviewed metadata');
+    $this->assertSession()->pageTextNotContains('Bulk renamed');
     $this->drupalGet('upload-image', ['query' => ['category' => $country->id()]]);
     $this->assertSession()->pageTextContains('You are not authorized to access this page.');
   }

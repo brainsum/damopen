@@ -186,3 +186,30 @@ It passes in headless Chrome: 1 test, 20 assertions, with existing contributed
 code deprecations reported. The test also exposed and fixed the custom form
 factory returning the contributed base form. Run `ddev test-damopen` from the
 project root; see [tests/README.md](tests/README.md) for details.
+
+## Unified asset browser and Manager workspace (10 November 2026)
+
+The existing `/assets` screen now provides the imported category hierarchy through
+full-path selection, including empty branches. Parent filters include published
+descendant assets and retain the other search and consent restrictions. A single
+selected category offers an authorized uploader a preset upload link. Legacy
+`/library` routes redirect here; there is no separate Library gallery.
+
+The theme patch adds shared spacing, responsive asset cards with visible titles,
+forms, tables and navigation. It also corrects the page template's conditional
+container closing tag. Managers without the administration-theme permission use
+the configured default theme on their permitted review and management pages.
+This does not grant permissions or change the theme for administrators.
+
+The optional Extras consent form groups evidence, asset coverage, review dates
+and source information. The local demo Manager has a separate reviewer role;
+the default Manager role was not granted access to private consent evidence.
+Related assets use the same image cards. Own profiles show the assigned upload
+category and restriction; user administrators can see it on managed profiles.
+The approval widget spans the gallery and wraps its cards within the workspace.
+
+Validation: category upload and hierarchy workflow (47 assertions), Bootstrap
+browser suite (3 tests, 32 assertions), consent delivery/form checks (71
+assertions), and asset rejection workflow (15 assertions). Existing contributed-code deprecations
+remain. The complete theme patch reverses and reapplies byte-for-byte on a
+copy of the installed theme.

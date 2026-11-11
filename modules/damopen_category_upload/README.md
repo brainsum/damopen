@@ -1,11 +1,13 @@
 # Category Library and uploads
 
-Adds a hierarchical Library, category-specific image upload links, and an
+Adds hierarchical category browsing to the existing Assets screen, category-specific
+image upload links, and an
 administrator-managed **Upload category** field on user profiles.
 
 ## Local demo
 
-- Browse: `/library` (also linked from the main menu).
+- Browse: `/assets` (Assets in the main menu). `/library` and `/library/ID` redirect
+  to this screen, preserving the selected category. There is no second gallery.
 - Manage terms: `/admin/structure/taxonomy/manage/category/overview`.
 - Find/copy upload links: `/admin/content/category-upload-links`.
 - Assign a user: People → Edit → **Upload category**.
@@ -47,7 +49,8 @@ Managers' existing `administer users` permission does not grant this permission;
 grant it explicitly if Managers should keep editing the Category vocabulary.
 Do not grant either new restricted permission to Agency or Manager roles.
 
-The Library includes empty categories. Selecting a branch shows published assets
+The category picker includes full paths and empty categories. A single selected
+category offers “Upload images here” when the current user may upload there. Selecting a branch shows published assets
 from its descendants, subject to media view access. Existing approval rules are
 unchanged. Other structured metadata (Country, Project, Sector, Topic) is not
 derived from Category.

@@ -1,6 +1,6 @@
 damopen_category_upload.library:
-  title: Library
-  route_name: damopen_category_upload.library
+  title: Assets
+  route_name: view.asset_search.asset_search
   menu_name: main
   weight: -5
 damopen_category_upload.links:

@@ -5,3 +5,8 @@ services:
       - '@stream_wrapper_manager'
       - '@settings'
       - '@logger.channel.file'
+  damopen_common.workspace_theme:
+    class: Drupal\damopen_common\Theme\WorkspaceThemeNegotiator
+    arguments: ['@current_user', '@config.factory']
+    tags:
+      - { name: theme_negotiator, priority: 1100 }
