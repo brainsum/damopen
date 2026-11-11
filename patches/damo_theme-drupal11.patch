@@ -265,7 +265,7 @@
 +})(jQuery, Drupal, drupalSettings);
 --- /dev/null
 +++ b/css/workspace.css
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,145 @@
 +/* Shared workspace foundations: the same spacing and surfaces as upload/review. */
 +body.dam-workspace { --dam-accent:#278b96; --dam-ink:#263638; --dam-muted:#647579; --dam-line:#dfe8e9; --dam-surface:#fff; --dam-radius:12px; background:#f5f8f8; color:var(--dam-ink); font-size:15px; line-height:1.55; }
 +.dam-workspace main.container,.dam-workspace main.container-fluid { width:100%; max-width:1500px; margin:0 auto; padding:32px 36px 48px; min-height:calc(100vh - 220px); }
@@ -394,6 +394,23 @@
 +/* Lift the card whose popover is open above the cards that follow it. */
 +.dam-workspace #damo-wfa > div:first-child > div:nth-child(3) > div:has(.chakra-popover__content:not([style*="visibility: hidden"])) { position:relative; z-index:20; }
 +.dam-workspace:has(#damo-wfa) header form:not(:has(input[type="text"],select)) { display:none; }
++
++/* Dialogs (e.g. the image preview). The administration theme's dialog styles
++   also load here, but their colour variables are undefined in this theme,
++   which left a transparent body, a black title bar and no visible close icon. */
++.dam-workspace .ui-dialog { padding:0; overflow:hidden; border:1px solid var(--dam-line); border-radius:var(--dam-radius); background:var(--dam-surface) !important; color:var(--dam-ink); box-shadow:0 12px 40px #14353840; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar { position:relative; padding:14px 60px 14px 20px; border:0; border-bottom:1px solid var(--dam-line); border-radius:0; background:#edf3f3; color:var(--dam-ink); }
++.dam-workspace .ui-dialog .ui-dialog-title { float:none; width:auto; margin:0; color:var(--dam-ink); font-size:18px; font-weight:600; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close { position:absolute; top:50%; right:14px; left:auto; width:32px; height:32px; margin:0; padding:0; transform:translateY(-50%); border:1px solid var(--dam-line) !important; border-radius:50%; background:var(--dam-surface) !important; -webkit-mask:none; mask:none; opacity:1; font-size:0; cursor:pointer; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close > * { display:none; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close::after { content:none; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close::before { content:"\00d7"; position:static; display:block; width:auto; height:auto; background:none; -webkit-mask:none; mask:none; color:var(--dam-ink); font-size:22px; line-height:30px; text-align:center; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close:hover,.dam-workspace .ui-dialog .ui-dialog-titlebar-close:focus-visible { border-color:var(--dam-accent) !important; }
++.dam-workspace .ui-dialog .ui-dialog-titlebar-close:hover::before { color:var(--dam-accent); }
++.dam-workspace .ui-dialog .ui-dialog-content { padding:20px !important; background:var(--dam-surface) !important; color:var(--dam-ink); }
++.dam-workspace .ui-dialog .ui-dialog-content img { max-width:100%; height:auto; }
++.dam-workspace .ui-dialog .ui-dialog-buttonpane { margin:0; padding:14px 20px; border:0; border-top:1px solid var(--dam-line); background:var(--dam-surface); }
++.dam-workspace .ui-widget-overlay { background:#143538; opacity:.55; }
 --- a/damo_theme.theme
 +++ b/damo_theme.theme
 @@ -15,6 +15,8 @@
