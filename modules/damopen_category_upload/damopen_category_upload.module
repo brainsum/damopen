@@ -146,6 +146,11 @@ function damopen_category_upload_media_category_widget(array &$widget, MediaInte
     }
   }
   $widget['#options'] = $options;
+  if (($widget['#type'] ?? NULL) === 'checkboxes') {
+    // A search field and a scrolling list keep the long list manageable.
+    $widget['#attributes']['class'][] = 'dam-category-checkboxes';
+    $widget['#attached']['library'][] = 'damopen_category_upload/category_checkboxes';
+  }
   // Checkboxes compare disabled defaults strictly against integer option keys.
   if (($widget['#type'] ?? NULL) === 'checkboxes' && is_array($widget['#default_value'] ?? NULL)) {
     $widget['#default_value'] = array_map('intval', $widget['#default_value']);

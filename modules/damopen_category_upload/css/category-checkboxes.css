@@ -1,0 +1,63 @@
+/* The category list is long: search it, and scroll it within two thirds of
+   the visible area, like the category dropdown in the asset browser. */
+.dam-category-search {
+  display: block;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border: 1px solid #c9d1d3;
+  border-radius: 6px;
+  font: inherit;
+}
+.dam-category-list {
+  max-height: 66.667vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 12px;
+  border: 1px solid #c9d1d3;
+  border-radius: 6px;
+}
+.dam-category-list [hidden] {
+  display: none !important;
+}
+.dam-category-empty {
+  margin: 8px 0;
+  color: #5b6769;
+}
+
+/* Selected categories, shown like the tags of the asset browser's filter. */
+.dam-category-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.dam-category-selected[hidden] {
+  display: none;
+}
+.dam-category-selected li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 3px 8px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #e4e4e4;
+}
+.dam-category-selected button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #777;
+  font: inherit;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+.dam-category-selected button:hover,
+.dam-category-selected button:focus-visible {
+  color: #222;
+}

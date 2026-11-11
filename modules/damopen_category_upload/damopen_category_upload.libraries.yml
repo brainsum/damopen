@@ -9,3 +9,13 @@ category_browser:
     - core/drupal
     - core/once
     - select2_facets/drupal.select2_facets.select2-widget
+
+category_checkboxes:
+  css:
+    component:
+      css/category-checkboxes.css: {}
+  js:
+    js/category-checkboxes.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
