@@ -102,8 +102,9 @@ After changing a patch's contents, reinstall its target package with
 `composer reinstall <package>` so the new patch is applied. If that reports
 "Package is not installed" (seen with patched themes), it has already removed
 the package: run `composer install` immediately to restore it with patches.
-Reinstalling `brainsum/damo_theme` locally discards files copied into the
-installed theme, such as the rebuilt upload widget.
+`brainsum/damo_theme` 0.12.0 ships the rebuilt upload and approval widgets, so
+nothing needs to be copied into the installed theme. The theme patch is written
+against that release and only carries the Drupal 11 fixes.
 
 ## Tests
 
